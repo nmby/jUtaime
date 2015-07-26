@@ -35,7 +35,7 @@ JUnitでのテストを効率化するためのライブラリです。
     assertThat(of(() -> obj.doSomething(param)),
             allOf(raise(WrappingException.class, "expected message"),
                   rootCause(RuntimeException.class),
-                  not(rootCause(NullPointerException.class)));
+                  not(rootCause(NullPointerException.class))));
 
 `allOf()` の代わりに、次の連結スタイルで記述することも可能です。  
 
