@@ -44,7 +44,7 @@ JUnitでのテストを効率化するためのライブラリです。
                     .rootCause(RuntimeException.class)
                     .not(rootCause(NullPointerException.class)));
 
-詳細は [javadoc](http://nmby.github.io/jUtaime/api-doc/index.html) を参照してください。  
+詳細は [javadoc](http://nmby.github.io/jUtaime/api-docs/index.html) を参照してください。  
 
 ## 前提・依存
 * ジュテームのサポート対象は java 8 です。java 7 以前では利用できません。
