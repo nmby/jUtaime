@@ -3,8 +3,9 @@
 /project/LICENSE.txt
 /project/README.md
 
-/api-docs/.project
-/jars/.project
+/api-docs/.*/
+/api-docs/.*
+/jars/.*
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
