@@ -3,6 +3,8 @@
 
 /project/.mySettings/
 
+/api-docs/.project
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
