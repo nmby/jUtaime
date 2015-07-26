@@ -14,7 +14,7 @@ import xyz.hotchpotch.jutaime.throwable.Testee;
  * この {@code Matcher} は、スローされた例外の型が期待された型と完全に同一の場合に一致と判定します。<br>
  * <br>
  * このクラスはスレッドセーフではありません。<br>
- * ひとつの {@code Matcher} オブジェクトが複数のスレッドから実行されることは想定されていません。<br>
+ * ひとつの {@code Matcher} オブジェクトが複数のスレッドから操作されることは想定されていません。<br>
  * 
  * @author nmby
  */

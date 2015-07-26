@@ -9,7 +9,7 @@ import org.hamcrest.Matcher;
  * 例外チェインの中に目的の例外が含まれるかを検査する {@code Matcher} の基底クラスです。<br>
  * <br>
  * このクラスはスレッドセーフではありません。<br>
- * ひとつの {@code Matcher} オブジェクトが複数のスレッドから実行されることは想定されていません。<br>
+ * ひとつの {@code Matcher} オブジェクトが複数のスレッドから操作されることは想定されていません。<br>
  * 
  * @author nmby
  */

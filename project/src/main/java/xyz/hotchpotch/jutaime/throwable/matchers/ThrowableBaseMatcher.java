@@ -12,7 +12,7 @@ import xyz.hotchpotch.jutaime.throwable.Testee;
  * スローされた例外またはエラーに対して何らかの検査を行う {@code Matcher} の基底クラスです。<br>
  * <br>
  * このクラスはスレッドセーフではありません。<br>
- * ひとつの {@code Matcher} オブジェクトが複数のスレッドから実行されることは想定されていません。<br>
+ * ひとつの {@code Matcher} オブジェクトが複数のスレッドから操作されることは想定されていません。<br>
  * 
  * @author nmby
  */

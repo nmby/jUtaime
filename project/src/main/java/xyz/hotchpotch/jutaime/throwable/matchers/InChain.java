@@ -8,7 +8,7 @@ import xyz.hotchpotch.jutaime.throwable.Testee;
 
 /**
  * スローされた例外の例外チェインの中に期待される例外が含まれるかを検査する {@code Matcher} です。<br>
- * この {@code Matcher} は、スローされた例外の例外チェーンを {@code cause.getCause() == null} となるまで辿り、
+ * この {@code Matcher} は、スローされた例外の例外チェインを {@code cause.getCause() == null} となるまで辿り、
  * その中に期待される例外が含まれるかを検査します。<br>
  * 合格と判定されるものが見つかった場合は、その時点で検査を打ち切ります。<br>
  * スローされた例外そのものも例外チェインの一部とみなされます。<br>
@@ -17,7 +17,7 @@ import xyz.hotchpotch.jutaime.throwable.Testee;
  * この {@code Matcher} は、例外チェインの中の例外の型が期待された型のサブクラスの場合も一致と判定します。<br>
  * <br>
  * このクラスはスレッドセーフではありません。<br>
- * ひとつの {@code Matcher} オブジェクトが複数のスレッドから実行されることは想定されていません。<br>
+ * ひとつの {@code Matcher} オブジェクトが複数のスレッドから操作されることは想定されていません。<br>
  * 
  * @author nmby
  */

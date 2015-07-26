@@ -78,7 +78,7 @@ public class Testee implements UnsafeCallable<Object> {
     /**
      * 検査対象のオペレーションを実行します。
      * オペレーションが正常に終了した場合はその戻り値を返し、例外またはエラーが発生した場合はそのままスローします。<br>
-     * このメソッドはJUnitテストケースの実行時に {@code Matcher} から実行されます。<br>
+     * このメソッドは JUnit テストケースの実行時に {@code Matcher} から実行されます。<br>
      * <br>
      * 次の例のように、このメソッドはひとつの {@code assertThat()} 内で複数回実行される可能性があります。<br>
      * <pre>    assertThat(Testee.of(・・・), allOf(matcher1(・・・), matcher2(・・・), matcher3(・・・));</pre>
@@ -159,15 +159,15 @@ public class Testee implements UnsafeCallable<Object> {
     
     /**
      * 検査結果の文字列表現を返します。
-     * この値がJUnitの障害トレースビューの中で "actual" としてレポートされます。<br>
+     * この値が JUnit の障害トレースビューの中で "actual" としてレポートされます。<br>
      * <br>
      * 検査対象のオペレーションが正常に終了した場合は、その戻り値の文字列表現を返します。<br>
      * 但し、検査対象のオペレーションが戻り値を返さないタイプの場合は、次の文字列を返します。
-     * <pre>    {@value #MSG_COMPLETED_SAFELY}</pre>
+     * <pre>    "Completed safely."</pre>
      * 検査対象のオペレーションにより例外またはエラーが発生した場合は、次の形式の文字列を返します。
-     * <pre>    "throw <i>ExceptionClassName</i> (<i>Message</i>): <i>CauseClassName1</i> (<i>Message</i>): <i>CauseClassName2</i> (<i>Message</i>): ...]"</pre>
+     * <pre>    "throw <i>ExceptionClassName</i> (<i>Message</i>): <i>CauseClassName1</i> (<i>Message</i>): <i>CauseClassName2</i> (<i>Message</i>): ..."</pre>
      * 検査対象のオペレーションが未実行の場合は、次の文字列を返します。
-     * <pre>    {@value #MSG_NOT_TESTED}</pre>
+     * <pre>    "I haven't yet been tested."</pre>
      * 
      * @return 検査結果の文字列表現
      */

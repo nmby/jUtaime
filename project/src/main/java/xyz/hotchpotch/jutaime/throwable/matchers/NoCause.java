@@ -13,7 +13,7 @@ import xyz.hotchpotch.jutaime.throwable.Testee;
  * 検査対象のオペレーションが正常終了した場合は、不合格と判定します。<br>
  * <br>
  * このクラスはスレッドセーフではありません。<br>
- * ひとつの {@code Matcher} オブジェクトが複数のスレッドから実行されることは想定されていません。<br>
+ * ひとつの {@code Matcher} オブジェクトが複数のスレッドから操作されることは想定されていません。<br>
  * 
  * @author nmby
  */

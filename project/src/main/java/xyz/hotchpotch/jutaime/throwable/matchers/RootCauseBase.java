@@ -9,7 +9,7 @@ import org.hamcrest.Matcher;
  * 根本原因（root cause）が期待通りのものかを検査する {@code Matcher} の基底クラスです。<br>
  * <br>
  * このクラスはスレッドセーフではありません。<br>
- * ひとつの {@code Matcher} オブジェクトが複数のスレッドから実行されることは想定されていません。<br>
+ * ひとつの {@code Matcher} オブジェクトが複数のスレッドから操作されることは想定されていません。<br>
  * 
  * @author nmby
  */

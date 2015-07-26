@@ -123,6 +123,8 @@ public class RaiseMatchers {
     /**
      * 検査対象のオペレーションが例外やエラーをスローせずに正常終了することを検査する {@code Matcher} オブジェクトを返します。<br>
      * このメソッドにより返される {@code Matcher} オブジェクトは、検査対象オペレーションが例外やエラーをスローせずに終了した場合に合格と判定します。<br>
+     * <br>
+     * より具体的に説明すると、このメソッドは、{@link RaiseNothing#raiseNothing()} が返す {@code Matcher} オブジェクトを返します。<br>
      * 
      * @return 検査対象のオペレーションが正常終了することを検査する {@code Matcher}
      * @see RaiseNothing#raiseNothing()
