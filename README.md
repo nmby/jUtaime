@@ -1,6 +1,7 @@
 # jUtaime （ジュテーム）
 JUnitでのテストを効率化するためのライブラリです。  
   
+  
 #### 例外検証の効率化
 通常の検証と同じスタイルで、`assertThat()` を使用して例外発生コードを検証することができます。  
 
@@ -24,6 +25,7 @@ JUnitでのテストを効率化するためのライブラリです。
             ...
         }
 
+  
   
 また、[hamcrest.org](http://hamcrest.org/JavaHamcrest/) が提供する各種 Matcher と組み合わせて使用することもできます。  
 次の例では、オペレーションの実行により NullPointerException または IllegalArgumentException がスローされることを
@@ -49,6 +51,7 @@ JUnitでのテストを効率化するためのライブラリです。
 詳細は [javadoc](http://nmby.github.io/jUtaime/api-doc/index.html) を参照してください。
 
   
+  
 ## 前提・依存
 * ジュテームのサポート対象は java 8 です。java 7 以前では利用できません。
 * ジュテームは [hamcrest-core](http://search.maven.org/#search%7Cga%7C1%7Cg%3Aorg.hamcrest) に依存しています。  
@@ -56,19 +59,22 @@ JUnitでのテストを効率化するためのライブラリです。
 ビルド・パスに含める必要がありますが、JUnit4を利用しているのであれば、通常はすでに含まれているはずです。
 
   
+  
 ## 使い方
 [こちら](https://github.com/nmby/jUtaime/releases)から xyz.hotchpotch.jutaime-X.X.X-yyyymmdd.jar をダウンロードして任意の場所に配置し、
 ビルド・パスを設定してください。
 
   
+  
 ## 更新履歴
 #### Version 1.0.0 (2015/07/xx)
 * 初版
   
-
+  
 ## ライセンス
 Licensed under the MIT License, see LICENSE.txt.  
 Copyright (c) 2015 nmby  
+  
   
 ---
 Repository : [https://github.com/nmby/jUtaime](https://github.com/nmby/jUtaime)
