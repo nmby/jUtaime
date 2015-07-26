@@ -11,6 +11,7 @@
 
 # Package Files #
 *.jar
+!xyz.hotchpotch.jutaime-*.jar
 *.war
 *.ear
 
