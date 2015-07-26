@@ -1,7 +1,7 @@
 /project/bin/
-*.class
-
 /project/.mySettings/
+/project/LICENSE.txt
+/project/README.md
 
 /api-docs/.project
 
