@@ -14,8 +14,16 @@ import xyz.hotchpotch.jutaime.throwable.matchers.RootCause;
 import xyz.hotchpotch.jutaime.throwable.matchers.RootCauseExact;
 
 /**
- * TODO: doc me !!
+ * JUnit4 で、{@code assertThat()} メソッドを利用して例外またはエラーをスローしうるオペレーションを検査するための各種
+ * {@code Matcher} を提供するユーティリティクラスです。<br>
+ * {@link Testee} と組み合わせた利用方法については、{@link xyz.hotchpotch.jutaime.throwable パッケージの説明}を参照してください。<br>
+ * <br>
+ * 一般に、このクラスの static ファクトリメソッドにより提供される {@code Matcher} オブジェクトはスレッドセーフではありません。<br>
+ * ひとつの {@code Matcher} オブジェクトが複数のスレッドから操作されることは想定されていません。<br>
  * 
+ * @see xyz.hotchpotch.jutaime.throwable
+ * @see Testee
+ * @see org.junit.Assert#assertThat(Object, org.hamcrest.Matcher)
  * @author nmby
  */
 public class RaiseMatchers {

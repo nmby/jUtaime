@@ -11,15 +11,14 @@ import java.util.Objects;
  * 戻り値を返すタイプのオペレーションおよび返さないタイプのオペレーションの双方を検査できます。
  * また、{@link Throwable} を含む任意の例外またはエラーを検査できます。<br>
  * {@link RaiseMatchers} と組み合わせた利用方法については、{@link xyz.hotchpotch.jutaime.throwable パッケージの説明}を参照してください。<br>
- * 
  * <br>
  * 次の例のように、ひとつの {@code Testee} オブジェクトはひとつの {@code assertThat()} メソッド内で複数回評価され得ます。<br>
  * <pre>    assertThat(Testee.of(・・・), allOf(matcher1(・・・), matcher2(・・・), matcher3(・・・)));</pre>
- * 同じ結果を返すために、{@code Testee} は検査対象のオペレーションを一度だけ実行し、2回目以降はキャプチャした1回目の結果を返します。<br>
+ * テスト結果の一貫性を保つために、{@code Testee} は検査対象のオペレーションを一度だけ実行し、2回目以降はキャプチャした1回目の結果を返します。<br>
  * <br>
  * この実装はスレッドセーフです。<br>
  * 想定しづらいことではありますが、たとえば上の例における {@code allOf()} の実装によっては、
- * ひとつの {@code Testee} オブジェクトが複数のスレッド上の {@code Matcher} から操作され得ます。
+ * ひとつの {@code Testee} オブジェクトが複数のスレッド上の {@code Matcher} から操作・参照され得ます。
  * {@code Testee} クラスはそのような場合でも正しく動作するように設計されています。<br>
  * 
  * @see xyz.hotchpotch.jutaime.throwable
