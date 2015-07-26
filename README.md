@@ -25,8 +25,7 @@ JUnitでのテストを効率化するためのライブラリです。
         }
 
 また、[hamcrest.org](http://hamcrest.org/JavaHamcrest/) が提供する各種 Matcher と組み合わせて使用することもできます。  
-次の例では、オペレーションの実行により NullPointerException または IllegalArgumentException がスローされることを
-検証しています。  
+次の例では、オペレーションの実行により NullPointerException または IllegalArgumentException がスローされることを検証しています。  
 
     assertThat(of(() -> obj.doSomething(null)),
             anyOf(raise(NullPointerException.class), raise(IllegalArgumentException.class));
