@@ -21,7 +21,7 @@ import xyz.hotchpotch.jutaime.throwable.matchers.RootCauseExact;
  * このクラスのインスタンスは、{@link RaiseMatchers} クラスの static ファクトリメソッドにより提供されます。<br>
  * <br>
  * このクラスはスレッドセーフではありません。<br>
- * ひとつの {@code Matcher} オブジェクトが複数のスレッドから実行されることは想定されていません。<br>
+ * ひとつの {@code Matcher} オブジェクトが複数のスレッドから操作されることは想定されていません。<br>
  * 
  * @author nmby
  */
@@ -59,7 +59,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
     }
     
     /**
-     * この {@code Matcher} に、{@link RaiseMatchers#raise(Class)} で返される {@code Matcher} を追加します。<br>
+     * この {@code Matcher} に、{@link Raise#raise(Class)} で返される {@code Matcher} を追加します。<br>
      * 
      * @param expectedType 期待される例外の型
      * @return この {@code Matcher}
@@ -72,7 +72,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
     }
     
     /**
-     * この {@code Matcher} に、{@link RaiseMatchers#raiseExact(Class)} で返される {@code Matcher} を追加します。<br>
+     * この {@code Matcher} に、{@link RaiseExact#raiseExact(Class)} で返される {@code Matcher} を追加します。<br>
      * 
      * @param expectedType 期待される例外の型
      * @return この {@code Matcher}
@@ -85,7 +85,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
     }
     
     /**
-     * この {@code Matcher} に、{@link RaiseMatchers#raise(Class, String)} で返される {@code Matcher} を追加します。<br>
+     * この {@code Matcher} に、{@link Raise#raise(Class, String)} で返される {@code Matcher} を追加します。<br>
      * 
      * @param expectedType 期待される例外の型
      * @param expectedMessage 期待されるメッセージ（{@code null} が許容されます）
@@ -99,7 +99,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
     }
     
     /**
-     * この {@code Matcher} に、{@link RaiseMatchers#raiseExact(Class, String)} で返される {@code Matcher} を追加します。<br>
+     * この {@code Matcher} に、{@link RaiseExact#raiseExact(Class, String)} で返される {@code Matcher} を追加します。<br>
      * 
      * @param expectedType 期待される例外の型
      * @param expectedMessage 期待されるメッセージ（{@code null} が許容されます）
@@ -113,7 +113,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
     }
     
     /**
-     * この {@code Matcher} に、{@link RaiseMatchers#raise(Matcher)} で返される {@code Matcher} を追加します。<br>
+     * この {@code Matcher} に、{@link Raise#raise(Matcher)} で返される {@code Matcher} を追加します。<br>
      * 
      * @param matcher スローされた例外に対する判定を行うための {@code Matcher}
      * @return この {@code Matcher}
@@ -126,7 +126,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
     }
     
     /**
-     * この {@code Matcher} に、{@link RaiseMatchers#noCause()} で返される {@code Matcher} を追加します。<br>
+     * この {@code Matcher} に、{@link NoCause#noCause()} で返される {@code Matcher} を追加します。<br>
      * 
      * @return この {@code Matcher}
      * @see RaiseMatchers#noCause()
@@ -137,9 +137,9 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
     }
     
     /**
-     * この {@code Matcher} に、{@link RaiseMatchers#rootCause(Class)} で返される {@code Matcher} を追加します。<br>
+     * この {@code Matcher} に、{@link RootCause#rootCause(Class)} で返される {@code Matcher} を追加します。<br>
      * 
-     * @param expectedType 期待される root cause の型
+     * @param expectedType 期待される根本原因（root cause）の型
      * @return この {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
      * @see RaiseMatchers#rootCause(Class)
@@ -150,9 +150,9 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
     }
     
     /**
-     * この {@code Matcher} に、{@link RaiseMatchers#rootCauseExact(Class)} で返される {@code Matcher} を追加します。<br>
+     * この {@code Matcher} に、{@link RootCauseExact#rootCauseExact(Class)} で返される {@code Matcher} を追加します。<br>
      * 
-     * @param expectedType 期待される root cause の型
+     * @param expectedType 期待される根本原因（root cause）の型
      * @return この {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
      * @see RaiseMatchers#rootCauseExact(Class)
@@ -163,10 +163,10 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
     }
     
     /**
-     * この {@code Matcher} に、{@link RaiseMatchers#rootCause(Class, String)} で返される {@code Matcher} を追加します。<br>
+     * この {@code Matcher} に、{@link RootCause#rootCause(Class, String)} で返される {@code Matcher} を追加します。<br>
      * 
-     * @param expectedType 期待される root cause の型
-     * @param expectedMessage 期待される root cause のメッセージ（{@code null} が許容されます）
+     * @param expectedType 期待される根本原因（root cause）の型
+     * @param expectedMessage 期待される根本原因（root cause）のメッセージ（{@code null} が許容されます）
      * @return この {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
      * @see RaiseMatchers#rootCause(Class, String)
@@ -177,10 +177,10 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
     }
     
     /**
-     * この {@code Matcher} に、{@link RaiseMatchers#rootCauseExact(Class, String)} で返される {@code Matcher} を追加します。<br>
+     * この {@code Matcher} に、{@link RootCauseExact#rootCauseExact(Class, String)} で返される {@code Matcher} を追加します。<br>
      * 
-     * @param expectedType 期待される root cause の型
-     * @param expectedMessage 期待される root cause のメッセージ（{@code null} が許容されます）
+     * @param expectedType 期待される根本原因（root cause）の型
+     * @param expectedMessage 期待される根本原因（root cause）のメッセージ（{@code null} が許容されます）
      * @return この {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
      * @see RaiseMatchers#rootCauseExact(Class, String)
@@ -191,7 +191,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
     }
     
     /**
-     * この {@code Matcher} に、{@link RaiseMatchers#rootCause(Matcher)} で返される {@code Matcher} を追加します。<br>
+     * この {@code Matcher} に、{@link RootCause#rootCause(Matcher)} で返される {@code Matcher} を追加します。<br>
      * 
      * @param matcher 根本原因（root cause）に対する判定を行うための {@code Matcher}
      * @return この {@code Matcher}
@@ -204,7 +204,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
     }
     
     /**
-     * この {@code Matcher} に、{@link RaiseMatchers#inChain(Class)} で返される {@code Matcher} を追加します。<br>
+     * この {@code Matcher} に、{@link InChain#inChain(Class)} で返される {@code Matcher} を追加します。<br>
      * 
      * @param expectedType 期待される例外の型
      * @return この {@code Matcher}
@@ -217,7 +217,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
     }
     
     /**
-     * この {@code Matcher} に、{@link RaiseMatchers#inChainExact(Class)} で返される {@code Matcher} を追加します。<br>
+     * この {@code Matcher} に、{@link InChainExact#inChainExact(Class)} で返される {@code Matcher} を追加します。<br>
      * 
      * @param expectedType 期待される例外の型
      * @return この {@code Matcher}
@@ -230,7 +230,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
     }
     
     /**
-     * この {@code Matcher} に、{@link RaiseMatchers#inChain(Class, String)} で返される {@code Matcher} を追加します。<br>
+     * この {@code Matcher} に、{@link InChain#inChain(Class, String)} で返される {@code Matcher} を追加します。<br>
      * 
      * @param expectedType 期待される例外の型
      * @param expectedMessage 期待されるメッセージ（{@code null} が許容されます）
@@ -244,7 +244,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
     }
     
     /**
-     * この {@code Matcher} に、{@link RaiseMatchers#inChainExact(Class, String)} で返される {@code Matcher} を追加します。<br>
+     * この {@code Matcher} に、{@link InChainExact#inChainExact(Class, String)} で返される {@code Matcher} を追加します。<br>
      * 
      * @param expectedType 期待される例外の型
      * @param expectedMessage 期待されるメッセージ（{@code null} が許容されます）
@@ -258,7 +258,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
     }
     
     /**
-     * この {@code Matcher} に、{@link RaiseMatchers#inChain(Matcher)} で返される {@code Matcher} を追加します。<br>
+     * この {@code Matcher} に、{@link InChain#inChain(Matcher)} で返される {@code Matcher} を追加します。<br>
      * 
      * @param matcher 例外チェインの中の各例外に対する判定を行うための {@code Matcher}
      * @return この {@code Matcher}
@@ -271,7 +271,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
     }
     
     /**
-     * この {@code Matcher} に、{@link Testee} に対する任意の {@link Matcher} を追加します。<br>
+     * この {@code Matcher} に任意の {@link Matcher} を追加します。<br>
      * 
      * @param matcher {@code Testee} に対する任意の検査を行う {@code Matcher}
      * @return この {@code Matcher}

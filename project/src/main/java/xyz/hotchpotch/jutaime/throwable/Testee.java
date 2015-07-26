@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * JUnit4 で、{@code assertThat()} メソッドを利用して例外またはエラーをスローしうるオペレーションを検査するためのラッパーです。<br>
+ * オペレーションによりスローされる例外およびエラーを検査するための、オペレーションのラッパーです。<br>
  * 戻り値を返すタイプのオペレーションおよび返さないタイプのオペレーションの双方を検査できます。
  * また、{@link Throwable} を含む任意の例外またはエラーを検査できます。<br>
  * {@link RaiseMatchers} と組み合わせた利用方法については、{@link xyz.hotchpotch.jutaime.throwable パッケージの説明}を参照してください。<br>

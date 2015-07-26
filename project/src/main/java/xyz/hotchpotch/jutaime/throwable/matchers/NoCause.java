@@ -7,7 +7,7 @@ import org.hamcrest.TypeSafeMatcher;
 import xyz.hotchpotch.jutaime.throwable.Testee;
 
 /**
- * 検査対象のオペレーションがスローした例外やエラーが原因（cause）を持たないことを検査する {@code Matcher} です。<br>
+ * スローされた例外やエラーが原因（cause）を持たないことを検査する {@code Matcher} です。<br>
  * この {@code Matcher} は、スローされた例外 {@code actual} に対して、
  * {@code actual.getCause() == null} の場合に合格と判定します。<br>
  * 検査対象のオペレーションが正常終了した場合は、不合格と判定します。<br>
