@@ -2,6 +2,7 @@
 JUnitでのテストを効率化するためのライブラリです。  
 
 #### 例外検証の効率化
+
 通常の検証と同じスタイルで、`assertThat()` を使用して例外発生コードを検証することができます。  
 
     assertThat(Testee.of(SomeClass::someMethodShouldFail),
@@ -24,14 +25,14 @@ JUnitでのテストを効率化するためのライブラリです。
             ...
         }
 
-また、[hamcrest.org](http://hamcrest.org/JavaHamcrest/) が提供する各種 Matcher と組み合わせて使用することもできます。  
-次の例では、オペレーションの実行により NullPointerException または IllegalArgumentException がスローされることを検証しています。  
+また、他の Matcher と組み合わせて使用することもできます。  
+次の例では、[hamcrest.org](http://hamcrest.org/JavaHamcrest/) が提供する `anyOf`、`allOf`、`not` と組み合わせて使用しています。  
 
+    // NullPointerException または IllegalArgumentException がスローされることを検証する。
     assertThat(of(() -> obj.doSomething(null)),
             anyOf(raise(NullPointerException.class), raise(IllegalArgumentException.class));
-
-次の例では、NullPointerException 以外の何らかの実行時例外を原因として上位例外がスローされることを検証しています。  
-
+    
+    // NullPointerException 以外の何らかの実行時例外を原因として上位例外がスローされることを検証する。
     assertThat(of(() -> obj.doSomething(param)),
             allOf(raise(WrappingException.class, "expected message"),
                   rootCause(RuntimeException.class),
