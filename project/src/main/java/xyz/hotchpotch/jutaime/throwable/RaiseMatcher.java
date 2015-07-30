@@ -64,7 +64,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @param expectedType 期待される例外の型
      * @return この {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
-     * @see RaiseMatchers#raise(Class)
+     * @see Raise#raise(Class)
      */
     public RaiseMatcher raise(Class<? extends Throwable> expectedType) {
         matchers.add(Raise.raise(Objects.requireNonNull(expectedType)));
@@ -77,7 +77,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @param expectedType 期待される例外の型
      * @return この {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
-     * @see RaiseMatchers#raiseExact(Class)
+     * @see RaiseExact#raiseExact(Class)
      */
     public RaiseMatcher raiseExact(Class<? extends Throwable> expectedType) {
         matchers.add(RaiseExact.raiseExact(Objects.requireNonNull(expectedType)));
@@ -91,7 +91,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @param expectedMessage 期待されるメッセージ（{@code null} が許容されます）
      * @return この {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
-     * @see RaiseMatchers#raise(Class, String)
+     * @see Raise#raise(Class, String)
      */
     public RaiseMatcher raise(Class<? extends Throwable> expectedType, String expectedMessage) {
         matchers.add(Raise.raise(Objects.requireNonNull(expectedType), expectedMessage));
@@ -105,7 +105,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @param expectedMessage 期待されるメッセージ（{@code null} が許容されます）
      * @return この {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
-     * @see RaiseMatchers#raiseExact(Class, String)
+     * @see RaiseExact#raiseExact(Class, String)
      */
     public RaiseMatcher raiseExact(Class<? extends Throwable> expectedType, String expectedMessage) {
         matchers.add(RaiseExact.raiseExact(Objects.requireNonNull(expectedType), expectedMessage));
@@ -118,7 +118,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @param matcher スローされた例外に対する判定を行うための {@code Matcher}
      * @return この {@code Matcher}
      * @throws NullPointerException {@code matcher} が {@code null} の場合
-     * @see RaiseMatchers#raise(Matcher)
+     * @see Raise#raise(Matcher)
      */
     public RaiseMatcher raise(Matcher<Throwable> matcher) {
         matchers.add(Raise.raise(Objects.requireNonNull(matcher)));
@@ -129,7 +129,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * この {@code Matcher} に、{@link NoCause#noCause()} で返される {@code Matcher} を追加します。<br>
      * 
      * @return この {@code Matcher}
-     * @see RaiseMatchers#noCause()
+     * @see NoCause#noCause()
      */
     public RaiseMatcher noCause() {
         matchers.add(NoCause.noCause());
@@ -142,7 +142,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @param expectedType 期待される根本原因（root cause）の型
      * @return この {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
-     * @see RaiseMatchers#rootCause(Class)
+     * @see RootCause#rootCause(Class)
      */
     public RaiseMatcher rootCause(Class<? extends Throwable> expectedType) {
         matchers.add(RootCause.rootCause(Objects.requireNonNull(expectedType)));
@@ -155,7 +155,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @param expectedType 期待される根本原因（root cause）の型
      * @return この {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
-     * @see RaiseMatchers#rootCauseExact(Class)
+     * @see RootCauseExact#rootCauseExact(Class)
      */
     public RaiseMatcher rootCauseExact(Class<? extends Throwable> expectedType) {
         matchers.add(RootCauseExact.rootCauseExact(Objects.requireNonNull(expectedType)));
@@ -169,7 +169,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @param expectedMessage 期待される根本原因（root cause）のメッセージ（{@code null} が許容されます）
      * @return この {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
-     * @see RaiseMatchers#rootCause(Class, String)
+     * @see RootCause#rootCause(Class, String)
      */
     public RaiseMatcher rootCause(Class<? extends Throwable> expectedType, String expectedMessage) {
         matchers.add(RootCause.rootCause(Objects.requireNonNull(expectedType), expectedMessage));
@@ -183,7 +183,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @param expectedMessage 期待される根本原因（root cause）のメッセージ（{@code null} が許容されます）
      * @return この {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
-     * @see RaiseMatchers#rootCauseExact(Class, String)
+     * @see RootCauseExact#rootCauseExact(Class, String)
      */
     public RaiseMatcher rootCauseExact(Class<? extends Throwable> expectedType, String expectedMessage) {
         matchers.add(RootCauseExact.rootCauseExact(Objects.requireNonNull(expectedType), expectedMessage));
@@ -196,7 +196,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @param matcher 根本原因（root cause）に対する判定を行うための {@code Matcher}
      * @return この {@code Matcher}
      * @throws NullPointerException {@code matcher} が {@code null} の場合
-     * @see RaiseMatchers#rootCause(Matcher)
+     * @see RootCause#rootCause(Matcher)
      */
     public RaiseMatcher rootCause(Matcher<Throwable> matcher) {
         matchers.add(RootCause.rootCause(Objects.requireNonNull(matcher)));
@@ -209,7 +209,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @param expectedType 期待される例外の型
      * @return この {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
-     * @see RaiseMatchers#inChain(Class)
+     * @see InChain#inChain(Class)
      */
     public RaiseMatcher inChain(Class<? extends Throwable> expectedType) {
         matchers.add(InChain.inChain(Objects.requireNonNull(expectedType)));
@@ -222,7 +222,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @param expectedType 期待される例外の型
      * @return この {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
-     * @see RaiseMatchers#inChainExact(Class)
+     * @see InChainExact#inChainExact(Class)
      */
     public RaiseMatcher inChainExact(Class<? extends Throwable> expectedType) {
         matchers.add(InChainExact.inChainExact(Objects.requireNonNull(expectedType)));
@@ -236,7 +236,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @param expectedMessage 期待されるメッセージ（{@code null} が許容されます）
      * @return この {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
-     * @see RaiseMatchers#inChain(Class, String)
+     * @see InChain#inChain(Class, String)
      */
     public RaiseMatcher inChain(Class<? extends Throwable> expectedType, String expectedMessage) {
         matchers.add(InChain.inChain(Objects.requireNonNull(expectedType), expectedMessage));
@@ -250,7 +250,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @param expectedMessage 期待されるメッセージ（{@code null} が許容されます）
      * @return この {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
-     * @see RaiseMatchers#inChainExact(Class, String)
+     * @see InChainExact#inChainExact(Class, String)
      */
     public RaiseMatcher inChainExact(Class<? extends Throwable> expectedType, String expectedMessage) {
         matchers.add(InChainExact.inChainExact(Objects.requireNonNull(expectedType), expectedMessage));
@@ -263,7 +263,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @param matcher 例外チェインの中の各例外に対する判定を行うための {@code Matcher}
      * @return この {@code Matcher}
      * @throws NullPointerException {@code matcher} が {@code null} の場合
-     * @see RaiseMatchers#inChain(Matcher)
+     * @see InChain#inChain(Matcher)
      */
     public RaiseMatcher inChain(Matcher<Throwable> matcher) {
         matchers.add(InChain.inChain(Objects.requireNonNull(matcher)));
