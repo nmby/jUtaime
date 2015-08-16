@@ -34,7 +34,8 @@ public class InChainExact extends InChainBase {
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
      */
     public static Matcher<Testee> inChainExact(Class<? extends Throwable> expectedType) {
-        return new InChainExact(Objects.requireNonNull(expectedType));
+        Objects.requireNonNull(expectedType);
+        return new InChainExact(expectedType);
     }
     
     /**
@@ -47,7 +48,8 @@ public class InChainExact extends InChainBase {
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
      */
     public static Matcher<Testee> inChainExact(Class<? extends Throwable> expectedType, String expectedMessage) {
-        return new InChainExact(Objects.requireNonNull(expectedType), expectedMessage);
+        Objects.requireNonNull(expectedType);
+        return new InChainExact(expectedType, expectedMessage);
     }
     
     // ++++++++++++++++ instance members ++++++++++++++++

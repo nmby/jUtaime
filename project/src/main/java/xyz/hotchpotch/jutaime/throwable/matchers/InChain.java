@@ -34,7 +34,8 @@ public class InChain extends InChainBase {
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
      */
     public static Matcher<Testee> inChain(Class<? extends Throwable> expectedType) {
-        return new InChain(Objects.requireNonNull(expectedType));
+        Objects.requireNonNull(expectedType);
+        return new InChain(expectedType);
     }
     
     /**
@@ -47,7 +48,8 @@ public class InChain extends InChainBase {
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
      */
     public static Matcher<Testee> inChain(Class<? extends Throwable> expectedType, String expectedMessage) {
-        return new InChain(Objects.requireNonNull(expectedType), expectedMessage);
+        Objects.requireNonNull(expectedType);
+        return new InChain(expectedType, expectedMessage);
     }
     
     /**
@@ -59,7 +61,8 @@ public class InChain extends InChainBase {
      * @throws NullPointerException {@code matcher} が {@code null} の場合
      */
     public static Matcher<Testee> inChain(Matcher<Throwable> matcher) {
-        return new InChain(Objects.requireNonNull(matcher));
+        Objects.requireNonNull(matcher);
+        return new InChain(matcher);
     }
     
     // ++++++++++++++++ instance members ++++++++++++++++

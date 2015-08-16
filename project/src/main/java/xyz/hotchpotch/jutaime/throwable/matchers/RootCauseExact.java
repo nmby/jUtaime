@@ -33,7 +33,8 @@ public class RootCauseExact extends RootCauseBase {
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
      */
     public static Matcher<Testee> rootCauseExact(Class<? extends Throwable> expectedType) {
-        return new RootCauseExact(Objects.requireNonNull(expectedType));
+        Objects.requireNonNull(expectedType);
+        return new RootCauseExact(expectedType);
     }
     
     /**
@@ -46,7 +47,8 @@ public class RootCauseExact extends RootCauseBase {
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
      */
     public static Matcher<Testee> rootCauseExact(Class<? extends Throwable> expectedType, String expectedMessage) {
-        return new RootCauseExact(Objects.requireNonNull(expectedType), expectedMessage);
+        Objects.requireNonNull(expectedType);
+        return new RootCauseExact(expectedType, expectedMessage);
     }
     
     // ++++++++++++++++ instance members ++++++++++++++++

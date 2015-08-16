@@ -31,7 +31,8 @@ abstract class ThrowableBaseMatcher extends TypeSafeMatcher<Testee> {
             @Override
             protected boolean matchesSafely(Throwable actual) {
                 assert actual != null;
-                return (exactly ? expectedType.equals(actual.getClass())
+                return (exactly
+                        ? expectedType.equals(actual.getClass())
                         : expectedType.isAssignableFrom(actual.getClass()))
                         && Objects.equals(expectedMessage, actual.getMessage());
             }
@@ -51,7 +52,8 @@ abstract class ThrowableBaseMatcher extends TypeSafeMatcher<Testee> {
             @Override
             protected boolean matchesSafely(Throwable actual) {
                 assert actual != null;
-                return (exactly ? expectedType.equals(actual.getClass())
+                return (exactly
+                        ? expectedType.equals(actual.getClass())
                         : expectedType.isAssignableFrom(actual.getClass()));
             }
             

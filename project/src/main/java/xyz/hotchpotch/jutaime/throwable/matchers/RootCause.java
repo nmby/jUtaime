@@ -33,7 +33,8 @@ public class RootCause extends RootCauseBase {
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
      */
     public static Matcher<Testee> rootCause(Class<? extends Throwable> expectedType) {
-        return new RootCause(Objects.requireNonNull(expectedType));
+        Objects.requireNonNull(expectedType);
+        return new RootCause(expectedType);
     }
     
     /**
@@ -46,7 +47,8 @@ public class RootCause extends RootCauseBase {
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
      */
     public static Matcher<Testee> rootCause(Class<? extends Throwable> expectedType, String expectedMessage) {
-        return new RootCause(Objects.requireNonNull(expectedType), expectedMessage);
+        Objects.requireNonNull(expectedType);
+        return new RootCause(expectedType, expectedMessage);
     }
     
     /**
@@ -57,7 +59,8 @@ public class RootCause extends RootCauseBase {
      * @throws NullPointerException {@code matcher} が {@code null} の場合
      */
     public static Matcher<Testee> rootCause(Matcher<Throwable> matcher) {
-        return new RootCause(Objects.requireNonNull(matcher));
+        Objects.requireNonNull(matcher);
+        return new RootCause(matcher);
     }
     
     // ++++++++++++++++ instance members ++++++++++++++++

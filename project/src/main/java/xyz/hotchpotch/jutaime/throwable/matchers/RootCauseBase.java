@@ -42,11 +42,13 @@ class RootCauseBase extends ThrowableBaseMatcher {
             t = t.getCause();
             
             // 例外チェインがループ状になっている場合のための処置。
-            // ループ状の例外チェインが妥当であるはずがないし実装する輩がいるとは思えないが、防御的に実装しておく。
+            // ループ状の例外チェインが妥当であるはずがないし実装する輩がいるとは思えないが、
+            // 防御的に対処コードを実装しておく。
+            // 
             // equals() がオーバーライドされている可能性が無くはないので
             // List#contains() ではなく明示的に == で比較することにする。
             Throwable t2 = t;
-            if (chain.parallelStream().anyMatch(x -> x == t2)) {
+            if (chain.stream().anyMatch(x -> x == t2)) {
                 // ループしている場合は不合格とする
                 return false;
             }

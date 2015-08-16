@@ -31,7 +31,8 @@ public class Raise extends RaiseBase {
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
      */
     public static Matcher<Testee> raise(Class<? extends Throwable> expectedType) {
-        return new Raise(Objects.requireNonNull(expectedType));
+        Objects.requireNonNull(expectedType);
+        return new Raise(expectedType);
     }
     
     /**
@@ -44,7 +45,8 @@ public class Raise extends RaiseBase {
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
      */
     public static Matcher<Testee> raise(Class<? extends Throwable> expectedType, String expectedMessage) {
-        return new Raise(Objects.requireNonNull(expectedType), expectedMessage);
+        Objects.requireNonNull(expectedType);
+        return new Raise(expectedType, expectedMessage);
     }
     
     /**
@@ -55,7 +57,8 @@ public class Raise extends RaiseBase {
      * @throws NullPointerException {@code matcher} が {@code null} の場合
      */
     public static Matcher<Testee> raise(Matcher<Throwable> matcher) {
-        return new Raise(Objects.requireNonNull(matcher));
+        Objects.requireNonNull(matcher);
+        return new Raise(matcher);
     }
     
     // ++++++++++++++++ instance members ++++++++++++++++
