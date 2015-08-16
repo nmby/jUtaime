@@ -3,6 +3,7 @@ package xyz.hotchpotch.jutaime.throwable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -44,7 +45,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
     @Override
     protected boolean matchesSafely(Testee testee) {
         assert testee != null;
-        return matchers.stream().allMatch(x -> x.matches(testee));
+        return matchers.parallelStream().allMatch(x -> x.matches(testee));
     }
     
     /**
@@ -54,7 +55,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
     public void describeTo(Description description) {
         if (description != null) {
             description.appendText(
-                    String.join(", ", matchers.stream().map(x -> x.toString()).toArray(String[]::new)));
+                    matchers.stream().map(x -> x.toString()).collect(Collectors.joining(", ")));
         }
     }
     
@@ -67,7 +68,8 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @see Raise#raise(Class)
      */
     public RaiseMatcher raise(Class<? extends Throwable> expectedType) {
-        matchers.add(Raise.raise(Objects.requireNonNull(expectedType)));
+        Objects.requireNonNull(expectedType);
+        matchers.add(Raise.raise(expectedType));
         return this;
     }
     
@@ -80,7 +82,8 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @see RaiseExact#raiseExact(Class)
      */
     public RaiseMatcher raiseExact(Class<? extends Throwable> expectedType) {
-        matchers.add(RaiseExact.raiseExact(Objects.requireNonNull(expectedType)));
+        Objects.requireNonNull(expectedType);
+        matchers.add(RaiseExact.raiseExact(expectedType));
         return this;
     }
     
@@ -94,7 +97,8 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @see Raise#raise(Class, String)
      */
     public RaiseMatcher raise(Class<? extends Throwable> expectedType, String expectedMessage) {
-        matchers.add(Raise.raise(Objects.requireNonNull(expectedType), expectedMessage));
+        Objects.requireNonNull(expectedType);
+        matchers.add(Raise.raise(expectedType, expectedMessage));
         return this;
     }
     
@@ -108,7 +112,8 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @see RaiseExact#raiseExact(Class, String)
      */
     public RaiseMatcher raiseExact(Class<? extends Throwable> expectedType, String expectedMessage) {
-        matchers.add(RaiseExact.raiseExact(Objects.requireNonNull(expectedType), expectedMessage));
+        Objects.requireNonNull(expectedType);
+        matchers.add(RaiseExact.raiseExact(expectedType, expectedMessage));
         return this;
     }
     
@@ -121,7 +126,8 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @see Raise#raise(Matcher)
      */
     public RaiseMatcher raise(Matcher<Throwable> matcher) {
-        matchers.add(Raise.raise(Objects.requireNonNull(matcher)));
+        Objects.requireNonNull(matcher);
+        matchers.add(Raise.raise(matcher));
         return this;
     }
     
@@ -145,7 +151,8 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @see RootCause#rootCause(Class)
      */
     public RaiseMatcher rootCause(Class<? extends Throwable> expectedType) {
-        matchers.add(RootCause.rootCause(Objects.requireNonNull(expectedType)));
+        Objects.requireNonNull(expectedType);
+        matchers.add(RootCause.rootCause(expectedType));
         return this;
     }
     
@@ -158,7 +165,8 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @see RootCauseExact#rootCauseExact(Class)
      */
     public RaiseMatcher rootCauseExact(Class<? extends Throwable> expectedType) {
-        matchers.add(RootCauseExact.rootCauseExact(Objects.requireNonNull(expectedType)));
+        Objects.requireNonNull(expectedType);
+        matchers.add(RootCauseExact.rootCauseExact(expectedType));
         return this;
     }
     
@@ -172,7 +180,8 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @see RootCause#rootCause(Class, String)
      */
     public RaiseMatcher rootCause(Class<? extends Throwable> expectedType, String expectedMessage) {
-        matchers.add(RootCause.rootCause(Objects.requireNonNull(expectedType), expectedMessage));
+        Objects.requireNonNull(expectedType);
+        matchers.add(RootCause.rootCause(expectedType, expectedMessage));
         return this;
     }
     
@@ -186,7 +195,8 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @see RootCauseExact#rootCauseExact(Class, String)
      */
     public RaiseMatcher rootCauseExact(Class<? extends Throwable> expectedType, String expectedMessage) {
-        matchers.add(RootCauseExact.rootCauseExact(Objects.requireNonNull(expectedType), expectedMessage));
+        Objects.requireNonNull(expectedType);
+        matchers.add(RootCauseExact.rootCauseExact(expectedType, expectedMessage));
         return this;
     }
     
@@ -199,7 +209,8 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @see RootCause#rootCause(Matcher)
      */
     public RaiseMatcher rootCause(Matcher<Throwable> matcher) {
-        matchers.add(RootCause.rootCause(Objects.requireNonNull(matcher)));
+        Objects.requireNonNull(matcher);
+        matchers.add(RootCause.rootCause(matcher));
         return this;
     }
     
@@ -212,7 +223,8 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @see InChain#inChain(Class)
      */
     public RaiseMatcher inChain(Class<? extends Throwable> expectedType) {
-        matchers.add(InChain.inChain(Objects.requireNonNull(expectedType)));
+        Objects.requireNonNull(expectedType);
+        matchers.add(InChain.inChain(expectedType));
         return this;
     }
     
@@ -225,7 +237,8 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @see InChainExact#inChainExact(Class)
      */
     public RaiseMatcher inChainExact(Class<? extends Throwable> expectedType) {
-        matchers.add(InChainExact.inChainExact(Objects.requireNonNull(expectedType)));
+        Objects.requireNonNull(expectedType);
+        matchers.add(InChainExact.inChainExact(expectedType));
         return this;
     }
     
@@ -239,7 +252,8 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @see InChain#inChain(Class, String)
      */
     public RaiseMatcher inChain(Class<? extends Throwable> expectedType, String expectedMessage) {
-        matchers.add(InChain.inChain(Objects.requireNonNull(expectedType), expectedMessage));
+        Objects.requireNonNull(expectedType);
+        matchers.add(InChain.inChain(expectedType, expectedMessage));
         return this;
     }
     
@@ -253,7 +267,8 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @see InChainExact#inChainExact(Class, String)
      */
     public RaiseMatcher inChainExact(Class<? extends Throwable> expectedType, String expectedMessage) {
-        matchers.add(InChainExact.inChainExact(Objects.requireNonNull(expectedType), expectedMessage));
+        Objects.requireNonNull(expectedType);
+        matchers.add(InChainExact.inChainExact(expectedType, expectedMessage));
         return this;
     }
     
@@ -266,7 +281,8 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @see InChain#inChain(Matcher)
      */
     public RaiseMatcher inChain(Matcher<Throwable> matcher) {
-        matchers.add(InChain.inChain(Objects.requireNonNull(matcher)));
+        Objects.requireNonNull(matcher);
+        matchers.add(InChain.inChain(matcher));
         return this;
     }
     
@@ -280,7 +296,8 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
     public RaiseMatcher and(Matcher<Testee> matcher) {
         // 自分自身を渡されたりそれに類したことをされるとループになってしまうが、
         // そこまで面倒見てられないので、ケアしないことにする。
-        matchers.add(Objects.requireNonNull(matcher));
+        Objects.requireNonNull(matcher);
+        matchers.add(matcher);
         return this;
     }
     
@@ -296,7 +313,8 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
     public RaiseMatcher not(Matcher<Testee> matcher) {
         // 自分自身を渡されたりそれに類したことをされるとループになってしまうが、
         // そこまで面倒見てられないので、ケアしないことにする。
-        matchers.add(org.hamcrest.CoreMatchers.not(Objects.requireNonNull(matcher)));
+        Objects.requireNonNull(matcher);
+        matchers.add(org.hamcrest.CoreMatchers.not(matcher));
         return this;
     }
 }
