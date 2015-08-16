@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * オペレーションによりスローされる例外およびエラーを検査するための、オペレーションのラッパーです。<br>
@@ -53,6 +54,58 @@ public class Testee implements UnsafeCallable<Object> {
      */
     public static Testee of(UnsafeRunnable operation) {
         return new Testee(Objects.requireNonNull(operation));
+    }
+    
+    private static String descResult(Object result) {
+        if (result == null || !result.getClass().isArray()) {
+            return Objects.toString(result);
+        }
+        
+        try {
+            if (result.getClass().getComponentType().isPrimitive()) {
+                Method method = Arrays.class.getMethod("toString", result.getClass());
+                return (String) method.invoke(null, result);
+            } else {
+                return Arrays.deepToString((Object[]) result);
+            }
+        } catch (Exception e) {
+            return Objects.toString(result);
+        }
+    }
+    
+    private static String descThrown(Throwable thrown) {
+        List<Throwable> chain = new ArrayList<>();
+        boolean containsLoop = false;
+        Throwable t = thrown;
+        
+        while (t != null) {
+            
+            // 例外チェインがループ状になっている場合のための処置。
+            // ループ状の例外チェインが妥当であるはずがないし実装する輩がいるとは思えないが、
+            // 防御的に対処コードを実装しておく。
+            // 
+            // equals() がオーバーライドされている可能性が無くはないので
+            // List#contains() ではなく明示的に == で比較することにする。
+            Throwable t2 = t;
+            if (chain.parallelStream().anyMatch(x -> x == t2)) {
+                chain.add(t);
+                containsLoop = true;
+                break;
+            }
+            
+            chain.add(t);
+            t = t.getCause();
+        }
+        String chainStr = chain.parallelStream()
+                .map(x -> String.format("%s (%s)", x.getClass().getName(), x.getMessage()))
+                .collect(Collectors.joining(": "));
+                
+        StringBuilder str = new StringBuilder();
+        str.append("throw ")
+                .append(chainStr)
+                .append(containsLoop ? ": ..." : "");
+                
+        return str.toString();
     }
     
     // ++++++++++++++++ instance members ++++++++++++++++
@@ -105,56 +158,6 @@ public class Testee implements UnsafeCallable<Object> {
         } else {
             return result;
         }
-    }
-    
-    private String descResult(Object result) {
-        if (result == null || !result.getClass().isArray()) {
-            return Objects.toString(result);
-        }
-        
-        try {
-            if (result.getClass().getComponentType().isPrimitive()) {
-                Method method = Arrays.class.getMethod("toString", result.getClass());
-                return (String) method.invoke(null, result);
-            } else {
-                return Arrays.deepToString((Object[]) result);
-            }
-        } catch (Exception e) {
-            return Objects.toString(result);
-        }
-    }
-    
-    private String descThrown(Throwable thrown) {
-        List<Throwable> chain = new ArrayList<>();
-        boolean containsLoop = false;
-        Throwable t = thrown;
-        
-        while (t != null) {
-            
-            // 例外チェインがループ状になっている場合のための処置。
-            // ループ状の例外チェインが妥当であるはずがないし実装する輩がいるとは思えないが、防御的に実装しておく。
-            // equals() がオーバーライドされている可能性が無くはないので
-            // List#contains() ではなく明示的に == で比較することにする。
-            Throwable t2 = t;
-            if (chain.parallelStream().anyMatch(x -> x == t2)) {
-                chain.add(t);
-                containsLoop = true;
-                break;
-            }
-            
-            chain.add(t);
-            t = t.getCause();
-        }
-        String[] chainStr = chain.stream()
-                .map(x -> String.format("%s (%s)", x.getClass().getName(), x.getMessage()))
-                .toArray(String[]::new);
-                
-        StringBuilder str = new StringBuilder();
-        str.append("throw ")
-                .append(String.join(": ", chainStr))
-                .append(containsLoop ? ": ..." : "");
-                
-        return str.toString();
     }
     
     /**
