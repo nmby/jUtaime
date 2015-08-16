@@ -36,10 +36,7 @@ class InChainBase extends ThrowableBaseMatcher {
         List<Throwable> chain = new ArrayList<>();
         Throwable t = actual;
         
-        // まず、例外チェインに含まれる例外をすべて収集する
-        // （例外チェインなど短いものなので、このアルゴリズムを採用する）
         while (t != null) {
-            
             // 例外チェインがループ状になっている場合のための処置。
             // ループ状の例外チェインが妥当であるはずがないし実装する輩がいるとは思えないが、
             // 防御的に対処コードを実装しておく。
@@ -47,17 +44,18 @@ class InChainBase extends ThrowableBaseMatcher {
             // equals() がオーバーライドされている可能性が無くはないので
             // List#contains() ではなく明示的に == で比較することにする。
             Throwable t2 = t;
-            if (chain.stream().anyMatch(x -> x == t2)) {
-                chain.add(t);
-                break;
+            if (chain.parallelStream().anyMatch(x -> x == t2)) {
+                // ループしている場合はこれ以上調べても仕方ない
+                return false;
             }
             
+            if (matchesEach(t)) {
+                return true;
+            }
             chain.add(t);
             t = t.getCause();
         }
-        
-        // 収集した例外の中にマッチするものがあるかを調べる
-        return chain.parallelStream().anyMatch(this::matchesEach);
+        return false;
     }
     
     @Override
