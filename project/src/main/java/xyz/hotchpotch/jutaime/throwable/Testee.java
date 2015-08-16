@@ -87,7 +87,7 @@ public class Testee implements UnsafeCallable<Object> {
             // equals() がオーバーライドされている可能性が無くはないので
             // List#contains() ではなく明示的に == で比較することにする。
             Throwable t2 = t;
-            if (chain.parallelStream().anyMatch(x -> x == t2)) {
+            if (chain.stream().anyMatch(x -> x == t2)) {
                 chain.add(t);
                 containsLoop = true;
                 break;
@@ -96,7 +96,7 @@ public class Testee implements UnsafeCallable<Object> {
             chain.add(t);
             t = t.getCause();
         }
-        String chainStr = chain.parallelStream()
+        String chainStr = chain.stream()
                 .map(x -> String.format("%s (%s)", x.getClass().getName(), x.getMessage()))
                 .collect(Collectors.joining(": "));
                 
