@@ -44,7 +44,7 @@ class InChainBase extends ThrowableBaseMatcher {
             // equals() がオーバーライドされている可能性が無くはないので
             // List#contains() ではなく明示的に == で比較することにする。
             Throwable t2 = t;
-            if (chain.parallelStream().anyMatch(x -> x == t2)) {
+            if (chain.stream().anyMatch(x -> x == t2)) {
                 // ループしている場合はこれ以上調べても仕方ない
                 return false;
             }
