@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Objects;
+import java.util.function.Function;
 
 public class TestUtil {
     
@@ -37,10 +38,34 @@ public class TestUtil {
         }
     }
     
-    @SuppressWarnings("unchecked")
     public static <T> T writeAndRead(T obj) {
+        return writeModifyAndRead(obj, Function.identity());
+    }
+    
+    public static <T> T writeModifyAndRead(T obj, Function<byte[], byte[]> bytesModifier) {
+        Objects.requireNonNull(bytesModifier);
+        
+        // write
         byte[] bytes = write(obj);
-        return (T) read(bytes);
+        
+        // modify
+        byte[] bytes2 = bytesModifier.apply(bytes);
+        
+        // and read
+        @SuppressWarnings("unchecked")
+        T obj2 = (T) read(bytes2);
+        
+        return obj2;
+    }
+    
+    public static Function<byte[], byte[]> bytesModifier(Function<String, String> stringModifier) {
+        Objects.requireNonNull(stringModifier);
+        
+        return bytes -> {
+            String hexStr = toHexString(bytes);
+            String hexStr2 = stringModifier.apply(hexStr);
+            return hexToBytes(hexStr2);
+        };
     }
     
     public static String toHexString(byte[] bytes) {

@@ -8,6 +8,8 @@ import static xyz.hotchpotch.jutaime.throwable.Testee.*;
 
 import java.io.NotSerializableException;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.function.Function;
 
 import org.junit.Test;
 
@@ -66,6 +68,29 @@ public class TestUtilTest {
     }
     
     @Test
+    public void testWriteModifyAndRead() {
+        Function<byte[], byte[]> bytesModifier = bytes -> {
+            byte[] bytes2 = Arrays.copyOf(bytes, bytes.length);
+            bytes2[bytes2.length - 1] = 0x02;
+            return bytes2;
+            };
+        assertThat(writeModifyAndRead(Integer.valueOf(1), bytesModifier), is(Integer.valueOf(2)));
+        
+        assertThat(of(() -> writeModifyAndRead(Integer.valueOf(1), null)), raise(NullPointerException.class));
+    }
+    
+    @Test
+    public void testBytesModifier() {
+        Function<String, String> stringModifier = hexStr -> {
+            return hexStr.substring(0, hexStr.length() - 3 * 4) + " 00 00 00 02";
+        };
+        Function<byte[], byte[]> bytesModifier = bytesModifier(stringModifier);
+        assertThat(writeModifyAndRead(Integer.valueOf(1), bytesModifier), is(Integer.valueOf(2)));
+        
+        assertThat(of(() -> bytesModifier(null)), raise(NullPointerException.class));
+    }
+    
+    @Test
     public void testToHexString() {
         assertThat(toHexString(new byte[] {}), is(""));
         assertThat(toHexString(new byte[] { 0 }), is("00"));
@@ -92,6 +117,7 @@ public class TestUtilTest {
         assertThat(of(() -> hexToBytes("0")), raise(NumberFormatException.class));
         assertThat(of(() -> hexToBytes("00 ")), raise(NumberFormatException.class));
         assertThat(of(() -> hexToBytes(" 00")), raise(NumberFormatException.class));
+        assertThat(of(() -> hexToBytes("00 01 2 03")), raise(NumberFormatException.class));
         assertThat(of(() -> hexToBytes("FF")), raise(NumberFormatException.class));
         assertThat(of(() -> hexToBytes("Hello, World !!")), raise(NumberFormatException.class));
     }
