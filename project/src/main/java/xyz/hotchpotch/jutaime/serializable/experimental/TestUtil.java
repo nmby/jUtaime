@@ -2,7 +2,6 @@ package xyz.hotchpotch.jutaime.serializable.experimental;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Objects;
@@ -20,7 +19,7 @@ public class TestUtil {
             oos.flush(); // 要るのかよく分からないが、念のため実行する。
             return bos.toByteArray();
             
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new FailToSerializeException(e);
         }
     }
@@ -33,7 +32,7 @@ public class TestUtil {
                 
             return ois.readObject();
             
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (Exception e) {
             throw new FailToDeserializeException(e);
         }
     }
