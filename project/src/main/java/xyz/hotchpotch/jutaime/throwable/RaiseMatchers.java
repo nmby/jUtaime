@@ -114,6 +114,7 @@ public class RaiseMatchers {
      * @param expectedMessage 期待されるメッセージ（{@code null} が許容されます）
      * @return スローされた例外のメッセージを検査する {@code Matcher}
      * @see Raise#raise(String)
+     * @since 1.1.0
      */
     public static RaiseMatcher raise(String expectedMessage) {
         return new RaiseMatcher(Raise.raise(expectedMessage));
@@ -270,6 +271,7 @@ public class RaiseMatchers {
      * @param expectedMessage 期待される根本原因（root cause）のメッセージ（{@code null} が許容されます）
      * @return スローされた例外の根本原因（root cause）のメッセージを検査する {@code Matcher}
      * @see RootCause#rootCause(String)
+     * @since 1.1.0
      */
     public static RaiseMatcher rootCause(String expectedMessage) {
         return new RaiseMatcher(RootCause.rootCause(expectedMessage));
@@ -401,6 +403,7 @@ public class RaiseMatchers {
      * @param expectedMessage 期待されるメッセージ（{@code null} が許容されます）
      * @return スローされた例外の例外チェインの中に期待されるメッセージの例外が含まれるかを検査する {@code Matcher}
      * @see InChain#inChain(String)
+     * @since 1.1.0
      */
     public static RaiseMatcher inChain(String expectedMessage) {
         return new RaiseMatcher(InChain.inChain(expectedMessage));

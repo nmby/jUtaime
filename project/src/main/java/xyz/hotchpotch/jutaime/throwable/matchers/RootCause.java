@@ -57,6 +57,7 @@ public class RootCause extends RootCauseBase {
      * 
      * @param expectedMessage 期待される根本原因（root cause）のメッセージ（{@code null} が許容されます）
      * @return スローされた例外の根本原因（root cause）を検査する {@code Matcher}
+     * @since 1.1.0
      */
     public static Matcher<Testee> rootCause(String expectedMessage) {
         return new RootCause(Throwable.class, expectedMessage);

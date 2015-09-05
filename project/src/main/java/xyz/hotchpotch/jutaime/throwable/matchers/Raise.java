@@ -55,6 +55,7 @@ public class Raise extends RaiseBase {
      * 
      * @param expectedMessage 期待されるメッセージ（{@code null} が許容されます）
      * @return スローされた例外を検査する {@code Matcher}
+     * @since 1.1.0
      */
     public static Matcher<Testee> raise(String expectedMessage) {
         return new Raise(Throwable.class, expectedMessage);

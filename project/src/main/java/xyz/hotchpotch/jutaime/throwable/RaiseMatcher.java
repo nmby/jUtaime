@@ -123,6 +123,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @param expectedMessage 期待されるメッセージ（{@code null} が許容されます）
      * @return この {@code Matcher}
      * @see Raise#raise(String)
+     * @since 1.1.0
      */
     public RaiseMatcher raise(String expectedMessage) {
         matchers.add(Raise.raise(expectedMessage));
@@ -218,6 +219,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @param expectedMessage 期待される根本原因（root cause）のメッセージ（{@code null} が許容されます）
      * @return この {@code Matcher}
      * @see RootCause#rootCause(String)
+     * @since 1.1.0
      */
     public RaiseMatcher rootCause(String expectedMessage) {
         matchers.add(RootCause.rootCause(expectedMessage));
@@ -302,6 +304,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @param expectedMessage 期待されるメッセージ（{@code null} が許容されます）
      * @return この {@code Matcher}
      * @see InChain#inChain(String)
+     * @since 1.1.0
      */
     public RaiseMatcher inChain(String expectedMessage) {
         matchers.add(InChain.inChain(expectedMessage));

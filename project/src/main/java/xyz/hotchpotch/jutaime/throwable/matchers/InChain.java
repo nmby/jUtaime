@@ -58,6 +58,7 @@ public class InChain extends InChainBase {
      * 
      * @param expectedMessage 期待されるメッセージ（{@code null} が許容されます）
      * @return スローされた例外の例外チェインの中に期待される例外が含まれるかを検査する {@code Matcher}
+     * @since 1.1.0
      */
     public static Matcher<Testee> inChain(String expectedMessage) {
         return new InChain(Throwable.class, expectedMessage);
