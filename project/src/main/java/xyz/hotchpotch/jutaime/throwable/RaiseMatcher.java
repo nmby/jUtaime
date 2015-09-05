@@ -118,6 +118,18 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
     }
     
     /**
+     * この {@code Matcher} に、{@link Raise#raise(String)} で返される {@code Matcher} を追加します。<br>
+     * 
+     * @param expectedMessage 期待されるメッセージ（{@code null} が許容されます）
+     * @return この {@code Matcher}
+     * @see Raise#raise(String)
+     */
+    public RaiseMatcher raise(String expectedMessage) {
+        matchers.add(Raise.raise(expectedMessage));
+        return this;
+    }
+    
+    /**
      * この {@code Matcher} に、{@link Raise#raise(Matcher)} で返される {@code Matcher} を追加します。<br>
      * 
      * @param matcher スローされた例外に対する判定を行うための {@code Matcher}
@@ -201,6 +213,18 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
     }
     
     /**
+     * この {@code Matcher} に、{@link RootCause#rootCause(String)} で返される {@code Matcher} を追加します。<br>
+     * 
+     * @param expectedMessage 期待される根本原因（root cause）のメッセージ（{@code null} が許容されます）
+     * @return この {@code Matcher}
+     * @see RootCause#rootCause(String)
+     */
+    public RaiseMatcher rootCause(String expectedMessage) {
+        matchers.add(RootCause.rootCause(expectedMessage));
+        return this;
+    }
+    
+    /**
      * この {@code Matcher} に、{@link RootCause#rootCause(Matcher)} で返される {@code Matcher} を追加します。<br>
      * 
      * @param matcher 根本原因（root cause）に対する判定を行うための {@code Matcher}
@@ -269,6 +293,18 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
     public RaiseMatcher inChainExact(Class<? extends Throwable> expectedType, String expectedMessage) {
         Objects.requireNonNull(expectedType);
         matchers.add(InChainExact.inChainExact(expectedType, expectedMessage));
+        return this;
+    }
+    
+    /**
+     * この {@code Matcher} に、{@link InChain#inChain(String)} で返される {@code Matcher} を追加します。<br>
+     * 
+     * @param expectedMessage 期待されるメッセージ（{@code null} が許容されます）
+     * @return この {@code Matcher}
+     * @see InChain#inChain(String)
+     */
+    public RaiseMatcher inChain(String expectedMessage) {
+        matchers.add(InChain.inChain(expectedMessage));
         return this;
     }
     

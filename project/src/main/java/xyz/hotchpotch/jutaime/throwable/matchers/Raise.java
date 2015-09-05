@@ -50,6 +50,17 @@ public class Raise extends RaiseBase {
     }
     
     /**
+     * スローされた例外のメッセージを検査する {@code Matcher} オブジェクトを返します。<br>
+     * このメソッドにより返される {@code Matcher} オブジェクトは、スローされた例外の型は考慮しません。<br>
+     * 
+     * @param expectedMessage 期待されるメッセージ（{@code null} が許容されます）
+     * @return スローされた例外を検査する {@code Matcher}
+     */
+    public static Matcher<Testee> raise(String expectedMessage) {
+        return new Raise(Throwable.class, expectedMessage);
+    }
+    
+    /**
      * スローされた例外を、パラメータとして受け取った {@code matcher} で検査する {@code Matcher} オブジェクトを返します。<br>
      * 
      * @param matcher スローされた例外に対する検査を行うための {@code Matcher}

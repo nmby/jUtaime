@@ -53,6 +53,17 @@ public class InChain extends InChainBase {
     }
     
     /**
+     * スローされた例外の例外チェインの中に、期待されるメッセージの例外が含まれるかを検査する {@code Matcher} オブジェクトを返します。<br>
+     * このメソッドにより返される {@code Matcher} オブジェクトは、例外チェインの中の例外の型は考慮しません。<br>
+     * 
+     * @param expectedMessage 期待されるメッセージ（{@code null} が許容されます）
+     * @return スローされた例外の例外チェインの中に期待される例外が含まれるかを検査する {@code Matcher}
+     */
+    public static Matcher<Testee> inChain(String expectedMessage) {
+        return new InChain(Throwable.class, expectedMessage);
+    }
+    
+    /**
      * スローされた例外の例外チェインの中に、パラメータとして受け取った {@code matcher} で合格と判定されるものがあるかを検査する
      * {@code Matcher} オブジェクトを返します。<br>
      * 

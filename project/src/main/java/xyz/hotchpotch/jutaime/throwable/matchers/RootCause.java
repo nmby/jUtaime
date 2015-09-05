@@ -52,6 +52,17 @@ public class RootCause extends RootCauseBase {
     }
     
     /**
+     * スローされた例外の根本原因（root cause）のメッセージを検査する {@code Matcher} オブジェクトを返します。<br>
+     * このメソッドにより返される {@code Matcher} オブジェクトは、根本原因（root cause）の型は考慮しません。<br>
+     * 
+     * @param expectedMessage 期待される根本原因（root cause）のメッセージ（{@code null} が許容されます）
+     * @return スローされた例外の根本原因（root cause）を検査する {@code Matcher}
+     */
+    public static Matcher<Testee> rootCause(String expectedMessage) {
+        return new RootCause(Throwable.class, expectedMessage);
+    }
+    
+    /**
      * スローされた例外の根本原因（root cause）を、パラメータとして受け取った {@code matcher} で検査する {@code Matcher} オブジェクトを返します。<br>
      * 
      * @param matcher 根本原因（root cause）に対する検査を行うための {@code Matcher}

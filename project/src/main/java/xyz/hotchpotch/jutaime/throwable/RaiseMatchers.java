@@ -104,6 +104,22 @@ public class RaiseMatchers {
     }
     
     /**
+     * スローされた例外のメッセージを検査する {@code Matcher} オブジェクトを返します。<br>
+     * このメソッドにより返される {@code Matcher} オブジェクトは、スローされた例外の型は考慮しません。<br>
+     * 検査対象のオペレーションが正常終了した場合は、不合格と判定します。<br>
+     * <br>
+     * より具体的に説明すると、このメソッドは、{@link Raise#raise(String)} が返す {@code Matcher} を格納した
+     * {@link RaiseMatcher} オブジェクトを返します。<br>
+     * 
+     * @param expectedMessage 期待されるメッセージ（{@code null} が許容されます）
+     * @return スローされた例外のメッセージを検査する {@code Matcher}
+     * @see Raise#raise(String)
+     */
+    public static RaiseMatcher raise(String expectedMessage) {
+        return new RaiseMatcher(Raise.raise(expectedMessage));
+    }
+    
+    /**
      * スローされた例外を検査する {@code Matcher} オブジェクトを返します。<br>
      * 検査対象のオペレーションが正常終了した場合は、不合格と判定します。<br>
      * <br>
@@ -240,6 +256,26 @@ public class RaiseMatchers {
     }
     
     /**
+     * スローされた例外の根本原因（root cause）のメッセージを検査する {@code Matcher} オブジェクトを返します。<br>
+     * このメソッドにより返される {@code Matcher} オブジェクトは、スローされた例外の例外チェインを {@code cause.getCause() == null} となるまで辿り、
+     * 最後に辿り着いた {@code cause} に対して判定を行います。<br>
+     * スローされた例外が原因（cause）を持たない場合は、スローされた例外自体が根本原因（root cause）とみなされます。<br>
+     * <br>
+     * このメソッドにより返される {@code Matcher} オブジェクトは、根本原因（root cause）の型は考慮しません。<br>
+     * 検査対象のオペレーションが正常終了した場合は、不合格と判定します。<br>
+     * <br>
+     * より具体的に説明すると、このメソッドは、{@link RootCause#rootCause(String)} が返す {@code Matcher} を格納した
+     * {@link RaiseMatcher} オブジェクトを返します。<br>
+     * 
+     * @param expectedMessage 期待される根本原因（root cause）のメッセージ（{@code null} が許容されます）
+     * @return スローされた例外の根本原因（root cause）のメッセージを検査する {@code Matcher}
+     * @see RootCause#rootCause(String)
+     */
+    public static RaiseMatcher rootCause(String expectedMessage) {
+        return new RaiseMatcher(RootCause.rootCause(expectedMessage));
+    }
+    
+    /**
      * スローされた例外の根本原因（root cause）を検査する {@code Matcher} オブジェクトを返します。<br>
      * このメソッドにより返される {@code Matcher} オブジェクトは、スローされた例外の例外チェインを {@code cause.getGause == null} となるまで辿り、
      * 最後に辿り着いた {@code cause} を、パラメータとして受け取った {@code matcher} で検査します。<br>
@@ -318,7 +354,7 @@ public class RaiseMatchers {
      * 
      * @param expectedType 期待される例外の型
      * @param expectedMessage 期待されるメッセージ（{@code null} が許容されます）
-     * @return スローされた例外の例外チェインの中に期待される型の例外が含まれるかを検査する {@code Matcher}
+     * @return スローされた例外の例外チェインの中に期待される型とメッセージの例外が含まれるかを検査する {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
      * @see InChain#inChain(Class, String)
      */
@@ -341,13 +377,33 @@ public class RaiseMatchers {
      * 
      * @param expectedType 期待される例外の型
      * @param expectedMessage 期待されるメッセージ（{@code null} が許容されます）
-     * @return スローされた例外の例外チェインの中に期待される型の例外が含まれるかを検査する {@code Matcher}
+     * @return スローされた例外の例外チェインの中に期待される型とメッセージの例外が含まれるかを検査する {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
      * @see InChainExact#inChainExact(Class, String)
      */
     public static RaiseMatcher inChainExact(Class<? extends Throwable> expectedType, String expectedMessage) {
         Objects.requireNonNull(expectedType);
         return new RaiseMatcher(InChainExact.inChainExact(expectedType, expectedMessage));
+    }
+    
+    /**
+     * スローされた例外の例外チェインの中に期待されるメッセージの例外が含まれるかを検査する {@code Matcher} オブジェクトを返します。<br>
+     * このメソッドにより返される {@code Matcher} オブジェクトは、スローされた例外の例外チェインを {@code cause.getCause() == null} となるまで辿り、
+     * その中に期待される型とメッセージの例外が含まれるかを判定します。<br>
+     * スローされた例外そのものや根本原因（root cause）も、例外チェインの一部とみなされます。<br>
+     * <br>
+     * このメソッドにより返される {@code Matcher} オブジェクトは、例外チェインの中の例外の型は考慮しません。<br>
+     * 検査対象のオペレーションが正常終了した場合は、不合格と判定します。<br>
+     * <br>
+     * より具体的に説明すると、このメソッドは、{@link InChain#inChain(String)} が返す {@code Matcher} を格納した
+     * {@link RaiseMatcher} オブジェクトを返します。<br>
+     * 
+     * @param expectedMessage 期待されるメッセージ（{@code null} が許容されます）
+     * @return スローされた例外の例外チェインの中に期待されるメッセージの例外が含まれるかを検査する {@code Matcher}
+     * @see InChain#inChain(String)
+     */
+    public static RaiseMatcher inChain(String expectedMessage) {
+        return new RaiseMatcher(InChain.inChain(expectedMessage));
     }
     
     /**
