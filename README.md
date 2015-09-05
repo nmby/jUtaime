@@ -11,7 +11,7 @@ JUnitでのテストを効率化するためのライブラリです。
 * 例外またはエラーをスローしうる検査対象の処理を、`Testee.of()` の中に記述します。
 * 期待する例外の型やメッセージ、原因（cause）の型などを、`RaiseMatchers.raise()` メソッドなどで指定します。
 
-次のように、ひとつのテストケースメソッド内に複数の例外検証コードを記述できます。  
+次のように、様々なスタイルで例外検証コードを記述できます。  
 
     import static xyz.hotchpotch.jutaime.throwable.RaiseMatchers.*;
     import static xyz.hotchpotch.jutaime.throwable.Testee.*;
@@ -58,6 +58,9 @@ JUnitでのテストを効率化するためのライブラリです。
 ビルド・パスを設定してください。  
 
 ## 更新履歴
+#### Version 1.1.0 (2015/09/06)
+* 例外の型は問わず例外メッセージの期待値のみを指定する機能を追加
+
 #### Version 1.0.1 (2015/08/27)
 * 内部実装を微修正
 * API ドキュメントを微修正
