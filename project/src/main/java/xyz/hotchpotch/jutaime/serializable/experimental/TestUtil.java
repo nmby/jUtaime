@@ -10,9 +10,31 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * TODO: code me !!
+ * JUnit4でのシリアル化／デシリアル化に関するテストを効率化するための機能を提供するユーティリティクラスです。<br>
+ * 本クラスが提供するユーティリティメソッドは、大きく次の3つに分類されます。<br>
+ * <ol>
+ *   <li>オブジェクトのシリアル化／デシリアル化に関するユーティリティ</li>
+ *   <li>プリミティブデータ型とオブジェクトのシリアル化形式取得に関するユーティリティ</li>
+ *   <li>バイト配列の加工、およびバイト配列と16進表示形式文字列の変換に関するユーティリティ</li>
+ * </ol>
+ * <br>
+ * バイト配列の視認性と加工のしやすさを向上させる目的で、バイト配列と16進表示形式文字列を相互に変換するユーティリティが提供されます。<br>
+ * ここでいう16進表示形式とは、{@code "00"}～{@code "ff"} の2文字がスペース区切りで連結された形式のことを指します。<br>
+ * 次の文字列は16進表示形式です。
+ * <ul>
+ *   <li>{@code "00"}</li>
+ *   <li>{@code "01 2a b3 ff"}</li>
+ *   <li>{@code ""}</li>
+ * </ul>
+ * 次の文字列は16進表示形式ではありません。
+ * <ul>
+ *   <li>{@code "00 1 23"} ： 必ず2桁の数字でなければなりません。</li>
+ *   <li>{@code "12 "}、{@code " 34"} ： 先頭や末尾に余分なスペースが含まれてはなりません。</li>
+ *   <li>{@code "AB FF"} ： {@code 0}～{@code 9}、{@code a}～{@code f} のみが許容されます。大文字は許容されません。</li>
+ *   <li>{@code null}</li>
+ * </ul>
  * 
- * @since TODO:
+ * @since 1.2.0
  * @author nmby
  */
 public class TestUtil {
@@ -21,7 +43,7 @@ public class TestUtil {
     
     private static final byte[] OBJECT_HEADER = { (byte) 0xac, (byte) 0xed, 0x00, 0x05 };
     
-    // ■■■シリアル化／デシリアル化関連のユーティリティ■■■
+    // **** オブジェクトのシリアル化／デシリアル化に関するユーティリティ ****
     
     /**
      * オブジェクトをシリアル化することによって得られるバイト配列を返します。<br>
@@ -101,7 +123,7 @@ public class TestUtil {
         return read(modified);
     }
     
-    // ■■■プリミティブデータ型とオブジェクトのシリアル化形式取得に関するユーティリティ■■■
+    // **** プリミティブデータ型とオブジェクトのシリアル化形式取得に関するユーティリティ ****
     
     /**
      * boolean 値をシリアル化して得られるバイト配列を返します。<br>
@@ -216,8 +238,9 @@ public class TestUtil {
     
     /**
      * 文字列を修正 UTF-8 形式でシリアル化して得られるバイト配列を返します。<br>
-     * 元の文字列と得られるバイト配列の例を示します。
-     * <table>
+     * 元の文字列と得られるバイト配列の例を示します。<br>
+     * <br>
+     * <table border="1">
      *   <tr><th>元の文字列</th><th>得られるバイト配列</th></tr>
      *   <tr><td>{@code ""}</td><td><code>{ 0x00, 0x00 }</code></td></tr>
      *   <tr><td>{@code "A"}</td><td><code>{ 0x00, 0x01, 0x41 }</code></td></tr>
@@ -234,7 +257,7 @@ public class TestUtil {
      * @throws FailToSerializeException シリアル化の過程で何らかの例外が発生した場合
      * @see DataOutputStream#writeUTF(String)
      */
-    public static byte[] bytesOfString(String str) {
+    public static byte[] bytes(String str) {
         Objects.requireNonNull(str);
         
         try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -252,11 +275,11 @@ public class TestUtil {
     /**
      * オブジェクトをシリアル化して得られるバイト配列から先頭の固定 4 バイトを除いた配列を返します。<br>
      * 
-     * @param obj 任意のオブジェクト
+     * @param obj 任意のオブジェクト（{@code null} が許容されます）
      * @return オブジェクトをシリアル化して得られるバイト配列から先頭の固定 4 バイトを除いた配列
      * @throws FailToSerializeException シリアル化の過程で何らかの例外が発生した場合
      */
-    public static byte[] bytesOfObject(Object obj) {
+    public static byte[] bytes(Object obj) {
         byte[] bytes = write(obj);
         
         assert bytes != null;
@@ -265,26 +288,29 @@ public class TestUtil {
         return Arrays.copyOfRange(bytes, OBJECT_HEADER.length, bytes.length);
     }
     
-    // ■■■バイト配列の加工、およびバイト配列と16進表示形式文字列の変換に関するユーティリティ■■■
+    // **** バイト配列の加工、およびバイト配列と16進表示形式文字列の変換に関するユーティリティ ****
     
     /**
      * バイト配列内の {@code target} と一致する部分配列を {@code replacement} で置換した新たな配列を返します。
      * 元の配列は変更しません。<br>
      * 置き換えは、バイト配列の先頭から末尾まで進みます。<br>
+     * <br>
      * 例1 ：
-     * <ul>
-     *   <li>{@code bytes} ： <code>{ 0x01, 0x01, 0x01, 0x01, 0x01, 0x01 }</code></li>
-     *   <li>{@code target} ： <code>{ 0x01, 0x01 }</code></li>
-     *   <li>{@code replacement} ： <code>{ 0x01 }</code></li>
-     *   <li>結果 ： <code>{ 0x01, 0x01, 0x01 }</code></li>
-     * </ul>
+     * <table border="1">
+     *   <tr><th>{@code bytes}</th><td><code>{ 0x01, 0x01, 0x01, 0x01, 0x01, 0x01 }</code></td></tr>
+     *   <tr><th>{@code target}</th><td><code>{ 0x01, 0x01 }</code></td></tr>
+     *   <tr><th>{@code replacement}</th><td><code>{ 0x01 }</code></td></tr>
+     *   <tr><th>結果</th><td><code>{ 0x01, 0x01, 0x01 }</code></td></tr>
+     * </table>
+     * <br>
      * 例2 ：
-     * <ul>
-     *   <li>{@code bytes} ： <code>{ 0x01, 0x01, 0x01 }</code></li>
-     *   <li>{@code target} ： <code>{ 0x01, 0x01 }</code></li>
-     *   <li>{@code replacement} ： <code>{ 0x02 }</code></li>
-     *   <li>結果 ： <code>{ 0x02, 0x01 }</code> （<code>{ 0x01, 0x02 }</code> ではない）</li>
-     * </ul>
+     * <table border="1">
+     *   <tr><th>{@code bytes}</th><td><code>{ 0x01, 0x01, 0x01 }</code></td></tr>
+     *   <tr><th>{@code target}</th><td><code>{ 0x01, 0x01 }</code></td></tr>
+     *   <tr><th>{@code replacement}</th><td><code>{ 0x02 }</code></td></tr>
+     *   <tr><th>結果</th><td><code>{ 0x02, 0x01 }</code> （<code>{ 0x01, 0x02 }</code> ではない）</td></tr>
+     * </table>
+     * <br>
      * {@code target} が長さ 0 の配列の場合、何も置換を行わず、{@code bytes} のコピーを返します。<br>
      * 
      * @param bytes 置換前のバイト配列
@@ -305,20 +331,23 @@ public class TestUtil {
      * バイト配列内の {@code target} で表される部分配列を、{@code replacement} で表される部分配列で置換した新たな配列を返します。
      * 元の配列は変更しません。<br>
      * 置き換えは、バイト配列の先頭から末尾まで進みます。<br>
+     * <br>
      * 例1 ：
-     * <ul>
-     *   <li>{@code bytes} ： <code>{ 0x01, 0x01, 0x01, 0x01, 0x01, 0x01 }</code></li>
-     *   <li>{@code target} ： {@code "01 01"}</li>
-     *   <li>{@code replacement} ： {@code "01"}</li>
-     *   <li>結果 ： <code>{ 0x01, 0x01, 0x01 }</code></li>
-     * </ul>
+     * <table border="1">
+     *   <tr><th>{@code bytes}</th><td><code>{ 0x01, 0x01, 0x01, 0x01, 0x01, 0x01 }</code></td></tr>
+     *   <tr><th>{@code target}</th><td>{@code "01 01"}</td></tr>
+     *   <tr><th>{@code replacement}</th><td>{@code "01"}</td></tr>
+     *   <tr><th>結果</th><td><code>{ 0x01, 0x01, 0x01 }</code></td></tr>
+     * </table>
+     * <br>
      * 例2 ：
-     * <ul>
-     *   <li>{@code bytes} ： <code>{ 0x01, 0x01, 0x01 }</code></li>
-     *   <li>{@code target} ： {@code "01 01"}</li>
-     *   <li>{@code replacement} ： {@code "02"}</li>
-     *   <li>結果 ： <code>{ 0x02, 0x01 }</code> （<code>{ 0x01, 0x02 }</code> ではない）</li>
-     * </ul>
+     * <table border="1">
+     *   <tr><th>{@code bytes}</th><td><code>{ 0x01, 0x01, 0x01 }</code></td></tr>
+     *   <tr><th>{@code target}</th><td>{@code "01 01"}</td></tr>
+     *   <tr><th>{@code replacement}</th><td>{@code "02"}</td></tr>
+     *   <tr><th>結果</th><td><code>{ 0x02, 0x01 }</code> （<code>{ 0x01, 0x02 }</code> ではない）</td></tr>
+     * </table>
+     * <br>
      * {@code target} が空文字列の場合、何も置換を行わず、{@code bytes} のコピーを返します。<br>
      * 
      * @param bytes 置換前のバイト配列
@@ -346,6 +375,24 @@ public class TestUtil {
     
     private static String normalize(String hexStr) {
         return hexStr.trim().replaceAll("[ ]{2,}", " ");
+    }
+    
+    /**
+     * 2つのバイト配列を連結して得られる新しいバイト配列を返します。<br>
+     * 
+     * @param bytes1 バイト配列1
+     * @param bytes2 バイト配列2
+     * @return 2つのバイト配列を連結して得られる新しいバイト配列
+     * @throws NullPointerException {@code bytes1}、{@code bytes2} のいずれかが {@code null} の場合
+     */
+    public static byte[] concat(byte[] bytes1, byte[] bytes2) {
+        Objects.requireNonNull(bytes1);
+        Objects.requireNonNull(bytes2);
+        
+        byte[] marged = new byte[bytes1.length + bytes2.length];
+        System.arraycopy(bytes1, 0, marged, 0, bytes1.length);
+        System.arraycopy(bytes2, 0, marged, bytes1.length, bytes2.length);
+        return marged;
     }
     
     /**

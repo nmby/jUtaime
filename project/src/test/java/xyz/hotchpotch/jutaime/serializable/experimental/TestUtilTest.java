@@ -79,53 +79,43 @@ public class TestUtilTest {
     
     @Test
     public void testWriteModifyAndRead() {
+        assertThat(of(() -> writeModifyAndRead(Integer.valueOf(1), null)), raise(NullPointerException.class));
+        
         Function<byte[], byte[]> modifier1 = bytes -> {
-            byte[] bytes2 = Arrays.copyOf(bytes, bytes.length);
-            bytes2[bytes2.length - 1] = 0x02;
-            return bytes2;
+            byte[] modified = Arrays.copyOf(bytes, bytes.length);
+            modified[modified.length - 1] = 0x02;
+            return modified;
         };
         assertThat(writeModifyAndRead(Integer.valueOf(1), modifier1), is(Integer.valueOf(2)));
         
         Function<byte[], byte[]> modifier2 = bytes -> {
-            return replace(bytes, bytesOfString(Writable.class.getName()), bytesOfString(Writable2.class.getName()));
-        };;
+            return replace(bytes, bytes(Writable.class.getName()), bytes(Writable2.class.getName()));
+        };
         assertThat(writeModifyAndRead(new Writable(), modifier2), instanceOf(Writable2.class));
         
         Function<byte[], byte[]> modifier3 = bytes -> {
-            return replace(bytes, bytesOfString(Writable.class.getName()), bytesOfString(Writable3.class.getName()));
-        };;
+            return replace(bytes, bytes(Writable.class.getName()), bytes(Writable3.class.getName()));
+        };
         assertThat(of(() -> writeModifyAndRead(new Writable(), modifier3)),
                 raise(FailToDeserializeException.class).rootCause(InvalidClassException.class));
         
         Function<byte[], byte[]> modifier4 = bytes -> {
-            byte[] bytes2 = replace(bytes, bytesOfString(Writable.class.getName()), bytesOfString(Writable3.class.getName()));
-            return replace(bytes2, bytes(1L), bytes(2L));
-        };;
+            byte[] modified = replace(bytes, bytes(Writable.class.getName()), bytes(Writable3.class.getName()));
+            return replace(modified, bytes(1L), bytes(2L));
+        };
         assertThat(writeModifyAndRead(new Writable(), modifier4), instanceOf(Writable3.class));
         
         Function<byte[], byte[]> modifier5 = bytes -> {
-            return replace(bytes, bytesOfString(Writable.class.getName()), bytesOfString(NotWritable.class.getName()));
+            return replace(bytes, bytes(Writable.class.getName()), bytes(NotWritable.class.getName()));
         };
         assertThat(of(() -> writeModifyAndRead(new Writable(), modifier5)),
                 raise(FailToDeserializeException.class).rootCause(InvalidClassException.class));
-        
-        assertThat(of(() -> writeModifyAndRead(Integer.valueOf(1), null)), raise(NullPointerException.class));
     }
     
     @Test
-    public void testBytesString() {
-        assertThat(bytesOfString(""), is(new byte[] { 0x00, 0x00 }));
-        assertThat(bytesOfString("A"), is(new byte[] { 0x00, 0x01, 0x41 }));
-        assertThat(bytesOfString("a"), is(new byte[] { 0x00, 0x01, 0x61 }));
-        assertThat(bytesOfString("abc"), is(new byte[] { 0x00, 0x03, 0x61, 0x62, 0x63 }));
-        assertThat(bytesOfString("123"), is(new byte[] { 0x00, 0x03, 0x31, 0x32, 0x33 }));
-        assertThat(bytesOfString("あ"), is(new byte[] { 0x00, 0x03, (byte) 0xe3, (byte) 0x81, (byte) 0x82 }));
-        assertThat(bytesOfString("あいう"), is(new byte[] { 0x00, 0x09,
-                (byte) 0xe3, (byte) 0x81, (byte) 0x82,
-                (byte) 0xe3, (byte) 0x81, (byte) 0x84,
-                (byte) 0xe3, (byte) 0x81, (byte) 0x86 }));
-                
-        assertThat(of(() -> bytesOfString(null)), raise(NullPointerException.class));
+    public void testBytesBoolean() {
+        assertThat(bytes(true), is(new byte[] { 0x01 }));
+        assertThat(bytes(false), is(new byte[] { 0x00 }));
     }
     
     @Test
@@ -144,6 +134,50 @@ public class TestUtilTest {
         assertThat(bytes(2L), is(new byte[] { 0, 0, 0, 0, 0, 0, 0, 2 }));
         assertThat(bytes(-1L), is(new byte[] { -1, -1, -1, -1, -1, -1, -1, -1 }));
         assertThat(bytes(-2L), is(new byte[] { -1, -1, -1, -1, -1, -1, -1, -2 }));
+    }
+    
+    @Test
+    public void testBytesFloat() {
+        assertThat(bytes(0f), is(bytes(Float.floatToIntBits(0f))));
+        assertThat(bytes(1.2f), is(bytes(Float.floatToIntBits(1.2f))));
+        assertThat(bytes(-34.5f), is(bytes(Float.floatToIntBits(-34.5f))));
+    }
+    
+    @Test
+    public void testBytesDouble() {
+        assertThat(bytes(0d), is(bytes(Double.doubleToLongBits(0d))));
+        assertThat(bytes(1.2d), is(bytes(Double.doubleToLongBits(1.2d))));
+        assertThat(bytes(-34.5d), is(bytes(Double.doubleToLongBits(-34.5d))));
+    }
+    
+    @Test
+    public void testBytesString() {
+        assertThat(of(() -> bytes((String) null)), raise(NullPointerException.class));
+        
+        assertThat(bytes(""), is(new byte[] { 0x00, 0x00 }));
+        assertThat(bytes("A"), is(new byte[] { 0x00, 0x01, 0x41 }));
+        assertThat(bytes("a"), is(new byte[] { 0x00, 0x01, 0x61 }));
+        assertThat(bytes("abc"), is(new byte[] { 0x00, 0x03, 0x61, 0x62, 0x63 }));
+        assertThat(bytes("123"), is(new byte[] { 0x00, 0x03, 0x31, 0x32, 0x33 }));
+        assertThat(bytes("あ"), is(new byte[] { 0x00, 0x03, (byte) 0xe3, (byte) 0x81, (byte) 0x82 }));
+        assertThat(bytes("あいう"), is(new byte[] { 0x00, 0x09,
+                (byte) 0xe3, (byte) 0x81, (byte) 0x82,
+                (byte) 0xe3, (byte) 0x81, (byte) 0x84,
+                (byte) 0xe3, (byte) 0x81, (byte) 0x86 }));
+    }
+    
+    @Test
+    public void testBytesObject() {
+        assertThat(bytes((Object) null), is(new byte[] { 0x70 }));
+        
+        assertThat(bytes(Integer.valueOf(1)), instanceOf(byte[].class));
+        assertThat(bytes(TestEnum.TWO), instanceOf(byte[].class));
+        assertThat(bytes(new boolean[] { true, false }), instanceOf(byte[].class));
+        assertThat(bytes("Hello, World !!"), instanceOf(byte[].class));
+        
+        assertThat(bytes(new Writable()), instanceOf(byte[].class));
+        assertThat(of(() -> bytes(new NotWritable())),
+                raise(FailToSerializeException.class).rootCause(NotSerializableException.class));
     }
     
     @Test
@@ -198,6 +232,18 @@ public class TestUtilTest {
         assertThat(replace(testArr2, "01", ""), is(new byte[] { 2, 2, 3, 3 }));
         assertThat(replace(testArr2, "02", ""), is(new byte[] { 1, 1, 3, 3 }));
         assertThat(replace(testArr2, "03", ""), is(new byte[] { 1, 1, 2, 2 }));
+    }
+    
+    @Test
+    public void testConcat() {
+        assertThat(of(() -> concat(null, new byte[] {})), raise(NullPointerException.class));
+        assertThat(of(() -> concat(new byte[] {}, null)), raise(NullPointerException.class));
+        assertThat(of(() -> concat(null, null)), raise(NullPointerException.class));
+        
+        assertThat(concat(new byte[] {}, new byte[] {}), is(new byte[] {}));
+        assertThat(concat(new byte[] { 1, 2, 3 }, new byte[] {}), is(new byte[] { 1, 2, 3 }));
+        assertThat(concat(new byte[] {}, new byte[] { 4, 5 }), is(new byte[] { 4, 5 }));
+        assertThat(concat(new byte[] { 1, 2, 3 }, new byte[] { 4, 5 }), is(new byte[] { 1, 2, 3, 4, 5 }));
     }
     
     @Test

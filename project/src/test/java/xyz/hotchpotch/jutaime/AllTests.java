@@ -4,6 +4,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import xyz.hotchpotch.jutaime.serializable.experimental.TestUtilTest;
 import xyz.hotchpotch.jutaime.throwable.RaiseMatcherTest;
 import xyz.hotchpotch.jutaime.throwable.RaiseMatchersTest;
 import xyz.hotchpotch.jutaime.throwable.TesteeTest;
@@ -22,6 +23,8 @@ import xyz.hotchpotch.jutaime.throwable.matchers.ThrowableBaseMatcherTest;
 
 @RunWith(Suite.class)
 @SuiteClasses({
+    TestUtilTest.class,
+    
     RaiseMatchersTest.class,
     RaiseMatcherTest.class,
     TesteeTest.class,
