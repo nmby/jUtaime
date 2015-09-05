@@ -30,6 +30,8 @@ public class RootCauseTest {
         assertThat(RootCause.rootCause(Throwable.class), instanceOf(RootCause.class));
         assertThat(RootCause.rootCause(Exception.class, "message"), instanceOf(RootCause.class));
         assertThat(RootCause.rootCause(RuntimeException.class, null), instanceOf(RootCause.class));
+        assertThat(RootCause.rootCause("message"), instanceOf(RootCause.class));
+        assertThat(RootCause.rootCause((String) null), instanceOf(RootCause.class));
         assertThat(RootCause.rootCause(new TestMatcher()), instanceOf(RootCause.class));
     }
     
@@ -49,10 +51,23 @@ public class RootCauseTest {
     }
     
     @Test
-    public void testMatchesSafely() {
+    public void testMatchesSafely1() {
         // サブクラスも合格と判定する。
         assertThat(Testee.of(() -> { throw new Exception(); }), not(RootCause.rootCause(RuntimeException.class)));
         assertThat(Testee.of(() -> { throw new RuntimeException(); }), RootCause.rootCause(RuntimeException.class));
         assertThat(Testee.of(() -> { throw new NullPointerException(); }), RootCause.rootCause(RuntimeException.class));
+    }
+    
+    @Test
+    public void testMatchesSafely2() {
+        // 型は考慮せずメッセージのみに基づいて判定する
+        assertThat(Testee.of(() -> { throw new Throwable("msg"); }), RootCause.rootCause("msg"));
+        assertThat(Testee.of(() -> { throw new Error("msg"); }), RootCause.rootCause("msg"));
+        assertThat(Testee.of(() -> { throw new Exception("msg"); }), RootCause.rootCause("msg"));
+        assertThat(Testee.of(() -> { throw new RuntimeException("msg"); }), RootCause.rootCause("msg"));
+        
+        assertThat(Testee.of(() -> { throw new Throwable((String) null); }), RootCause.rootCause((String) null));
+        
+        assertThat(Testee.of(() -> { throw new Throwable("diff"); }), not(RootCause.rootCause("msg")));
     }
 }

@@ -48,7 +48,7 @@ public class RaiseMatcherTest {
     }
     
     @Test
-    public void testRaiseClassOfQextendsThrowable() {
+    public void testRaiseClass() {
         assertThat(RaiseMatchers.rootCause(Exception.class).raise(Error.class),
                 instanceOf(RaiseMatcher.class));
         
@@ -59,7 +59,7 @@ public class RaiseMatcherTest {
     }
     
     @Test
-    public void testRaiseExactClassOfQextendsThrowable() {
+    public void testRaiseExactClass() {
         assertThat(RaiseMatchers.rootCause(instanceOf(Exception.class)).raiseExact(Error.class),
                 instanceOf(RaiseMatcher.class));
         
@@ -70,7 +70,7 @@ public class RaiseMatcherTest {
     }
     
     @Test
-    public void testRaiseClassOfQextendsThrowableString() {
+    public void testRaiseClassString() {
         assertThat(RaiseMatchers.rootCause(Exception.class, "test msg1").raise(Error.class, "test msg2"),
                 instanceOf(RaiseMatcher.class));
         
@@ -81,7 +81,7 @@ public class RaiseMatcherTest {
     }
     
     @Test
-    public void testRaiseExactClassOfQextendsThrowableString() {
+    public void testRaiseExactClassString() {
         assertThat(RaiseMatchers.rootCauseExact(Exception.class).raiseExact(Error.class, "test msg"),
                 instanceOf(RaiseMatcher.class));
         
@@ -92,7 +92,18 @@ public class RaiseMatcherTest {
     }
     
     @Test
-    public void testRaiseMatcherOfThrowable() {
+    public void testRaiseString() {
+        assertThat(RaiseMatchers.rootCause(Exception.class, "test msg1").raise("test msg2"),
+                instanceOf(RaiseMatcher.class));
+        
+        assertThat(Testee.of(() -> { throw new LinkageError("test msg2", new Exception("test msg1")); }),
+                RaiseMatchers.rootCause(Exception.class, "test msg1").raise("test msg2"));
+        assertThat(Testee.of(() -> { throw new Throwable("diff msg2", new Exception("test msg1")); }),
+                not(RaiseMatchers.rootCause(Exception.class, "test msg1").raise("test msg2")));
+    }
+    
+    @Test
+    public void testRaiseMatcher() {
         assertThat(RaiseMatchers.rootCauseExact(Exception.class, "test msg").raise(instanceOf(Error.class)),
                 instanceOf(RaiseMatcher.class));
         
@@ -114,7 +125,7 @@ public class RaiseMatcherTest {
     }
     
     @Test
-    public void testRootCauseClassOfQextendsThrowable() {
+    public void testRootCauseClass() {
         assertThat(RaiseMatchers.inChain(instanceOf(Exception.class)).rootCause(Error.class),
                 instanceOf(RaiseMatcher.class));
         
@@ -125,7 +136,7 @@ public class RaiseMatcherTest {
     }
     
     @Test
-    public void testRootCauseExactClassOfQextendsThrowable() {
+    public void testRootCauseExactClass() {
         assertThat(RaiseMatchers.inChain(Exception.class, "test msg").rootCauseExact(Error.class),
                 instanceOf(RaiseMatcher.class));
         
@@ -136,7 +147,7 @@ public class RaiseMatcherTest {
     }
     
     @Test
-    public void testRootCauseClassOfQextendsThrowableString() {
+    public void testRootCauseClassString() {
         assertThat(RaiseMatchers.inChainExact(Exception.class).rootCause(Error.class, "test msg"),
                 instanceOf(RaiseMatcher.class));
         
@@ -147,7 +158,7 @@ public class RaiseMatcherTest {
     }
     
     @Test
-    public void testRootCauseExactClassOfQextendsThrowableString() {
+    public void testRootCauseExactClassString() {
         assertThat(RaiseMatchers.inChainExact(Exception.class, "test msg1").rootCauseExact(Error.class, "test msg2"),
                 instanceOf(RaiseMatcher.class));
         
@@ -158,7 +169,18 @@ public class RaiseMatcherTest {
     }
     
     @Test
-    public void testRootCauseMatcherOfThrowable() {
+    public void testRootCauseString() {
+        assertThat(RaiseMatchers.inChainExact(Exception.class).rootCause("test msg"),
+                instanceOf(RaiseMatcher.class));
+        
+        assertThat(Testee.of(() -> { throw new Exception(new LinkageError("test msg")); }),
+                RaiseMatchers.inChainExact(Exception.class).rootCause("test msg"));
+        assertThat(Testee.of(() -> { throw new Exception(new LinkageError("diff msg")); }),
+                not(RaiseMatchers.inChainExact(Exception.class).rootCause("test msg")));
+    }
+    
+    @Test
+    public void testRootCauseMatcher() {
         assertThat(RaiseMatchers.raise(Exception.class).rootCause(instanceOf(Error.class)),
                 instanceOf(RaiseMatcher.class));
         
@@ -169,7 +191,7 @@ public class RaiseMatcherTest {
     }
     
     @Test
-    public void testInChainClassOfQextendsThrowable() {
+    public void testInChainClass() {
         assertThat(RaiseMatchers.raise(instanceOf(Exception.class)).inChain(Error.class),
                 instanceOf(RaiseMatcher.class));
         
@@ -180,7 +202,7 @@ public class RaiseMatcherTest {
     }
     
     @Test
-    public void testInChainExactClassOfQextendsThrowable() {
+    public void testInChainExactClass() {
         assertThat(RaiseMatchers.raise(Exception.class, "test msg").inChainExact(Error.class),
                 instanceOf(RaiseMatcher.class));
         
@@ -191,7 +213,7 @@ public class RaiseMatcherTest {
     }
     
     @Test
-    public void testInChainClassOfQextendsThrowableString() {
+    public void testInChainClassString() {
         assertThat(RaiseMatchers.raiseExact(Exception.class).inChain(Error.class, "test msg"),
                 instanceOf(RaiseMatcher.class));
         
@@ -202,7 +224,7 @@ public class RaiseMatcherTest {
     }
     
     @Test
-    public void testInChainExactClassOfQextendsThrowableString() {
+    public void testInChainExactClassString() {
         assertThat(RaiseMatchers.raiseExact(Exception.class, "test msg1").inChainExact(Error.class, "test msg2"),
                 instanceOf(RaiseMatcher.class));
         
@@ -213,7 +235,18 @@ public class RaiseMatcherTest {
     }
     
     @Test
-    public void testInChainMatcherOfThrowable() {
+    public void testInChainString() {
+        assertThat(RaiseMatchers.raiseExact(Exception.class).inChain("test msg"),
+                instanceOf(RaiseMatcher.class));
+        
+        assertThat(Testee.of(() -> { throw new Exception(new LinkageError("test msg", new Exception())); }),
+                RaiseMatchers.raiseExact(Exception.class).inChain("test msg"));
+        assertThat(Testee.of(() -> { throw new Exception(new LinkageError("diff msg", new Exception())); }),
+                not(RaiseMatchers.raiseExact(Exception.class).inChain("test msg")));
+    }
+    
+    @Test
+    public void testInChainMatcher() {
         assertThat(RaiseMatchers.raise(Exception.class).inChain(instanceOf(Error.class)),
                 instanceOf(RaiseMatcher.class));
         

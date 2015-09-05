@@ -30,6 +30,8 @@ public class InChainTest {
         assertThat(InChain.inChain(Throwable.class), instanceOf(InChain.class));
         assertThat(InChain.inChain(Exception.class, "message"), instanceOf(InChain.class));
         assertThat(InChain.inChain(RuntimeException.class, null), instanceOf(InChain.class));
+        assertThat(InChain.inChain("message"), instanceOf(InChain.class));
+        assertThat(InChain.inChain((String) null), instanceOf(InChain.class));
         assertThat(InChain.inChain(new TestMatcher()), instanceOf(InChain.class));
     }
     
@@ -49,10 +51,23 @@ public class InChainTest {
     }
     
     @Test
-    public void testMatchesSafely() {
+    public void testMatchesSafely1() {
         // サブクラスも合格と判定する。
         assertThat(Testee.of(() -> { throw new Exception(); }), not(InChain.inChain(RuntimeException.class)));
         assertThat(Testee.of(() -> { throw new RuntimeException(); }), InChain.inChain(RuntimeException.class));
         assertThat(Testee.of(() -> { throw new NullPointerException(); }), InChain.inChain(RuntimeException.class));
+    }
+    
+    @Test
+    public void testMatchesSafely2() {
+        // 型は考慮せずメッセージのみに基づいて判定する
+        assertThat(Testee.of(() -> { throw new Throwable("msg"); }), InChain.inChain("msg"));
+        assertThat(Testee.of(() -> { throw new Error("msg"); }), InChain.inChain("msg"));
+        assertThat(Testee.of(() -> { throw new Exception("msg"); }), InChain.inChain("msg"));
+        assertThat(Testee.of(() -> { throw new RuntimeException("msg"); }), InChain.inChain("msg"));
+        
+        assertThat(Testee.of(() -> { throw new Throwable((String) null); }), InChain.inChain((String) null));
+        
+        assertThat(Testee.of(() -> { throw new Throwable("diff"); }), not(InChain.inChain("msg")));
     }
 }
