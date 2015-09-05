@@ -7,12 +7,21 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
+/**
+ * TODO: code me !!
+ * 
+ * @since TODO:
+ * @author nmby
+ */
 public class TestUtil {
     
     // ++++++++++++++++ static members ++++++++++++++++
+    
+    private static final byte[] OBJECT_HEADER = { (byte) 0xac, (byte) 0xed, 0x00, 0x05 };
+    
+    // ■■■シリアル化／デシリアル化関連のユーティリティ■■■
     
     /**
      * オブジェクトをシリアル化することによって得られるバイト配列を返します。<br>
@@ -20,6 +29,7 @@ public class TestUtil {
      * @param obj シリアル化対象のオブジェクト（{@code null} が許容されます）
      * @return {@code obj} をシリアル化することによって得られるバイト配列
      * @throws FailToSerializeException シリアル化の過程で何らかの例外が発生した場合
+     * @see ObjectOutputStream#writeObject(Object)
      */
     public static byte[] write(Object obj) {
         try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -39,7 +49,9 @@ public class TestUtil {
      * 
      * @param bytes バイト配列
      * @return バイト配列をデシリアル化することにより得られるオブジェクト
+     * @throws NullPointerException {@code bytes} が {@code null} の場合
      * @throws FailToDeserializeException デシリアル化の過程で何らかの例外が発生した場合
+     * @see ObjectInputStream#readObject()
      */
     public static Object read(byte[] bytes) {
         Objects.requireNonNull(bytes);
@@ -57,8 +69,10 @@ public class TestUtil {
     /**
      * オブジェクトをバイト配列にシリアル化したのちデシリアル化することによって得られるオブジェクトを返します。<br>
      * 
-     * @param obj シリアル化対象のオブジェクト
+     * @param obj シリアル化対象のオブジェクト（{@code null} が許容されます）
      * @return {@code obj} をバイト配列にシリアル化したのちデシリアル化することによって得られるオブジェクト
+     * @throws FailToSerializeException シリアル化の過程で何らかの例外が発生した場合
+     * @throws FailToDeserializeException デシリアル化の過程で何らかの例外が発生した場合
      * @see #write(Object)
      * @see #read(byte[])
      */
@@ -70,97 +84,40 @@ public class TestUtil {
     /**
      * オブジェクトをシリアル化することによって得られるバイト配列を改竄したのちデシリアル化することによって得られるオブジェクトを返します。<br>
      * 
-     * @param obj シリアル化対象のオブジェクト
+     * @param obj シリアル化対象のオブジェクト（{@code null} が許容されます）
      * @param modifier バイト配列を改竄する {@code Function}
      * @return 改竄されたバイト配列をデシリアル化することによって得られるオブジェクト
+     * @throws NullPointerException {@code modifier} が {@code null} の場合
+     * @throws FailToSerializeException シリアル化の過程で何らかの例外が発生した場合
+     * @throws FailToDeserializeException デシリアル化の過程で何らかの例外が発生した場合
      * @see #write(Object)
      * @see #read(byte[])
      */
     public static Object writeModifyAndRead(Object obj, Function<byte[], byte[]> modifier) {
         Objects.requireNonNull(modifier);
         
-        // write
         byte[] bytes = write(obj);
-        
-        // modify
-        byte[] bytes2 = modifier.apply(bytes);
-        
-        // and read
-        return read(bytes2);
+        byte[] modified = modifier.apply(bytes);
+        return read(modified);
     }
+    
+    // ■■■プリミティブデータ型とオブジェクトのシリアル化形式取得に関するユーティリティ■■■
     
     /**
-     * 文字列を修正 UTF-8 形式でシリアル化して得られるバイト配列を返します。<br>
-     * 元の文字列と得られるバイト配列の例を示します。
-     * <ul>
-     *   <li>{@code ""} ： {@code 00 00}</li>
-     *   <li>{@code "A"} ： {@code 00 01 41}</li>
-     *   <li>{@code "a"} ： {@code 00 01 61}</li>
-     *   <li>{@code "abc"} ： {@code 00 03 61 62 63}</li>
-     *   <li>{@code "123"} ： {@code 00 03 31 32 33}</li>
-     *   <li>{@code "あ"} ： {@code 00 03 e3 81 82}</li>
-     *   <li>{@code "あいう"} ： {@code 00 09 e3 81 82 e3 81 84 e3 81 86}</li>
-     * </ul>
+     * boolean 値をシリアル化して得られるバイト配列を返します。<br>
+     * 具体的には、{@code true} には <code>{ 0x01 }</code> を、
+     * {@code false} には <code>{ 0x00 }</code> を返します。<br>
      * 
-     * @param str 任意の文字列
-     * @return {@code str} のプリミティブ・データを修正 UTF-8 形式でシリアル化して得られるバイト配列
-     * @throws NullPointerException {@code str} が {@code null} の場合
-     * @see DataOutputStream#writeUTF(String)
+     * @param b 任意の boolean 値
+     * @return boolean 値をシリアル化して得られるバイト配列
+     * @throws FailToSerializeException シリアル化の過程で何らかの例外が発生した場合
+     * @see DataOutputStream#writeBoolean(boolean)
      */
-    public static byte[] bytes(String str) {
-        Objects.requireNonNull(str);
-        
-        return bytes(dos -> {
-            try {
-                dos.writeUTF(str);
-            } catch (Exception e) {
-                throw new FailToSerializeException(e);
-            }
-        });
-    }
-    
-    /**
-     * int 値をシリアル化して得られるバイト配列を返します。<br>
-     * 例えば、{@code 1} には {@code 00 00 00 01} を、{@code -1} には {@code ff ff ff ff} を返します。<br>
-     * 
-     * @param n 任意の int 値
-     * @return int 値をシリアル化して得られるバイト配列
-     */
-    public static byte[] bytes(int n) {
-        return bytes(dos -> {
-            try {
-                dos.writeInt(n);
-            } catch (Exception e) {
-                throw new FailToSerializeException(e);
-            }
-        });
-    }
-    
-    /**
-     * long 値をシリアル化して得られるバイト配列を返します。<br>
-     * 例えば、{@code 1L} には {@code 00 00 00 00 00 00 00 01} を、
-     * {@code -1L} には {@code ff ff ff ff ff ff ff ff} を返します。<br>
-     * 
-     * @param n 任意の long 値
-     * @return long 値をシリアル化して得られるバイト配列
-     */
-    public static byte[] bytes(long n) {
-        return bytes(dos -> {
-            try {
-                dos.writeLong(n);
-            } catch (Exception e) {
-                throw new FailToSerializeException(e);
-            }
-        });
-    }
-    
-    private static byte[] bytes(Consumer<DataOutputStream> writeAction) {
-        assert writeAction != null;
-        
+    public static byte[] bytes(boolean b) {
         try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 DataOutputStream dos = new DataOutputStream(bos)) {
                 
-            writeAction.accept(dos);
+            dos.writeBoolean(b);
             dos.flush(); // 要るのかよく分からないが、念のため実行する。
             return bos.toByteArray();
             
@@ -170,7 +127,148 @@ public class TestUtil {
     }
     
     /**
-     * バイト配列内の {@code target} と一致する部分配列を、{@code replacement} と一致する部分配列で置換した新たな配列を返します。
+     * int 値をシリアル化して得られるバイト配列を返します。<br>
+     * 例えば、{@code 1} には <code>{ 0x00, 0x00, 0x00, 0x01 }</code> を、
+     * {@code -1} には <code>{ 0xff, 0xff, 0xff, 0xff }</code> を返します。<br>
+     * 
+     * @param i 任意の int 値
+     * @return int 値をシリアル化して得られるバイト配列
+     * @throws FailToSerializeException シリアル化の過程で何らかの例外が発生した場合
+     * @see DataOutputStream#writeInt(int)
+     */
+    public static byte[] bytes(int i) {
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                DataOutputStream dos = new DataOutputStream(bos)) {
+                
+            dos.writeInt(i);
+            dos.flush(); // 要るのかよく分からないが、念のため実行する。
+            return bos.toByteArray();
+            
+        } catch (Exception e) {
+            throw new FailToSerializeException(e);
+        }
+    }
+    
+    /**
+     * long 値をシリアル化して得られるバイト配列を返します。<br>
+     * 例えば、{@code 1L} には <code>{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01 }</code> を、
+     * {@code -1L} には <code>{ 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff }</code> を返します。<br>
+     * 
+     * @param l 任意の long 値
+     * @return long 値をシリアル化して得られるバイト配列
+     * @throws FailToSerializeException シリアル化の過程で何らかの例外が発生した場合
+     * @see DataOutputStream#writeLong(long)
+     */
+    public static byte[] bytes(long l) {
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                DataOutputStream dos = new DataOutputStream(bos)) {
+                
+            dos.writeLong(l);
+            dos.flush(); // 要るのかよく分からないが、念のため実行する。
+            return bos.toByteArray();
+            
+        } catch (Exception e) {
+            throw new FailToSerializeException(e);
+        }
+    }
+    
+    /**
+     * float 値をシリアル化して得られるバイト配列を返します。<br>
+     * 
+     * @param f 任意の float 値
+     * @return float 値をシリアル化して得られるバイト配列
+     * @throws FailToSerializeException シリアル化の過程で何らかの例外が発生した場合
+     * @see DataOutputStream#writeFloat(float)
+     */
+    public static byte[] bytes(float f) {
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                DataOutputStream dos = new DataOutputStream(bos)) {
+                
+            dos.writeFloat(f);
+            dos.flush(); // 要るのかよく分からないが、念のため実行する。
+            return bos.toByteArray();
+            
+        } catch (Exception e) {
+            throw new FailToSerializeException(e);
+        }
+    }
+    
+    /**
+     * double 値をシリアル化して得られるバイト配列を返します。<br>
+     * 
+     * @param d 任意の double 値
+     * @return double 値をシリアル化して得られるバイト配列
+     * @throws FailToSerializeException シリアル化の過程で何らかの例外が発生した場合
+     * @see DataOutputStream#writeDouble(double)
+     */
+    public static byte[] bytes(double d) {
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                DataOutputStream dos = new DataOutputStream(bos)) {
+                
+            dos.writeDouble(d);
+            dos.flush(); // 要るのかよく分からないが、念のため実行する。
+            return bos.toByteArray();
+            
+        } catch (Exception e) {
+            throw new FailToSerializeException(e);
+        }
+    }
+    
+    /**
+     * 文字列を修正 UTF-8 形式でシリアル化して得られるバイト配列を返します。<br>
+     * 元の文字列と得られるバイト配列の例を示します。
+     * <table>
+     *   <tr><th>元の文字列</th><th>得られるバイト配列</th></tr>
+     *   <tr><td>{@code ""}</td><td><code>{ 0x00, 0x00 }</code></td></tr>
+     *   <tr><td>{@code "A"}</td><td><code>{ 0x00, 0x01, 0x41 }</code></td></tr>
+     *   <tr><td>{@code "a"}</td><td><code>{ 0x00, 0x01, 0x61 }</code></td></tr>
+     *   <tr><td>{@code "abc"}</td><td><code>{ 0x00, 0x03, 0x61, 0x62, 0x63 }</code></td></tr>
+     *   <tr><td>{@code "123"}</td><td><code>{ 0x00, 0x03, 0x31, 0x32, 0x33 }</code></td></tr>
+     *   <tr><td>{@code "あ"}</td><td><code>{ 0x00, 0x03, 0xe3, 0x81, 0x82 }</code></td></tr>
+     *   <tr><td>{@code "あいう"}</td><td><code>{ 0x00, 0x09, 0xe3, 0x81, 0x82, 0xe3, 0x81, 0x84, 0xe3, 0x81, 0x86 }</code></td></tr>
+     * </table>
+     * 
+     * @param str 任意の文字列
+     * @return {@code str} のプリミティブ・データを修正 UTF-8 形式でシリアル化して得られるバイト配列
+     * @throws NullPointerException {@code str} が {@code null} の場合
+     * @throws FailToSerializeException シリアル化の過程で何らかの例外が発生した場合
+     * @see DataOutputStream#writeUTF(String)
+     */
+    public static byte[] bytesOfString(String str) {
+        Objects.requireNonNull(str);
+        
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                DataOutputStream dos = new DataOutputStream(bos)) {
+                
+            dos.writeUTF(str);
+            dos.flush(); // 要るのかよく分からないが、念のため実行する。
+            return bos.toByteArray();
+            
+        } catch (Exception e) {
+            throw new FailToSerializeException(e);
+        }
+    }
+    
+    /**
+     * オブジェクトをシリアル化して得られるバイト配列から先頭の固定 4 バイトを除いた配列を返します。<br>
+     * 
+     * @param obj 任意のオブジェクト
+     * @return オブジェクトをシリアル化して得られるバイト配列から先頭の固定 4 バイトを除いた配列
+     * @throws FailToSerializeException シリアル化の過程で何らかの例外が発生した場合
+     */
+    public static byte[] bytesOfObject(Object obj) {
+        byte[] bytes = write(obj);
+        
+        assert bytes != null;
+        assert Arrays.equals(OBJECT_HEADER, Arrays.copyOf(bytes, OBJECT_HEADER.length));
+        
+        return Arrays.copyOfRange(bytes, OBJECT_HEADER.length, bytes.length);
+    }
+    
+    // ■■■バイト配列の加工、およびバイト配列と16進表示形式文字列の変換に関するユーティリティ■■■
+    
+    /**
+     * バイト配列内の {@code target} と一致する部分配列を {@code replacement} で置換した新たな配列を返します。
      * 元の配列は変更しません。<br>
      * 置き換えは、バイト配列の先頭から末尾まで進みます。<br>
      * 例1 ：
@@ -236,13 +334,13 @@ public class TestUtil {
         if (!isHexFormat(target) || !isHexFormat(replacement)) {
             throw new NumberFormatException(String.format("target : %s, replacement : %s", target, replacement));
         }
+        
         if ("".equals(target)) {
             return Arrays.copyOf(bytes, bytes.length);
         }
         
         String hexStr = toHexString(bytes);
         String hexStr2 = normalize(hexStr.replace(target, replacement));
-        
         return hexToBytes(hexStr2);
     }
     
@@ -307,7 +405,7 @@ public class TestUtil {
      * </ul>
      * 次の文字列は16進表示形式ではありません。
      * <ul>
-     *   <li>{@code "00 1 23"} ： 必ず2文字のペアでなければなりません。</li>
+     *   <li>{@code "00 1 23"} ： 必ず2桁の数字でなければなりません。</li>
      *   <li>{@code "12 "}、{@code " 34"} ： 先頭や末尾に余分なスペースが含まれてはなりません。</li>
      *   <li>{@code "AB FF"} ： {@code 0}～{@code 9}、{@code a}～{@code f} のみが許容されます。大文字は許容されません。</li>
      *   <li>{@code null}</li>
@@ -315,7 +413,7 @@ public class TestUtil {
      * 
      * @param hexStr 検査対象の文字列
      * @return {@code hexStr} が16進表示形式の場合は {@code true}
-     *         （{@code null} の場合は {@code false}、空文字列の場合は {@code true}）
+     *         （空文字列の場合は {@code true}、{@code null} の場合は {@code false}）
      */
     static boolean isHexFormat(String hexStr) {
         return hexStr != null && hexStr.matches("^$|^[0-9a-f]{2}( [0-9a-f]{2})*$");
