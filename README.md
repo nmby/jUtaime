@@ -1,6 +1,9 @@
 # jUtaime （ジュテーム）
 JUnitでのテストを効率化するためのライブラリです。  
-
+* 例外検証の効率化  
+* シリアル化／デシリアル化検証の効率化  
+  
+  
 #### 例外検証の効率化
 
 通常の検証と同じスタイルで、`assertThat()` を使用して例外発生コードを検証することができます。  
@@ -67,6 +70,7 @@ Serializable を実装したクラスに対するシリアル化／デシリア�
 
 **利用例２**：シリアル化されたバイト配列を改竄し、デシリアル化時の挙動を確認しています。
 
+    // test2-1
     Function<byte[], byte[]> modifier1 = bytes -> {
         byte[] modified = Arrays.copyOf(bytes, bytes.length);
         modified[modified.length - 1] = 0x02;
@@ -74,11 +78,13 @@ Serializable を実装したクラスに対するシリアル化／デシリア�
     };
     assertThat(TestUtil.writeModifyAndRead(Integer.valueOf(1), modifier1), is(Integer.valueOf(2)));
     
+    // test2-2
     Function<byte[], byte[]> modifier2 = bytes -> {
         return TestUtil.replace(bytes, TestUtil.bytes(MyClass1.class.getName()), TestUtil.bytes(MyClass2.class.getName()));
     };
     assertThat(TestUtil.writeModifyAndRead(new MyClass1(), modifier2), instanceOf(MyClass2.class));
     
+    // test2-3
     assertThat(of(() -> TestUtil.writeModifyAndRead(new MyOdd(7),
             bytes -> TestUtil.replace(bytes, TestUtil.bytes(7), TestUtil.bytes(8)))),
             raise(FailToDeserializeException.class).rootCause(InvalidObjectException.class));
