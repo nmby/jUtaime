@@ -45,7 +45,47 @@ JUnitでのテストを効率化するためのライブラリです。
                     .rootCause(RuntimeException.class)
                     .not(rootCause(NullPointerException.class)));
 
-詳細は [javadoc](http://nmby.github.io/jUtaime/api-docs/index.html) を参照してください。  
+詳細は [javadoc](http://nmby.github.io/jUtaime/api-docs/index.html) の中の
+[こちらのページ](http://nmby.github.io/jUtaime/api-docs/xyz/hotchpotch/jutaime/throwable/package-summary.html)
+を参照してください。  
+  
+#### シリアル化／デシリアル化検証の効率化
+
+※この機能は実験的機能の位置づけであり、API仕様を互換性のない形で予告なく変更・廃止することがあります。  
+  
+Serializable を実装したクラスに対するシリアル化／デシリアル化テストを効率化する機能を提供します。  
+大きく分けて、次の3分類の機能を提供します。  
+* オブジェクトのシリアル化／デシリアル化に関するユーティリティ  
+* プリミティブデータ型とオブジェクトのシリアル化形式取得に関するユーティリティ  
+* バイト配列の加工、およびバイト配列と16進表示形式文字列の変換に関するユーティリティ  
+  
+利用例１：オブジェクトをシリアル化／デシリアル化させ、挙動を確認しています。
+
+    assertThat(TestUtil.writeAndRead(mySerializableObj), is(mySerializableObj));
+    assertThat(TestUtil.writeAndRead(MySingleton.getInstance()), theInstance(MySingleton.getInstance()));
+    assertThat(of(() -> TestUtil.write(myNotSerializableObj)), raise(FailToSerializeException.class));
+
+利用例２：シリアル化されたバイト配列を改竄し、デシリアル化時の挙動を確認しています。
+
+    Function<byte[], byte[]> modifier1 = bytes -> {
+        byte[] modified = Arrays.copyOf(bytes, bytes.length);
+        modified[modified.length - 1] = 0x02;
+        return modified;
+    };
+    assertThat(TestUtil.writeModifyAndRead(Integer.valueOf(1), modifier1), is(Integer.valueOf(2)));
+    
+    Function<byte[], byte[]> modifier2 = bytes -> {
+        return TestUtil.replace(bytes, TestUtil.bytes(MyClass1.class.getName()), TestUtil.bytes(MyClass2.class.getName()));
+    };
+    assertThat(TestUtil.writeModifyAndRead(new MyClass1(), modifier2), instanceOf(MyClass2.class));
+    
+    assertThat(of(() -> TestUtil.writeModifyAndRead(new MyOdd(7),
+            bytes -> TestUtil.replace(bytes, TestUtil.bytes(7), TestUtil.bytes(8)))),
+            raise(FailToDeserializeException.class).rootCause(InvalidObjectException.class));
+
+詳細は [javadoc](http://nmby.github.io/jUtaime/api-docs/index.html) の中の
+[こちらのページ](http://nmby.github.io/jUtaime/api-docs/xyz/hotchpotch/jutaime/serializable/experimental/TestUtil.html)
+を参照してください。  
 
 ## 前提・依存
 * ジュテームのサポート対象は java 8 です。java 7 以前では利用できません。
@@ -58,6 +98,9 @@ JUnitでのテストを効率化するためのライブラリです。
 ビルド・パスを設定してください。  
 
 ## 更新履歴
+#### Version 1.2.0 (2015/09/06)
+* シリアル化／デシリアル化テスト支援機能を実験的に追加
+
 #### Version 1.1.0 (2015/09/06)
 * 例外の型は問わず例外メッセージの期待値のみを指定する機能を追加
 
