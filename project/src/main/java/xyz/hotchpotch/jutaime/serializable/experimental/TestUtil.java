@@ -10,11 +10,11 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * JUnit4でのシリアル化／デシリアル化に関するテストを効率化するための機能を提供するユーティリティクラスです。<br>
+ * JUnit4でのシリアライズ／デシリアライズに関するテストを効率化するための機能を提供するユーティリティクラスです。<br>
  * 本クラスが提供するユーティリティメソッドは、大きく次の3つに分類されます。<br>
  * <ol>
- *   <li>オブジェクトのシリアル化／デシリアル化に関するユーティリティ</li>
- *   <li>プリミティブデータ型とオブジェクトのシリアル化形式取得に関するユーティリティ</li>
+ *   <li>オブジェクトのシリアライズ／デシリアライズに関するユーティリティ</li>
+ *   <li>プリミティブデータ型とオブジェクトのシリアライズ形式取得に関するユーティリティ</li>
  *   <li>バイト配列の加工、およびバイト配列と16進表示形式文字列の変換に関するユーティリティ</li>
  * </ol>
  * <br>
@@ -43,14 +43,14 @@ public class TestUtil {
     
     private static final byte[] OBJECT_HEADER = { (byte) 0xac, (byte) 0xed, 0x00, 0x05 };
     
-    // **** オブジェクトのシリアル化／デシリアル化に関するユーティリティ ****
+    // **** オブジェクトのシリアライズ／デシリアライズに関するユーティリティ ****
     
     /**
-     * オブジェクトをシリアル化することによって得られるバイト配列を返します。<br>
+     * オブジェクトをシリアライズすることによって得られるバイト配列を返します。<br>
      * 
-     * @param obj シリアル化対象のオブジェクト（{@code null} が許容されます）
-     * @return {@code obj} をシリアル化することによって得られるバイト配列
-     * @throws FailToSerializeException シリアル化の過程で何らかの例外が発生した場合
+     * @param obj シリアライズ対象のオブジェクト（{@code null} が許容されます）
+     * @return {@code obj} をシリアライズすることによって得られるバイト配列
+     * @throws FailToSerializeException シリアライズの過程で何らかの例外が発生した場合
      * @see ObjectOutputStream#writeObject(Object)
      */
     public static byte[] write(Object obj) {
@@ -67,12 +67,12 @@ public class TestUtil {
     }
     
     /**
-     * バイト配列をデシリアル化することによって得られるオブジェクトを返します。<br>
+     * バイト配列をデシリアライズすることによって得られるオブジェクトを返します。<br>
      * 
      * @param bytes バイト配列
-     * @return バイト配列をデシリアル化することにより得られるオブジェクト
+     * @return バイト配列をデシリアライズすることにより得られるオブジェクト
      * @throws NullPointerException {@code bytes} が {@code null} の場合
-     * @throws FailToDeserializeException デシリアル化の過程で何らかの例外が発生した場合
+     * @throws FailToDeserializeException デシリアライズの過程で何らかの例外が発生した場合
      * @see ObjectInputStream#readObject()
      */
     public static Object read(byte[] bytes) {
@@ -89,13 +89,13 @@ public class TestUtil {
     }
     
     /**
-     * オブジェクトをバイト配列にシリアル化したのちデシリアル化することによって得られるオブジェクトを返します。<br>
+     * オブジェクトをバイト配列にシリアライズしたのちデシリアライズすることによって得られるオブジェクトを返します。<br>
      * 
-     * @param <T> シリアル化対象のオブジェクトの型
-     * @param obj シリアル化対象のオブジェクト（{@code null} が許容されます）
-     * @return {@code obj} をバイト配列にシリアル化したのちデシリアル化することによって得られるオブジェクト
-     * @throws FailToSerializeException シリアル化の過程で何らかの例外が発生した場合
-     * @throws FailToDeserializeException デシリアル化の過程で何らかの例外が発生した場合
+     * @param <T> シリアライズ対象のオブジェクトの型
+     * @param obj シリアライズ対象のオブジェクト（{@code null} が許容されます）
+     * @return {@code obj} をバイト配列にシリアライズしたのちデシリアライズすることによって得られるオブジェクト
+     * @throws FailToSerializeException シリアライズの過程で何らかの例外が発生した場合
+     * @throws FailToDeserializeException デシリアライズの過程で何らかの例外が発生した場合
      * @see #write(Object)
      * @see #read(byte[])
      */
@@ -105,14 +105,14 @@ public class TestUtil {
     }
     
     /**
-     * オブジェクトをシリアル化することによって得られるバイト配列を改竄したのちデシリアル化することによって得られるオブジェクトを返します。<br>
+     * オブジェクトをシリアライズすることによって得られるバイト配列を改竄したのちデシリアライズすることによって得られるオブジェクトを返します。<br>
      * 
-     * @param obj シリアル化対象のオブジェクト（{@code null} が許容されます）
+     * @param obj シリアライズ対象のオブジェクト（{@code null} が許容されます）
      * @param modifier バイト配列を改竄する {@code Function}
-     * @return 改竄されたバイト配列をデシリアル化することによって得られるオブジェクト
+     * @return 改竄されたバイト配列をデシリアライズすることによって得られるオブジェクト
      * @throws NullPointerException {@code modifier} が {@code null} の場合
-     * @throws FailToSerializeException シリアル化の過程で何らかの例外が発生した場合
-     * @throws FailToDeserializeException デシリアル化の過程で何らかの例外が発生した場合
+     * @throws FailToSerializeException シリアライズの過程で何らかの例外が発生した場合
+     * @throws FailToDeserializeException デシリアライズの過程で何らかの例外が発生した場合
      * @see #write(Object)
      * @see #read(byte[])
      */
@@ -124,16 +124,16 @@ public class TestUtil {
         return read(modified);
     }
     
-    // **** プリミティブデータ型とオブジェクトのシリアル化形式取得に関するユーティリティ ****
+    // **** プリミティブデータ型とオブジェクトのシリアライズ形式取得に関するユーティリティ ****
     
     /**
-     * boolean 値をシリアル化して得られるバイト配列を返します。<br>
+     * boolean 値をシリアライズして得られるバイト配列を返します。<br>
      * 具体的には、{@code true} には <code>{ 0x01 }</code> を、
      * {@code false} には <code>{ 0x00 }</code> を返します。<br>
      * 
      * @param b 任意の boolean 値
-     * @return boolean 値をシリアル化して得られるバイト配列
-     * @throws FailToSerializeException シリアル化の過程で何らかの例外が発生した場合
+     * @return boolean 値をシリアライズして得られるバイト配列
+     * @throws FailToSerializeException シリアライズの過程で何らかの例外が発生した場合
      * @see DataOutputStream#writeBoolean(boolean)
      */
     public static byte[] bytes(boolean b) {
@@ -150,13 +150,13 @@ public class TestUtil {
     }
     
     /**
-     * int 値をシリアル化して得られるバイト配列を返します。<br>
+     * int 値をシリアライズして得られるバイト配列を返します。<br>
      * 例えば、{@code 1} には <code>{ 0x00, 0x00, 0x00, 0x01 }</code> を、
      * {@code -1} には <code>{ 0xff, 0xff, 0xff, 0xff }</code> を返します。<br>
      * 
      * @param i 任意の int 値
-     * @return int 値をシリアル化して得られるバイト配列
-     * @throws FailToSerializeException シリアル化の過程で何らかの例外が発生した場合
+     * @return int 値をシリアライズして得られるバイト配列
+     * @throws FailToSerializeException シリアライズの過程で何らかの例外が発生した場合
      * @see DataOutputStream#writeInt(int)
      */
     public static byte[] bytes(int i) {
@@ -173,13 +173,13 @@ public class TestUtil {
     }
     
     /**
-     * long 値をシリアル化して得られるバイト配列を返します。<br>
+     * long 値をシリアライズして得られるバイト配列を返します。<br>
      * 例えば、{@code 1L} には <code>{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01 }</code> を、
      * {@code -1L} には <code>{ 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff }</code> を返します。<br>
      * 
      * @param l 任意の long 値
-     * @return long 値をシリアル化して得られるバイト配列
-     * @throws FailToSerializeException シリアル化の過程で何らかの例外が発生した場合
+     * @return long 値をシリアライズして得られるバイト配列
+     * @throws FailToSerializeException シリアライズの過程で何らかの例外が発生した場合
      * @see DataOutputStream#writeLong(long)
      */
     public static byte[] bytes(long l) {
@@ -196,11 +196,11 @@ public class TestUtil {
     }
     
     /**
-     * float 値をシリアル化して得られるバイト配列を返します。<br>
+     * float 値をシリアライズして得られるバイト配列を返します。<br>
      * 
      * @param f 任意の float 値
-     * @return float 値をシリアル化して得られるバイト配列
-     * @throws FailToSerializeException シリアル化の過程で何らかの例外が発生した場合
+     * @return float 値をシリアライズして得られるバイト配列
+     * @throws FailToSerializeException シリアライズの過程で何らかの例外が発生した場合
      * @see DataOutputStream#writeFloat(float)
      */
     public static byte[] bytes(float f) {
@@ -217,11 +217,11 @@ public class TestUtil {
     }
     
     /**
-     * double 値をシリアル化して得られるバイト配列を返します。<br>
+     * double 値をシリアライズして得られるバイト配列を返します。<br>
      * 
      * @param d 任意の double 値
-     * @return double 値をシリアル化して得られるバイト配列
-     * @throws FailToSerializeException シリアル化の過程で何らかの例外が発生した場合
+     * @return double 値をシリアライズして得られるバイト配列
+     * @throws FailToSerializeException シリアライズの過程で何らかの例外が発生した場合
      * @see DataOutputStream#writeDouble(double)
      */
     public static byte[] bytes(double d) {
@@ -238,7 +238,7 @@ public class TestUtil {
     }
     
     /**
-     * 文字列を修正 UTF-8 形式でシリアル化して得られるバイト配列を返します。<br>
+     * 文字列を修正 UTF-8 形式でシリアライズして得られるバイト配列を返します。<br>
      * 元の文字列と得られるバイト配列の例を示します。<br>
      * <br>
      * <table border="1">
@@ -254,9 +254,9 @@ public class TestUtil {
      * </table>
      * 
      * @param str 任意の文字列
-     * @return {@code str} のプリミティブ・データを修正 UTF-8 形式でシリアル化して得られるバイト配列
+     * @return {@code str} のプリミティブ・データを修正 UTF-8 形式でシリアライズして得られるバイト配列
      * @throws NullPointerException {@code str} が {@code null} の場合
-     * @throws FailToSerializeException シリアル化の過程で何らかの例外が発生した場合
+     * @throws FailToSerializeException シリアライズの過程で何らかの例外が発生した場合
      * @see DataOutputStream#writeUTF(String)
      */
     public static byte[] bytes(String str) {
@@ -275,11 +275,11 @@ public class TestUtil {
     }
     
     /**
-     * オブジェクトをシリアル化して得られるバイト配列から先頭の固定 4 バイトを除いた配列を返します。<br>
+     * オブジェクトをシリアライズして得られるバイト配列から先頭の固定 4 バイトを除いた配列を返します。<br>
      * 
      * @param obj 任意のオブジェクト（{@code null} が許容されます）
-     * @return オブジェクトをシリアル化して得られるバイト配列から先頭の固定 4 バイトを除いた配列
-     * @throws FailToSerializeException シリアル化の過程で何らかの例外が発生した場合
+     * @return オブジェクトをシリアライズして得られるバイト配列から先頭の固定 4 バイトを除いた配列
+     * @throws FailToSerializeException シリアライズの過程で何らかの例外が発生した場合
      */
     public static byte[] bytes(Object obj) {
         byte[] bytes = write(obj);
