@@ -91,6 +91,7 @@ public class TestUtil {
     /**
      * オブジェクトをバイト配列にシリアル化したのちデシリアル化することによって得られるオブジェクトを返します。<br>
      * 
+     * @param <T> シリアル化対象のオブジェクトの型
      * @param obj シリアル化対象のオブジェクト（{@code null} が許容されます）
      * @return {@code obj} をバイト配列にシリアル化したのちデシリアル化することによって得られるオブジェクト
      * @throws FailToSerializeException シリアル化の過程で何らかの例外が発生した場合
@@ -241,6 +242,7 @@ public class TestUtil {
      * 元の文字列と得られるバイト配列の例を示します。<br>
      * <br>
      * <table border="1">
+     *   <caption>元の文字列と得られるバイト配列の例</caption>
      *   <tr><th>元の文字列</th><th>得られるバイト配列</th></tr>
      *   <tr><td>{@code ""}</td><td><code>{ 0x00, 0x00 }</code></td></tr>
      *   <tr><td>{@code "A"}</td><td><code>{ 0x00, 0x01, 0x41 }</code></td></tr>
@@ -295,16 +297,16 @@ public class TestUtil {
      * 元の配列は変更しません。<br>
      * 置き換えは、バイト配列の先頭から末尾まで進みます。<br>
      * <br>
-     * 例1 ：
      * <table border="1">
+     *   <caption>置換例１</caption>
      *   <tr><th>{@code bytes}</th><td><code>{ 0x01, 0x01, 0x01, 0x01, 0x01, 0x01 }</code></td></tr>
      *   <tr><th>{@code target}</th><td><code>{ 0x01, 0x01 }</code></td></tr>
      *   <tr><th>{@code replacement}</th><td><code>{ 0x01 }</code></td></tr>
      *   <tr><th>結果</th><td><code>{ 0x01, 0x01, 0x01 }</code></td></tr>
      * </table>
      * <br>
-     * 例2 ：
      * <table border="1">
+     *   <caption>置換例２</caption>
      *   <tr><th>{@code bytes}</th><td><code>{ 0x01, 0x01, 0x01 }</code></td></tr>
      *   <tr><th>{@code target}</th><td><code>{ 0x01, 0x01 }</code></td></tr>
      *   <tr><th>{@code replacement}</th><td><code>{ 0x02 }</code></td></tr>
@@ -332,16 +334,16 @@ public class TestUtil {
      * 元の配列は変更しません。<br>
      * 置き換えは、バイト配列の先頭から末尾まで進みます。<br>
      * <br>
-     * 例1 ：
      * <table border="1">
+     *   <caption>置換例１</caption>
      *   <tr><th>{@code bytes}</th><td><code>{ 0x01, 0x01, 0x01, 0x01, 0x01, 0x01 }</code></td></tr>
      *   <tr><th>{@code target}</th><td>{@code "01 01"}</td></tr>
      *   <tr><th>{@code replacement}</th><td>{@code "01"}</td></tr>
      *   <tr><th>結果</th><td><code>{ 0x01, 0x01, 0x01 }</code></td></tr>
      * </table>
      * <br>
-     * 例2 ：
      * <table border="1">
+     *   <caption>置換例２</caption>
      *   <tr><th>{@code bytes}</th><td><code>{ 0x01, 0x01, 0x01 }</code></td></tr>
      *   <tr><th>{@code target}</th><td>{@code "01 01"}</td></tr>
      *   <tr><th>{@code replacement}</th><td>{@code "02"}</td></tr>
