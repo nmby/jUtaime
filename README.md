@@ -53,19 +53,19 @@ JUnitでのテストを効率化するためのライブラリです。
 
 ※この機能は実験的機能の位置づけであり、API仕様を互換性のない形で予告なく変更・廃止することがあります。  
   
-Serializable を実装したクラスに対するシリアル化／デシリアル化テストを効率化する機能を提供します。  
+Serializable を実装したクラスに対するシリアル化／デシリアル化検証を効率化する機能を提供します。  
 大きく分けて、次の3分類の機能を提供します。  
 * オブジェクトのシリアル化／デシリアル化に関するユーティリティ  
 * プリミティブデータ型とオブジェクトのシリアル化形式取得に関するユーティリティ  
 * バイト配列の加工、およびバイト配列と16進表示形式文字列の変換に関するユーティリティ  
   
-利用例１：オブジェクトをシリアル化／デシリアル化させ、挙動を確認しています。
+**利用例１**：オブジェクトをシリアル化／デシリアル化し、挙動を確認しています。
 
     assertThat(TestUtil.writeAndRead(mySerializableObj), is(mySerializableObj));
     assertThat(TestUtil.writeAndRead(MySingleton.getInstance()), theInstance(MySingleton.getInstance()));
     assertThat(of(() -> TestUtil.write(myNotSerializableObj)), raise(FailToSerializeException.class));
 
-利用例２：シリアル化されたバイト配列を改竄し、デシリアル化時の挙動を確認しています。
+**利用例２**：シリアル化されたバイト配列を改竄し、デシリアル化時の挙動を確認しています。
 
     Function<byte[], byte[]> modifier1 = bytes -> {
         byte[] modified = Arrays.copyOf(bytes, bytes.length);
