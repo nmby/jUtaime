@@ -60,10 +60,12 @@ public class TestUtilTest {
         assertThat(read(write(new boolean[] { true, false })), is(new boolean[] { true, false }));
         assertThat(read(write("Hello, World !!")), is("Hello, World !!"));
         assertThat(read(write(new Writable())), instanceOf(Writable.class));
+        assertThat(TestUtil.<Integer>read(write(Integer.valueOf(1))).intValue(), is(1));
         
         assertThat(of(() -> read(null)), raise(NullPointerException.class));
         assertThat(of(() -> read(new byte[] {})), raise(FailToDeserializeException.class));
         assertThat(of(() -> read(new byte[] { 1, 2, 3 })), raise(FailToDeserializeException.class));
+        assertThat(of(() -> TestUtil.<Integer>read(write(String.valueOf("abc"))).intValue()), raise(ClassCastException.class));
     }
     
     @Test
@@ -110,6 +112,19 @@ public class TestUtilTest {
         };
         assertThat(of(() -> writeModifyAndRead(new Writable(), modifier5)),
                 raise(FailToDeserializeException.class).rootCause(InvalidClassException.class));
+        
+        Function<byte[], byte[]> modifier6 = bytes -> {
+            byte[] modified = Arrays.copyOf(bytes, bytes.length);
+            modified[modified.length - 1] = 0x02;
+            return modified;
+        };
+        assertThat(TestUtil.<Integer>writeModifyAndRead(Integer.valueOf(1), modifier6).intValue(), is(2));
+        
+        Function<byte[], byte[]> modifier7 = bytes -> {
+            return replace(bytes, bytes(Writable.class.getName()), bytes(Writable2.class.getName()));
+        };
+        assertThat(of(() -> TestUtil.<Integer>writeModifyAndRead(new Writable(), modifier7).intValue()),
+                raise(ClassCastException.class));
     }
     
     @Test

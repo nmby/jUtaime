@@ -69,19 +69,21 @@ public class TestUtil {
     /**
      * バイト配列をデシリアライズすることによって得られるオブジェクトを返します。<br>
      * 
+     * @param <T> 戻り値のオブジェクトの型
      * @param bytes バイト配列
      * @return バイト配列をデシリアライズすることにより得られるオブジェクト
      * @throws NullPointerException {@code bytes} が {@code null} の場合
      * @throws FailToDeserializeException デシリアライズの過程で何らかの例外が発生した場合
      * @see ObjectInputStream#readObject()
      */
-    public static Object read(byte[] bytes) {
+    @SuppressWarnings("unchecked")
+    public static <T> T read(byte[] bytes) {
         Objects.requireNonNull(bytes);
         
         try (ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
                 ObjectInputStream ois = new ObjectInputStream(bis)) {
                 
-            return ois.readObject();
+            return (T) ois.readObject();
             
         } catch (Exception e) {
             throw new FailToDeserializeException(e);
@@ -99,14 +101,14 @@ public class TestUtil {
      * @see #write(Object)
      * @see #read(byte[])
      */
-    @SuppressWarnings("unchecked")
     public static <T> T writeAndRead(T obj) {
-        return (T) writeModifyAndRead(obj, Function.identity());
+        return writeModifyAndRead(obj, Function.identity());
     }
     
     /**
      * オブジェクトをシリアライズすることによって得られるバイト配列を改竄したのちデシリアライズすることによって得られるオブジェクトを返します。<br>
      * 
+     * @param <T> 戻り値のオブジェクトの型
      * @param obj シリアライズ対象のオブジェクト（{@code null} が許容されます）
      * @param modifier バイト配列を改竄する {@code Function}
      * @return 改竄されたバイト配列をデシリアライズすることによって得られるオブジェクト
@@ -116,7 +118,7 @@ public class TestUtil {
      * @see #write(Object)
      * @see #read(byte[])
      */
-    public static Object writeModifyAndRead(Object obj, Function<byte[], byte[]> modifier) {
+    public static <T> T writeModifyAndRead(Object obj, Function<byte[], byte[]> modifier) {
         Objects.requireNonNull(modifier);
         
         byte[] bytes = write(obj);
