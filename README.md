@@ -104,6 +104,11 @@ Serializable を実装したクラスに対するシリアライズ／デシリ�
 ビルド・パスを設定してください。  
 
 ## 更新履歴
+#### Version 1.2.2 (2015/09/07)
+* 次の2つのメソッドの戻り値を Object から <T> に変更
+  - TestUtil#read(byte[])
+  - TestUtil#writeModifyAndRead(Object, Function<byte[], byte[]>)
+
 #### Version 1.2.1 (2015/09/06)
 * ドキュメント内の用語を統一
 
