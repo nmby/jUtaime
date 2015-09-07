@@ -105,7 +105,7 @@ Serializable を実装したクラスに対するシリアライズ／デシリ�
 
 ## 更新履歴
 #### Version 1.2.2 (2015/09/07)
-* 次の2つのメソッドの戻り値を Object から &lt;T&gt; に変更
+* 次の2つのメソッドの戻り値の型を Object から &lt;T&gt; に変更
   - TestUtil#read(byte[])
   - TestUtil#writeModifyAndRead(Object, Function&lt;byte[], byte[]&gt;)
 
