@@ -1,4 +1,4 @@
-package xyz.hotchpotch.jutaime.serializable.experimental;
+package xyz.hotchpotch.jutaime.serializable;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -11,19 +11,39 @@ import java.util.function.Function;
 
 /**
  * JUnit4でのシリアライズ／デシリアライズに関するテストを効率化するための機能を提供するユーティリティクラスです。<br>
+ * 本クラスが提供するユーティリティメソッドは、大きく次の3つに分類されます。<br>
+ * <ol>
+ *   <li>オブジェクトのシリアライズ／デシリアライズに関するユーティリティ</li>
+ *   <li>プリミティブデータ型とオブジェクトのシリアライズ形式取得に関するユーティリティ</li>
+ *   <li>バイト配列の加工、およびバイト配列と16進表示形式文字列の変換に関するユーティリティ</li>
+ * </ol>
+ * 利用方法の概要は {@link xyz.hotchpotch.jutaime.serializable xyz.hotchpotch.jutaime.serializable パッケージの説明}
+ * を参照してください。<br>
+ * <br>
+ * バイト配列の視認性と加工のしやすさを向上させる目的で、バイト配列と16進表示形式文字列を相互に変換するユーティリティが提供されます。<br>
+ * ここでいう16進表示形式とは、{@code "00"}～{@code "ff"} の2文字がスペース文字区切りで連結された形式のことを指します。<br>
+ * 次の文字列は16進表示形式です。
+ * <ul>
+ *   <li>{@code "00"}</li>
+ *   <li>{@code "01 2a b3 ff"}</li>
+ *   <li>{@code ""}</li>
+ * </ul>
+ * 次の文字列は16進表示形式ではありません。
+ * <ul>
+ *   <li>{@code "00 1 23"} ： 必ず2桁の数字でなければなりません。</li>
+ *   <li>{@code "12 "}、{@code " 34"} ： 先頭や末尾に余分なスペースが含まれてはなりません。</li>
+ *   <li>{@code "AB FF"} ： {@code 0}～{@code 9}、{@code a}～{@code f} のみが許容されます。大文字は許容されません。</li>
+ *   <li>{@code null} ： {@code null} は16進表示形式文字列ではありません。</li>
+ * </ul>
  * 
- * @deprecated このクラスは {@link xyz.hotchpotch.jutaime.serializable.STUtil} として正式リリースされました。<br>
- *             今後は {@link xyz.hotchpotch.jutaime.serializable.experimental} パッケージではなく
- *             {@link xyz.hotchpotch.jutaime.serializable} パッケージの各種クラスを利用してください。<br>
- *             このパッケージは将来のリリースで削除される予定です。<br>
- * @since 1.2.0
+ * @since 1.3.0
  * @author nmby
  */
-@Deprecated
-public class TestUtil {
+public class STUtil {
     
-    // ++++++++++++++++ static members ++++++++++++++++
+    // [static members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
+    /** オブジェクトをシリアライズした際に先頭に現れる固定バイト配列 */
     private static final byte[] OBJECT_HEADER = { (byte) 0xac, (byte) 0xed, 0x00, 0x05 };
     
     // **** オブジェクトのシリアライズ／デシリアライズに関するユーティリティ ****
@@ -76,7 +96,7 @@ public class TestUtil {
     /**
      * オブジェクトをバイト配列にシリアライズしたのちデシリアライズすることによって得られるオブジェクトを返します。<br>
      * 
-     * @param <T> シリアライズ対象のオブジェクトの型
+     * @param <T> シリアライズ対象および戻り値のオブジェクトの型
      * @param obj シリアライズ対象のオブジェクト（{@code null} が許容されます）
      * @return {@code obj} をバイト配列にシリアライズしたのちデシリアライズすることによって得られるオブジェクト
      * @throws FailToSerializeException シリアライズの過程で何らかの例外が発生した場合
@@ -122,16 +142,7 @@ public class TestUtil {
      * @see DataOutputStream#writeBoolean(boolean)
      */
     public static byte[] bytes(boolean b) {
-        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                DataOutputStream dos = new DataOutputStream(bos)) {
-                
-            dos.writeBoolean(b);
-            dos.flush(); // 要るのかよく分からないが、念のため実行する。
-            return bos.toByteArray();
-            
-        } catch (Exception e) {
-            throw new FailToSerializeException(e);
-        }
+        return bytesOfPrimitives(dos -> dos.writeBoolean(b));
     }
     
     /**
@@ -145,16 +156,7 @@ public class TestUtil {
      * @see DataOutputStream#writeInt(int)
      */
     public static byte[] bytes(int i) {
-        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                DataOutputStream dos = new DataOutputStream(bos)) {
-                
-            dos.writeInt(i);
-            dos.flush(); // 要るのかよく分からないが、念のため実行する。
-            return bos.toByteArray();
-            
-        } catch (Exception e) {
-            throw new FailToSerializeException(e);
-        }
+        return bytesOfPrimitives(dos -> dos.writeInt(i));
     }
     
     /**
@@ -168,16 +170,7 @@ public class TestUtil {
      * @see DataOutputStream#writeLong(long)
      */
     public static byte[] bytes(long l) {
-        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                DataOutputStream dos = new DataOutputStream(bos)) {
-                
-            dos.writeLong(l);
-            dos.flush(); // 要るのかよく分からないが、念のため実行する。
-            return bos.toByteArray();
-            
-        } catch (Exception e) {
-            throw new FailToSerializeException(e);
-        }
+        return bytesOfPrimitives(dos -> dos.writeLong(l));
     }
     
     /**
@@ -189,16 +182,7 @@ public class TestUtil {
      * @see DataOutputStream#writeFloat(float)
      */
     public static byte[] bytes(float f) {
-        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                DataOutputStream dos = new DataOutputStream(bos)) {
-                
-            dos.writeFloat(f);
-            dos.flush(); // 要るのかよく分からないが、念のため実行する。
-            return bos.toByteArray();
-            
-        } catch (Exception e) {
-            throw new FailToSerializeException(e);
-        }
+        return bytesOfPrimitives(dos -> dos.writeFloat(f));
     }
     
     /**
@@ -210,16 +194,7 @@ public class TestUtil {
      * @see DataOutputStream#writeDouble(double)
      */
     public static byte[] bytes(double d) {
-        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                DataOutputStream dos = new DataOutputStream(bos)) {
-                
-            dos.writeDouble(d);
-            dos.flush(); // 要るのかよく分からないが、念のため実行する。
-            return bos.toByteArray();
-            
-        } catch (Exception e) {
-            throw new FailToSerializeException(e);
-        }
+        return bytesOfPrimitives(dos -> dos.writeDouble(d));
     }
     
     /**
@@ -246,15 +221,20 @@ public class TestUtil {
      */
     public static byte[] bytes(String str) {
         Objects.requireNonNull(str);
+        return bytesOfPrimitives(dos -> dos.writeUTF(str));
+    }
+    
+    private static byte[] bytesOfPrimitives(UnsafeConsumer<DataOutputStream> writer) {
+        assert writer != null;
         
         try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 DataOutputStream dos = new DataOutputStream(bos)) {
                 
-            dos.writeUTF(str);
+            writer.accept(dos);
             dos.flush(); // 要るのかよく分からないが、念のため実行する。
             return bos.toByteArray();
             
-        } catch (Exception e) {
+        } catch (Throwable e) {
             throw new FailToSerializeException(e);
         }
     }
@@ -300,18 +280,18 @@ public class TestUtil {
      * <br>
      * {@code target} が長さ 0 の配列の場合、何も置換を行わず、{@code bytes} のコピーを返します。<br>
      * 
-     * @param bytes 置換前のバイト配列
+     * @param original 置換前のバイト配列
      * @param target 置換対象の部分配列
      * @param replacement 置換後の部分配列
      * @return 置換後のバイト配列
      * @throws NullPointerException {@code bytes}、{@code target}、{@code replacement} のいずれかが {@code null} の場合
      */
-    public static byte[] replace(byte[] bytes, byte[] target, byte[] replacement) {
-        Objects.requireNonNull(bytes);
+    public static byte[] replace(byte[] original, byte[] target, byte[] replacement) {
+        Objects.requireNonNull(original);
         Objects.requireNonNull(target);
         Objects.requireNonNull(replacement);
         
-        return replace(bytes, toHexString(target), toHexString(replacement));
+        return replace(original, toHexString(target), toHexString(replacement));
     }
     
     /**
@@ -337,7 +317,7 @@ public class TestUtil {
      * <br>
      * {@code target} が空文字列の場合、何も置換を行わず、{@code bytes} のコピーを返します。<br>
      * 
-     * @param bytes 置換前のバイト配列
+     * @param original 置換前のバイト配列
      * @param target 置換対象の部分配列を表す16進表示形式の文字列
      * @param replacement 置換後の部分配列を表す16進表示形式の文字列
      * @return 置換後のバイト配列
@@ -345,17 +325,17 @@ public class TestUtil {
      * @throws NumberFormatException {@code target}、{@code replacement} のいずれかが16進表示形式でない場合
      * @see String#replace(CharSequence, CharSequence)
      */
-    public static byte[] replace(byte[] bytes, String target, String replacement) {
-        Objects.requireNonNull(bytes);
+    public static byte[] replace(byte[] original, String target, String replacement) {
+        Objects.requireNonNull(original);
         if (!isHexFormat(target) || !isHexFormat(replacement)) {
             throw new NumberFormatException(String.format("target : %s, replacement : %s", target, replacement));
         }
         
         if ("".equals(target)) {
-            return Arrays.copyOf(bytes, bytes.length);
+            return Arrays.copyOf(original, original.length);
         }
         
-        String hexStr = toHexString(bytes);
+        String hexStr = toHexString(original);
         String hexStr2 = normalize(hexStr.replace(target, replacement));
         return hexToBytes(hexStr2);
     }
@@ -442,19 +422,19 @@ public class TestUtil {
      *   <li>{@code "00 1 23"} ： 必ず2桁の数字でなければなりません。</li>
      *   <li>{@code "12 "}、{@code " 34"} ： 先頭や末尾に余分なスペースが含まれてはなりません。</li>
      *   <li>{@code "AB FF"} ： {@code 0}～{@code 9}、{@code a}～{@code f} のみが許容されます。大文字は許容されません。</li>
-     *   <li>{@code null}</li>
+     *   <li>{@code null} ： {@code null} は16進表示文字列ではありません。</li>
      * </ul>
      * 
      * @param hexStr 検査対象の文字列
      * @return {@code hexStr} が16進表示形式の場合は {@code true}
      *         （空文字列の場合は {@code true}、{@code null} の場合は {@code false}）
      */
-    static boolean isHexFormat(String hexStr) {
+    private static boolean isHexFormat(String hexStr) {
         return hexStr != null && hexStr.matches("^$|^[0-9a-f]{2}( [0-9a-f]{2})*$");
     }
     
-    // ++++++++++++++++ instance members ++++++++++++++++
+    // [instance members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
-    private TestUtil() {
+    private STUtil() {
     }
 }
