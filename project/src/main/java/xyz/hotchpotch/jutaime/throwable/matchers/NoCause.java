@@ -18,7 +18,7 @@ import xyz.hotchpotch.jutaime.throwable.Testee;
  * @since 1.0.0
  * @author nmby
  */
-public class NoCause extends TypeSafeMatcher<Testee> {
+public class NoCause extends TypeSafeMatcher<Testee<?>> {
     
     // [static members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
@@ -27,7 +27,7 @@ public class NoCause extends TypeSafeMatcher<Testee> {
      * 
      * @return 検査対象のオペレーションがスローした例外やエラーが原因（cause）を持たないことを検査する {@code Matcher}
      */
-    public static Matcher<Testee> noCause() {
+    public static Matcher<Testee<?>> noCause() {
         return new NoCause();
     }
     
@@ -40,7 +40,7 @@ public class NoCause extends TypeSafeMatcher<Testee> {
      * {@inheritDoc}
      */
     @Override
-    protected boolean matchesSafely(Testee testee) {
+    protected boolean matchesSafely(Testee<?> testee) {
         assert testee != null;
         try {
             testee.call();

@@ -27,15 +27,15 @@ import xyz.hotchpotch.jutaime.throwable.matchers.RootCauseExact;
  * @since 1.0.0
  * @author nmby
  */
-public class RaiseMatcher extends TypeSafeMatcher<Testee> {
+public class RaiseMatcher extends TypeSafeMatcher<Testee<?>> {
     
     // [static members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
     // [instance members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
-    private final List<Matcher<Testee>> matchers = new ArrayList<>();
+    private final List<Matcher<Testee<?>>> matchers = new ArrayList<>();
     
-    /*package*/ RaiseMatcher(Matcher<Testee> matcher) {
+    /*package*/ RaiseMatcher(Matcher<Testee<?>> matcher) {
         assert matcher != null;
         matchers.add(matcher);
     }
@@ -47,7 +47,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @return 検査結果（合格の場合は {@code true}）
      */
     @Override
-    protected boolean matchesSafely(Testee testee) {
+    protected boolean matchesSafely(Testee<?> testee) {
         assert testee != null;
         return matchers.parallelStream().allMatch(x -> x.matches(testee));
     }
@@ -339,7 +339,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @throws NullPointerException {@code matcher} が {@code null} の場合
      * @throws IllegalArgumentException {@code matcher} がこの {@code Matcher} オブジェクト自身の場合
      */
-    public RaiseMatcher and(Matcher<Testee> matcher) {
+    public RaiseMatcher and(Matcher<Testee<?>> matcher) {
         Objects.requireNonNull(matcher);
         if (matcher == this) {
             throw new IllegalArgumentException("you are me.");
@@ -360,7 +360,7 @@ public class RaiseMatcher extends TypeSafeMatcher<Testee> {
      * @throws IllegalArgumentException {@code matcher} がこの {@code Matcher} オブジェクト自身の場合
      * @see org.hamcrest.CoreMatchers#not(Matcher) org.hamcrest.CoreMatchers.not(Matcher)
      */
-    public RaiseMatcher not(Matcher<Testee> matcher) {
+    public RaiseMatcher not(Matcher<Testee<?>> matcher) {
         Objects.requireNonNull(matcher);
         if (matcher == this) {
             throw new IllegalArgumentException("you are me.");

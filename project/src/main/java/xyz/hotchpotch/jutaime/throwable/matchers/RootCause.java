@@ -33,7 +33,7 @@ public class RootCause extends RootCauseBase {
      * @return スローされた例外の根本原因（root cause）を検査する {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
      */
-    public static Matcher<Testee> rootCause(Class<? extends Throwable> expectedType) {
+    public static Matcher<Testee<?>> rootCause(Class<? extends Throwable> expectedType) {
         Objects.requireNonNull(expectedType);
         return new RootCause(expectedType);
     }
@@ -47,7 +47,7 @@ public class RootCause extends RootCauseBase {
      * @return スローされた例外の根本原因（root cause）を検査する {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
      */
-    public static Matcher<Testee> rootCause(Class<? extends Throwable> expectedType, String expectedMessage) {
+    public static Matcher<Testee<?>> rootCause(Class<? extends Throwable> expectedType, String expectedMessage) {
         Objects.requireNonNull(expectedType);
         return new RootCause(expectedType, expectedMessage);
     }
@@ -60,7 +60,7 @@ public class RootCause extends RootCauseBase {
      * @return スローされた例外の根本原因（root cause）を検査する {@code Matcher}
      * @since 1.1.0
      */
-    public static Matcher<Testee> rootCause(String expectedMessage) {
+    public static Matcher<Testee<?>> rootCause(String expectedMessage) {
         return new RootCause(Throwable.class, expectedMessage);
     }
     
@@ -71,7 +71,7 @@ public class RootCause extends RootCauseBase {
      * @return 根本原因（root cause）に {@code matcher} を適用する {@code Matcher}
      * @throws NullPointerException {@code matcher} が {@code null} の場合
      */
-    public static Matcher<Testee> rootCause(Matcher<Throwable> matcher) {
+    public static Matcher<Testee<?>> rootCause(Matcher<Throwable> matcher) {
         Objects.requireNonNull(matcher);
         return new RootCause(matcher);
     }

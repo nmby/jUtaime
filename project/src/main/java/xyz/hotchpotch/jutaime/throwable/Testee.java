@@ -25,13 +25,14 @@ import java.util.stream.Collectors;
  * ひとつの {@code Testee} オブジェクトが複数のスレッド上の {@code Matcher} から操作・参照され得ます。
  * {@code Testee} クラスはそのような場合でも正しく動作するように設計されています。<br>
  * 
+ * @param <T> オペレーションの戻り値の型（戻り値を返さないオペレーションの場合は {@link Void}）
  * @see xyz.hotchpotch.jutaime.throwable
  * @see RaiseMatchers
  * @see org.junit.Assert#assertThat(Object, org.hamcrest.Matcher)
  * @since 1.0.0
  * @author nmby
  */
-public class Testee implements UnsafeCallable<Object> {
+public class Testee<T> implements UnsafeCallable<T> {
     
     // [static members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
@@ -41,12 +42,13 @@ public class Testee implements UnsafeCallable<Object> {
     /**
      * 戻り値を返すタイプのオペレーションを検査するための {@code Testee} オブジェクトを返します。<br>
      * 
+     * @param <T> オペレーションの戻り値の型
      * @param operation 例外またはエラーをスローしうるオペレーション
      * @return {@code operation} を検査するための {@code Testee}
      * @throws NullPointerException {@code operation} が {@code null} の場合
      */
-    public static Testee of(UnsafeCallable<?> operation) {
-        return new Testee(Objects.requireNonNull(operation));
+    public static <T> Testee<T> of(UnsafeCallable<? extends T> operation) {
+        return new Testee<>(Objects.requireNonNull(operation));
     }
     
     /**
@@ -56,96 +58,38 @@ public class Testee implements UnsafeCallable<Object> {
      * @return {@code operation} を検査するための {@code Testee}
      * @throws NullPointerException {@code operation} が {@code null} の場合
      */
-    public static Testee of(UnsafeRunnable operation) {
-        return new Testee(Objects.requireNonNull(operation));
-    }
-    
-    /**
-     * オペレーションが正常終了した場合の検査結果の文字列表現を返します。<br>
-     * 
-     * @param result オペレーションの戻り値
-     * @return 検査結果の文字列表現
-     */
-    private static String descResult(Object result) {
-        if (result == null || !result.getClass().isArray()) {
-            return Objects.toString(result);
-        }
-        
-        try {
-            if (result.getClass().getComponentType().isPrimitive()) {
-                Method method = Arrays.class.getMethod("toString", result.getClass());
-                return (String) method.invoke(null, result);
-            } else {
-                return Arrays.deepToString((Object[]) result);
-            }
-        } catch (Exception e) {
-            return Objects.toString(result);
-        }
-    }
-    
-    /**
-     * オペレーションが例外をスローして終了した場合の検査結果の文字列表現を返します。
-     * @param thrown オペレーションがスローした例外またはエラー
-     * @return 検査結果の文字列表現
-     */
-    private static String descThrown(Throwable thrown) {
-        List<Throwable> chain = new ArrayList<>();
-        boolean containsLoop = false;
-        Throwable t = thrown;
-        
-        while (t != null) {
-            
-            // 例外チェインがループ状になっている場合のための処置。
-            // ループ状の例外チェインが妥当であるはずがないし実装する輩がいるとは思えないが、
-            // 防御的に対処コードを実装しておく。
-            // 
-            // equals() がオーバーライドされている可能性が無くはないので
-            // List#contains() ではなく明示的に == で比較することにする。
-            Throwable t2 = t;
-            if (chain.stream().anyMatch(x -> x == t2)) {
-                chain.add(t);
-                containsLoop = true;
-                break;
-            }
-            
-            chain.add(t);
-            t = t.getCause();
-        }
-        String chainStr = chain.stream()
-                .map(x -> String.format("%s (%s)", x.getClass().getName(), x.getMessage()))
-                .collect(Collectors.joining(": "));
-                
-        StringBuilder str = new StringBuilder();
-        str.append("throw ")
-                .append(chainStr)
-                .append(containsLoop ? ": ..." : "");
-                
-        return str.toString();
+    public static Testee<Void> of(UnsafeRunnable operation) {
+        return new Testee<>(Objects.requireNonNull(operation));
     }
     
     // [instance members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
-    private final UnsafeCallable<?> operation;
+    private final UnsafeCallable<? extends T> operation;
+    private final boolean isVoid;
     
     private boolean isVirgin = true;
-    private Object result;
+    private T result;
     private Throwable thrown;
     private volatile String description = MSG_NOT_TESTED;
     
-    private Testee(UnsafeCallable<?> operation) {
+    private Testee(UnsafeCallable<? extends T> operation) {
         this.operation = operation;
+        this.isVoid = false;
     }
     
     private Testee(UnsafeRunnable operation) {
-        this(() -> {
+        this.operation = () -> {
             operation.run();
-            return MSG_COMPLETED_SAFELY;
-        });
+            return null;
+        };
+        this.isVoid = true;
     }
     
     /**
      * 検査対象のオペレーションを実行します。
      * オペレーションが正常に終了した場合はその戻り値を返し、例外またはエラーが発生した場合はそのままスローします。<br>
+     * 但し、検査対象のオペレーションが戻り値を返さないタイプの場合は {@code null} を返します。<br>
+     * <br>
      * このメソッドは JUnit テストケースの実行時に {@code Matcher} から実行されます。<br>
      * <br>
      * 次の例のように、このメソッドはひとつの {@code assertThat()} 内で複数回実行される可能性があります。<br>
@@ -157,7 +101,7 @@ public class Testee implements UnsafeCallable<Object> {
      * @throws Throwable オペレーション実行時に例外またはエラーが発生した場合
      */
     @Override
-    public synchronized Object call() throws Throwable {
+    public synchronized T call() throws Throwable {
         if (isVirgin) {
             isVirgin = false;
             try {
@@ -193,5 +137,71 @@ public class Testee implements UnsafeCallable<Object> {
     @Override
     public String toString() {
         return description;
+    }
+    
+    /**
+     * オペレーションが正常終了した場合の検査結果の文字列表現を返します。<br>
+     * 
+     * @param result オペレーションの戻り値
+     * @return 検査結果の文字列表現
+     */
+    private String descResult(Object result) {
+        if (isVoid) {
+            return MSG_COMPLETED_SAFELY;
+        }
+        if (result == null || !result.getClass().isArray()) {
+            return Objects.toString(result);
+        }
+        
+        try {
+            if (result.getClass().getComponentType().isPrimitive()) {
+                Method method = Arrays.class.getMethod("toString", result.getClass());
+                return (String) method.invoke(null, result);
+            } else {
+                return Arrays.deepToString((Object[]) result);
+            }
+        } catch (Exception e) {
+            return Objects.toString(result);
+        }
+    }
+    
+    /**
+     * オペレーションが例外をスローして終了した場合の検査結果の文字列表現を返します。
+     * @param thrown オペレーションがスローした例外またはエラー
+     * @return 検査結果の文字列表現
+     */
+    private String descThrown(Throwable thrown) {
+        List<Throwable> chain = new ArrayList<>();
+        boolean containsLoop = false;
+        Throwable t = thrown;
+        
+        while (t != null) {
+            
+            // 例外チェインがループ状になっている場合のための処置。
+            // ループ状の例外チェインが妥当であるはずがないし実装する輩がいるとは思えないが、
+            // 防御的に対処コードを実装しておく。
+            // 
+            // equals() がオーバーライドされている可能性が無くはないので
+            // List#contains() ではなく明示的に == で比較することにする。
+            Throwable t2 = t;
+            if (chain.stream().anyMatch(x -> x == t2)) {
+                chain.add(t);
+                containsLoop = true;
+                break;
+            }
+            
+            chain.add(t);
+            t = t.getCause();
+        }
+        String chainStr = chain.stream()
+                .map(x -> String.format("%s (%s)", x.getClass().getName(), x.getMessage()))
+                .collect(Collectors.joining(": "));
+                
+        StringBuilder str = new StringBuilder();
+        str.append("throw ")
+                .append(chainStr)
+                .append(containsLoop ? ": ..." : "");
+                
+        return str.toString();
     }
 }

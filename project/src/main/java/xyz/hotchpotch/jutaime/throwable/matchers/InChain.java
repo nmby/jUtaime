@@ -34,7 +34,7 @@ public class InChain extends InChainBase {
      * @return スローされた例外の例外チェインの中に期待される例外が含まれるかを検査する {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
      */
-    public static Matcher<Testee> inChain(Class<? extends Throwable> expectedType) {
+    public static Matcher<Testee<?>> inChain(Class<? extends Throwable> expectedType) {
         Objects.requireNonNull(expectedType);
         return new InChain(expectedType);
     }
@@ -48,7 +48,7 @@ public class InChain extends InChainBase {
      * @return スローされた例外の例外チェインの中に期待される例外が含まれるかを検査する {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
      */
-    public static Matcher<Testee> inChain(Class<? extends Throwable> expectedType, String expectedMessage) {
+    public static Matcher<Testee<?>> inChain(Class<? extends Throwable> expectedType, String expectedMessage) {
         Objects.requireNonNull(expectedType);
         return new InChain(expectedType, expectedMessage);
     }
@@ -61,7 +61,7 @@ public class InChain extends InChainBase {
      * @return スローされた例外の例外チェインの中に期待される例外が含まれるかを検査する {@code Matcher}
      * @since 1.1.0
      */
-    public static Matcher<Testee> inChain(String expectedMessage) {
+    public static Matcher<Testee<?>> inChain(String expectedMessage) {
         return new InChain(Throwable.class, expectedMessage);
     }
     
@@ -73,7 +73,7 @@ public class InChain extends InChainBase {
      * @return スローされた例外の例外チェインの中に期待される例外が含まれるかを検査する {@code Matcher}
      * @throws NullPointerException {@code matcher} が {@code null} の場合
      */
-    public static Matcher<Testee> inChain(Matcher<Throwable> matcher) {
+    public static Matcher<Testee<?>> inChain(Matcher<Throwable> matcher) {
         Objects.requireNonNull(matcher);
         return new InChain(matcher);
     }

@@ -84,7 +84,7 @@ public class TesteeTest {
     @Test
     public void testCall1() throws Throwable {
         // 様々なオペレーションを実行できることの確認
-        assertThat(Testee.of(() -> {}).call(), is(MSG_COMPLETED_SAFELY));
+        assertThat(Testee.of(() -> {}).call(), nullValue());
         assertThat(Testee.of(() -> 1 + 2).call(), is(3));
         
         Date date = new Date();
@@ -115,7 +115,7 @@ public class TesteeTest {
         Testee.of(() -> { throw new Error(); }).call();
     }
     
-    private Testee testee1 = null;
+    private Testee<?> testee1 = null;
     
     @Test
     public void testCall6() throws Throwable {
@@ -131,7 +131,7 @@ public class TesteeTest {
     @Test
     public void testCall7() throws Throwable {
         // 1回目の結果がキャプチャされることの確認
-        Testee testee = Testee.of(() -> Math.random());
+        Testee<Double> testee = Testee.of(() -> Math.random());
         assertThat(testee.call(), is(testee.call()));
         
         testee = Testee.of(() -> { throw new Exception(String.valueOf(Math.random())); });
@@ -158,7 +158,7 @@ public class TesteeTest {
         assertThat(Testee.of(() -> 12).toString(), is(MSG_NOT_TESTED));
     }
     
-    private void innerTestToString2(Testee testee, String expected) throws Throwable {
+    private void innerTestToString2(Testee<?> testee, String expected) throws Throwable {
         testee.call();
         assertThat(testee.toString(), is(expected));
     }
@@ -197,7 +197,7 @@ public class TesteeTest {
         innerTestToString2(Testee.of(() -> testNabeatsuArray246), "[2, 4, 6]");
     }
     
-    private void innerTestToString4(Testee testee, String expected) {
+    private void innerTestToString4(Testee<?> testee, String expected) {
         try {
             testee.call();
             fail();

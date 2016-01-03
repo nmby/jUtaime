@@ -31,7 +31,7 @@ public class Raise extends RaiseBase {
      * @return スローされた例外を検査する {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
      */
-    public static Matcher<Testee> raise(Class<? extends Throwable> expectedType) {
+    public static Matcher<Testee<?>> raise(Class<? extends Throwable> expectedType) {
         Objects.requireNonNull(expectedType);
         return new Raise(expectedType);
     }
@@ -45,7 +45,7 @@ public class Raise extends RaiseBase {
      * @return スローされた例外を検査する {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
      */
-    public static Matcher<Testee> raise(Class<? extends Throwable> expectedType, String expectedMessage) {
+    public static Matcher<Testee<?>> raise(Class<? extends Throwable> expectedType, String expectedMessage) {
         Objects.requireNonNull(expectedType);
         return new Raise(expectedType, expectedMessage);
     }
@@ -58,7 +58,7 @@ public class Raise extends RaiseBase {
      * @return スローされた例外を検査する {@code Matcher}
      * @since 1.1.0
      */
-    public static Matcher<Testee> raise(String expectedMessage) {
+    public static Matcher<Testee<?>> raise(String expectedMessage) {
         return new Raise(Throwable.class, expectedMessage);
     }
     
@@ -69,7 +69,7 @@ public class Raise extends RaiseBase {
      * @return スローされた例外に {@code matcher} を適用する {@code Matcher}
      * @throws NullPointerException {@code matcher} が {@code null} の場合
      */
-    public static Matcher<Testee> raise(Matcher<Throwable> matcher) {
+    public static Matcher<Testee<?>> raise(Matcher<Throwable> matcher) {
         Objects.requireNonNull(matcher);
         return new Raise(matcher);
     }

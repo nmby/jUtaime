@@ -148,7 +148,7 @@ public class RaiseMatchers {
      * @return 検査対象のオペレーションが正常終了することを検査する {@code Matcher}
      * @see RaiseNothing#raiseNothing()
      */
-    public static Matcher<Testee> raiseNothing() {
+    public static Matcher<Testee<?>> raiseNothing() {
         return RaiseNothing.raiseNothing();
     }
     

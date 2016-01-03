@@ -16,7 +16,7 @@ import xyz.hotchpotch.jutaime.throwable.Testee;
  * @since 1.0.0
  * @author nmby
  */
-public class RaiseNothing extends TypeSafeMatcher<Testee> {
+public class RaiseNothing extends TypeSafeMatcher<Testee<?>> {
     
     // [static members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
@@ -25,7 +25,7 @@ public class RaiseNothing extends TypeSafeMatcher<Testee> {
      * 
      * @return 検査対象のオペレーションが正常終了することを検査する {@code Matcher}
      */
-    public static Matcher<Testee> raiseNothing() {
+    public static Matcher<Testee<?>> raiseNothing() {
         return new RaiseNothing();
     }
     
@@ -38,7 +38,7 @@ public class RaiseNothing extends TypeSafeMatcher<Testee> {
      * {@inheritDoc}
      */
     @Override
-    protected boolean matchesSafely(Testee testee) {
+    protected boolean matchesSafely(Testee<?> testee) {
         assert testee != null;
         try {
             testee.call();

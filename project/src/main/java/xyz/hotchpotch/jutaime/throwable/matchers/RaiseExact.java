@@ -31,7 +31,7 @@ public class RaiseExact extends RaiseBase {
      * @return スローされた例外を検査する {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
      */
-    public static Matcher<Testee> raiseExact(Class<? extends Throwable> expectedType) {
+    public static Matcher<Testee<?>> raiseExact(Class<? extends Throwable> expectedType) {
         Objects.requireNonNull(expectedType);
         return new RaiseExact(expectedType);
     }
@@ -45,7 +45,7 @@ public class RaiseExact extends RaiseBase {
      * @return スローされた例外を検査する {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
      */
-    public static Matcher<Testee> raiseExact(Class<? extends Throwable> expectedType, String expectedMessage) {
+    public static Matcher<Testee<?>> raiseExact(Class<? extends Throwable> expectedType, String expectedMessage) {
         Objects.requireNonNull(expectedType);
         return new RaiseExact(expectedType, expectedMessage);
     }

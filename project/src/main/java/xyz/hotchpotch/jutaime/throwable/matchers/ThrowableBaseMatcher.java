@@ -17,7 +17,7 @@ import xyz.hotchpotch.jutaime.throwable.Testee;
  * @since 1.0.0
  * @author nmby
  */
-/*package*/ abstract class ThrowableBaseMatcher extends TypeSafeMatcher<Testee> {
+/*package*/ abstract class ThrowableBaseMatcher extends TypeSafeMatcher<Testee<?>> {
     
     // [static members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
@@ -86,7 +86,7 @@ import xyz.hotchpotch.jutaime.throwable.Testee;
      * @throws NullPointerException {@code testee} が {@code null} の場合
      */
     @Override
-    protected boolean matchesSafely(Testee testee) {
+    protected boolean matchesSafely(Testee<?> testee) {
         assert testee != null;
         try {
             testee.call();

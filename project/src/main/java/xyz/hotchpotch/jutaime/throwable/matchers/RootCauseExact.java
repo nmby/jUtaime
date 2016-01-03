@@ -33,7 +33,7 @@ public class RootCauseExact extends RootCauseBase {
      * @return スローされた例外の根本原因（root cause）を検査する {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
      */
-    public static Matcher<Testee> rootCauseExact(Class<? extends Throwable> expectedType) {
+    public static Matcher<Testee<?>> rootCauseExact(Class<? extends Throwable> expectedType) {
         Objects.requireNonNull(expectedType);
         return new RootCauseExact(expectedType);
     }
@@ -47,7 +47,7 @@ public class RootCauseExact extends RootCauseBase {
      * @return スローされた例外の根本原因（root cause）を検査する {@code Matcher}
      * @throws NullPointerException {@code expectedType} が {@code null} の場合
      */
-    public static Matcher<Testee> rootCauseExact(Class<? extends Throwable> expectedType, String expectedMessage) {
+    public static Matcher<Testee<?>> rootCauseExact(Class<? extends Throwable> expectedType, String expectedMessage) {
         Objects.requireNonNull(expectedType);
         return new RootCauseExact(expectedType, expectedMessage);
     }
