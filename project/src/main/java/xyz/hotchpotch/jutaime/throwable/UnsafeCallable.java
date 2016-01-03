@@ -12,14 +12,18 @@ import java.util.concurrent.Callable;
  * @see UnsafeRunnable
  * @see Callable
  * @see Runnable
- * @see Throwable
+ * @since 1.0.0
  * @author nmby
  */
 @FunctionalInterface
 public interface UnsafeCallable<V> {
     
+    // [static members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    
+    // [instance members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    
     /**
-     * オペレーションを実行して計算結果を返すか、実行できない場合は例外をスローします。
+     * オペレーションを実行して計算結果を返すか、実行できない場合は例外をスローします。<br>
      * 
      * @return 計算結果
      * @throws Throwable オペレーションを実行できなかった場合

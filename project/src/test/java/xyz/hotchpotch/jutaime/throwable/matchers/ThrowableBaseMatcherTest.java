@@ -14,6 +14,8 @@ import xyz.hotchpotch.jutaime.throwable.Testee;
 
 public class ThrowableBaseMatcherTest {
     
+    // [static members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    
     private static class TestOuterMatcher extends ThrowableBaseMatcher {
         private Throwable givenViaMatchesWhole;
         
@@ -55,6 +57,8 @@ public class ThrowableBaseMatcherTest {
             description.appendText("I'm TestInnerMatcher.");
         }
     }
+    
+    // [instance members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
     @Test
     public void testThrowableBaseMatcher() {

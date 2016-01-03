@@ -18,11 +18,12 @@ import xyz.hotchpotch.jutaime.throwable.Testee;
  * このクラスはスレッドセーフではありません。<br>
  * ひとつの {@code Matcher} オブジェクトが複数のスレッドから操作されることは想定されていません。<br>
  * 
+ * @since 1.0.0
  * @author nmby
  */
 public class RootCause extends RootCauseBase {
     
-    // ++++++++++++++++ static members ++++++++++++++++
+    // [static members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
     /**
      * スローされた例外の根本原因（root cause）の型を検査する {@code Matcher} オブジェクトを返します。<br>
@@ -75,7 +76,7 @@ public class RootCause extends RootCauseBase {
         return new RootCause(matcher);
     }
     
-    // ++++++++++++++++ instance members ++++++++++++++++
+    // [instance members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
     private RootCause(Class<? extends Throwable> expectedType) {
         super(false, expectedType);

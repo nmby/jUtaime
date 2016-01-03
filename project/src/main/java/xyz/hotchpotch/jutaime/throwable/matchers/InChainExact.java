@@ -19,11 +19,12 @@ import xyz.hotchpotch.jutaime.throwable.Testee;
  * このクラスはスレッドセーフではありません。<br>
  * ひとつの {@code Matcher} オブジェクトが複数のスレッドから操作されることは想定されていません。<br>
  * 
+ * @since 1.0.0
  * @author nmby
  */
 public class InChainExact extends InChainBase {
     
-    // ++++++++++++++++ static members ++++++++++++++++
+    // [static members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
     /**
      * スローされた例外の例外チェインの中に、期待される型の例外が含まれるかを検査する {@code Matcher} オブジェクトを返します。<br>
@@ -52,7 +53,7 @@ public class InChainExact extends InChainBase {
         return new InChainExact(expectedType, expectedMessage);
     }
     
-    // ++++++++++++++++ instance members ++++++++++++++++
+    // [instance members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
     private InChainExact(Class<? extends Throwable> expectedType) {
         super(true, expectedType);

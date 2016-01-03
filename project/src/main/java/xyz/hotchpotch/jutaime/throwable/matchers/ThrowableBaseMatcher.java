@@ -14,17 +14,22 @@ import xyz.hotchpotch.jutaime.throwable.Testee;
  * このクラスはスレッドセーフではありません。<br>
  * ひとつの {@code Matcher} オブジェクトが複数のスレッドから操作されることは想定されていません。<br>
  * 
+ * @since 1.0.0
  * @author nmby
  */
-abstract class ThrowableBaseMatcher extends TypeSafeMatcher<Testee> {
+/*package*/ abstract class ThrowableBaseMatcher extends TypeSafeMatcher<Testee> {
     
-    // ++++++++++++++++ static members ++++++++++++++++
+    // [static members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
-    // ++++++++++++++++ instance members ++++++++++++++++
+    // [instance members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
     private final Matcher<Throwable> matcher;
     
-    ThrowableBaseMatcher(boolean exactly, Class<? extends Throwable> expectedType, String expectedMessage) {
+    /*package*/ ThrowableBaseMatcher(
+            boolean exactly,
+            Class<? extends Throwable> expectedType,
+            String expectedMessage) {
+            
         assert expectedType != null;
         
         matcher = new TypeSafeMatcher<Throwable>() {
@@ -45,7 +50,10 @@ abstract class ThrowableBaseMatcher extends TypeSafeMatcher<Testee> {
         };
     }
     
-    ThrowableBaseMatcher(boolean exactly, Class<? extends Throwable> expectedType) {
+    /*package*/ ThrowableBaseMatcher(
+            boolean exactly,
+            Class<? extends Throwable> expectedType) {
+            
         assert expectedType != null;
         
         matcher = new TypeSafeMatcher<Throwable>() {
@@ -65,13 +73,17 @@ abstract class ThrowableBaseMatcher extends TypeSafeMatcher<Testee> {
         };
     }
     
-    ThrowableBaseMatcher(Matcher<Throwable> matcher) {
+    /*package*/ ThrowableBaseMatcher(Matcher<Throwable> matcher) {
         assert matcher != null;
         this.matcher = matcher;
     }
     
     /**
-     * {@inheritDoc}
+     * この {@code Matcher} で {@link Testee} オブジェクトを検査します。<br>
+     * 
+     * @param testee 検査対象の {@code Testee} オブジェクト
+     * @return 検査結果（合格の場合は {@code true}）
+     * @throws NullPointerException {@code testee} が {@code null} の場合
      */
     @Override
     protected boolean matchesSafely(Testee testee) {
@@ -84,15 +96,17 @@ abstract class ThrowableBaseMatcher extends TypeSafeMatcher<Testee> {
         }
     }
     
-    abstract boolean matchesWhole(Throwable actual);
+    /*package*/ abstract boolean matchesWhole(Throwable actual);
     
-    boolean matchesEach(Throwable t) {
+    /*package*/ boolean matchesEach(Throwable t) {
         assert t != null;
         return matcher.matches(t);
     }
     
     /**
-     * {@inheritDoc}
+     * この {@code Matcher} の文字列表現を指定された {@code Description} オブジェクトに追記します。<br>
+     * 
+     * @param description この {@code Matcher} の文字列表現を追記する {@code Description} オブジェクト
      */
     @Override
     public void describeTo(Description description) {
@@ -101,5 +115,5 @@ abstract class ThrowableBaseMatcher extends TypeSafeMatcher<Testee> {
         }
     }
     
-    abstract String descriptionTag();
+    /*package*/ abstract String descriptionTag();
 }

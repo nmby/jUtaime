@@ -14,6 +14,10 @@ import xyz.hotchpotch.jutaime.throwable.matchers.RootCause;
 
 public class RaiseMatcherTest {
     
+    // [static members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    
+    // [instance members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    
     @Test
     public void testDescribeTo() {
         assertThat(RaiseMatchers.raise(Exception.class)
@@ -24,7 +28,7 @@ public class RaiseMatcherTest {
                         Raise.raise(Exception.class).toString(),
                         InChainExact.inChainExact(Throwable.class, "msg1").toString(),
                         RootCause.rootCause(Error.class, "msg2").toString())));
-        
+                        
         try {
             RaiseMatchers.noCause().describeTo(null);
         } catch (RuntimeException e) {
@@ -257,7 +261,7 @@ public class RaiseMatcherTest {
     }
     
     @Test
-    public void testAnd() {
+    public void testAnd1() {
         assertThat(RaiseMatchers.inChain(Exception.class).and(RaiseMatchers.raiseExact(Error.class)),
                 instanceOf(RaiseMatcher.class));
         
@@ -267,8 +271,14 @@ public class RaiseMatcherTest {
                 not(RaiseMatchers.inChain(Exception.class).and(RaiseMatchers.raiseExact(Error.class))));
     }
     
+    @Test(expected = IllegalArgumentException.class)
+    public void testAnd2() {
+        RaiseMatcher matcher = RaiseMatchers.inChain(Exception.class);
+        matcher.and(matcher);
+    }
+    
     @Test
-    public void testNot() {
+    public void testNot1() {
         assertThat(RaiseMatchers.noCause().not(RaiseMatchers.raise(Exception.class)),
                 instanceOf(RaiseMatcher.class));
         
@@ -276,5 +286,11 @@ public class RaiseMatcherTest {
                 RaiseMatchers.noCause().not(RaiseMatchers.raise(Exception.class)));
         assertThat(Testee.of(() -> { throw new Exception();}),
                 not(RaiseMatchers.noCause().not(RaiseMatchers.raise(Exception.class))));
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testNot2() {
+        RaiseMatcher matcher = RaiseMatchers.noCause();
+        matcher.not(matcher);
     }
 }

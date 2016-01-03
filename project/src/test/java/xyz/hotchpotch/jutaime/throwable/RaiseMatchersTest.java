@@ -12,6 +12,10 @@ import xyz.hotchpotch.jutaime.throwable.matchers.RaiseNothing;
 
 public class RaiseMatchersTest {
     
+    // [static members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    
+    // [instance members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    
     @Test
     public void testRaiseClass() {
         assertThat(RaiseMatchers.raise(Exception.class), instanceOf(RaiseMatcher.class));

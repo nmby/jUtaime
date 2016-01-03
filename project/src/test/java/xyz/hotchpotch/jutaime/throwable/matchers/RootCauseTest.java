@@ -12,6 +12,8 @@ import xyz.hotchpotch.jutaime.throwable.Testee;
 
 public class RootCauseTest {
     
+    // [static members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    
     private static class TestMatcher extends TypeSafeMatcher<Throwable> {
         @Override
         protected boolean matchesSafely(Throwable t) {
@@ -23,6 +25,8 @@ public class RootCauseTest {
             description.appendText("I'm TestMatcher.");
         }
     }
+    
+    // [instance members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
     @Test
     public void testRootCause1() {

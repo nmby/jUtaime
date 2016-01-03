@@ -8,11 +8,14 @@ import java.util.Date;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 import org.junit.Test;
 
 public class TesteeTest {
+    
+    // [static members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
     private static final String MSG_COMPLETED_SAFELY = "Completed safely.";
     private static final String MSG_NOT_TESTED = "I haven't yet been tested.";
@@ -35,6 +38,28 @@ public class TesteeTest {
     private static final Map<?, ?>[] testNullArray = { null, null, null };
     private static final Map<?, ?>[] testEmptyArray = {};
     private static final Object[] testNestedArray = { testIntArray, testStringArray, testNullArray };
+    
+    private static class Nabeatsu {
+        private final String numStr;
+        
+        private Nabeatsu(int num) {
+            numStr = String.valueOf(num);
+        }
+        
+        @Override
+        public String toString() {
+            if (numStr.contains("3")) {
+                throw new RuntimeException(numStr);
+            } else {
+                return numStr;
+            }
+        }
+    }
+    
+    private static final Object[] testNabeatsuArray123 = { new Nabeatsu(1), new Nabeatsu(2), new Nabeatsu(3)};
+    private static final Object[] testNabeatsuArray246 = { new Nabeatsu(2), new Nabeatsu(4), new Nabeatsu(6)};
+    
+    // [instance members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
     @Test
     public void testOfUnsafeCallable1() {
@@ -168,6 +193,8 @@ public class TesteeTest {
         innerTestToString2(Testee.of(() -> testNullArray), "[null, null, null]");
         innerTestToString2(Testee.of(() -> testEmptyArray), "[]");
         innerTestToString2(Testee.of(() -> testNestedArray), "[[1, 2, 3], [a, b, c, , null], [null, null, null]]");
+        innerTestToString2(Testee.of(() -> testNabeatsuArray123), Objects.toString(testNabeatsuArray123));
+        innerTestToString2(Testee.of(() -> testNabeatsuArray246), "[2, 4, 6]");
     }
     
     private void innerTestToString4(Testee testee, String expected) {

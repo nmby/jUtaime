@@ -9,6 +9,10 @@ import xyz.hotchpotch.jutaime.throwable.Testee;
 
 public class RootCauseExactTest {
     
+    // [static members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    
+    // [instance members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    
     @Test
     public void testRootCauseExact1() {
         // インスタンス化の検査

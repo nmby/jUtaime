@@ -11,11 +11,14 @@ import java.util.stream.Collectors;
  * オペレーションによりスローされる例外およびエラーを検査するための、オペレーションのラッパーです。<br>
  * 戻り値を返すタイプのオペレーションおよび返さないタイプのオペレーションの双方を検査できます。
  * また、{@link Throwable} を含む任意の例外またはエラーを検査できます。<br>
- * {@link RaiseMatchers} と組み合わせた利用方法については、{@link xyz.hotchpotch.jutaime.throwable パッケージの説明}を参照してください。<br>
+ * {@link RaiseMatchers} と組み合わせた利用方法については、
+ * {@link xyz.hotchpotch.jutaime.throwable xyz.hotchpotch.jutaime.throwable パッケージの説明}を参照してください。<br>
  * <br>
  * 次の例のように、ひとつの {@code Testee} オブジェクトはひとつの {@code assertThat()} メソッド内で複数回評価され得ます。<br>
  * <pre>    assertThat(Testee.of(・・・), allOf(matcher1(・・・), matcher2(・・・), matcher3(・・・)));</pre>
- * テスト結果の一貫性を保つために、{@code Testee} は検査対象のオペレーションを一度だけ実行し、2回目以降はキャプチャした1回目の結果を返します。<br>
+ * 上の例では、{@code Testee} オブジェクトは {@code matcher1}、{@code matcher2}、{@code matcher3} によって最大3回評価されます。<br>
+ * テスト結果の一貫性を保つために、{@code Testee} は1回目の評価時に検査対象のオペレーションを一度だけ実行し、
+ * 2回目以降はキャプチャした1回目の結果を返します。<br>
  * <br>
  * この実装はスレッドセーフです。<br>
  * たとえば上の例における {@code allOf()} の実装によっては、
@@ -25,11 +28,12 @@ import java.util.stream.Collectors;
  * @see xyz.hotchpotch.jutaime.throwable
  * @see RaiseMatchers
  * @see org.junit.Assert#assertThat(Object, org.hamcrest.Matcher)
+ * @since 1.0.0
  * @author nmby
  */
 public class Testee implements UnsafeCallable<Object> {
     
-    // ++++++++++++++++ static members ++++++++++++++++
+    // [static members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
     private static final String MSG_COMPLETED_SAFELY = "Completed safely.";
     private static final String MSG_NOT_TESTED = "I haven't yet been tested.";
@@ -56,6 +60,12 @@ public class Testee implements UnsafeCallable<Object> {
         return new Testee(Objects.requireNonNull(operation));
     }
     
+    /**
+     * オペレーションが正常終了した場合の検査結果の文字列表現を返します。<br>
+     * 
+     * @param result オペレーションの戻り値
+     * @return 検査結果の文字列表現
+     */
     private static String descResult(Object result) {
         if (result == null || !result.getClass().isArray()) {
             return Objects.toString(result);
@@ -73,6 +83,11 @@ public class Testee implements UnsafeCallable<Object> {
         }
     }
     
+    /**
+     * オペレーションが例外をスローして終了した場合の検査結果の文字列表現を返します。
+     * @param thrown オペレーションがスローした例外またはエラー
+     * @return 検査結果の文字列表現
+     */
     private static String descThrown(Throwable thrown) {
         List<Throwable> chain = new ArrayList<>();
         boolean containsLoop = false;
@@ -108,7 +123,7 @@ public class Testee implements UnsafeCallable<Object> {
         return str.toString();
     }
     
-    // ++++++++++++++++ instance members ++++++++++++++++
+    // [instance members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
     private final UnsafeCallable<?> operation;
     
@@ -138,6 +153,7 @@ public class Testee implements UnsafeCallable<Object> {
      * このメソッドが毎回同じ結果を返すために、検査対象のオペレーションはこのメソッドの最初の呼び出し時にのみ実行されます。<br>
      * 2回目以降の呼び出しでは、キャプチャされた1回目の結果が返されるか、1回目の例外が再スローされます。<br>
      * 
+     * @return オペレーションの戻り値
      * @throws Throwable オペレーション実行時に例外またはエラーが発生した場合
      */
     @Override

@@ -8,34 +8,35 @@ import org.hamcrest.Matcher;
  * このクラスはスレッドセーフではありません。<br>
  * ひとつの {@code Matcher} オブジェクトが複数のスレッドから操作されることは想定されていません。<br>
  * 
+ * @since 1.0.0
  * @author nmby
  */
-class RaiseBase extends ThrowableBaseMatcher {
+/*package*/ class RaiseBase extends ThrowableBaseMatcher {
     
-    // ++++++++++++++++ static members ++++++++++++++++
+    // [static members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
-    // ++++++++++++++++ instance members ++++++++++++++++
+    // [instance members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
-    RaiseBase(boolean exactly, Class<? extends Throwable> expectedType, String expectedMessage) {
+    /*package*/ RaiseBase(boolean exactly, Class<? extends Throwable> expectedType, String expectedMessage) {
         super(exactly, expectedType, expectedMessage);
     }
     
-    RaiseBase(boolean exactly, Class<? extends Throwable> expectedType) {
+    /*package*/ RaiseBase(boolean exactly, Class<? extends Throwable> expectedType) {
         super(exactly, expectedType);
     }
     
-    RaiseBase(Matcher<Throwable> matcher) {
+    /*package*/ RaiseBase(Matcher<Throwable> matcher) {
         super(matcher);
     }
     
     @Override
-    boolean matchesWhole(Throwable actual) {
+    /*package*/ boolean matchesWhole(Throwable actual) {
         assert actual != null;
         return matchesEach(actual);
     }
     
     @Override
-    String descriptionTag() {
+    /*package*/ String descriptionTag() {
         return "throw";
     }
 }

@@ -11,28 +11,29 @@ import org.hamcrest.Matcher;
  * このクラスはスレッドセーフではありません。<br>
  * ひとつの {@code Matcher} オブジェクトが複数のスレッドから操作されることは想定されていません。<br>
  * 
+ * @since 1.0.0
  * @author nmby
  */
-class InChainBase extends ThrowableBaseMatcher {
+/*package*/ class InChainBase extends ThrowableBaseMatcher {
     
-    // ++++++++++++++++ static members ++++++++++++++++
+    // [static members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
-    // ++++++++++++++++ instance members ++++++++++++++++
+    // [instance members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
-    InChainBase(boolean exactly, Class<? extends Throwable> expectedType, String expectedMessage) {
+    /*package*/ InChainBase(boolean exactly, Class<? extends Throwable> expectedType, String expectedMessage) {
         super(exactly, expectedType, expectedMessage);
     }
     
-    InChainBase(boolean exactly, Class<? extends Throwable> expectedType) {
+    /*package*/ InChainBase(boolean exactly, Class<? extends Throwable> expectedType) {
         super(exactly, expectedType);
     }
     
-    InChainBase(Matcher<Throwable> matcher) {
+    /*package*/ InChainBase(Matcher<Throwable> matcher) {
         super(matcher);
     }
     
     @Override
-    boolean matchesWhole(Throwable actual) {
+    /*package*/ boolean matchesWhole(Throwable actual) {
         List<Throwable> chain = new ArrayList<>();
         Throwable t = actual;
         
@@ -59,7 +60,7 @@ class InChainBase extends ThrowableBaseMatcher {
     }
     
     @Override
-    String descriptionTag() {
+    /*package*/ String descriptionTag() {
         return "inChain";
     }
 }

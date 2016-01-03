@@ -9,6 +9,10 @@ import xyz.hotchpotch.jutaime.throwable.Testee;
 
 public class NoCauseTest {
     
+    // [static members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    
+    // [instance members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    
     @Test
     public void testNoCause() {
         // インスタンス化の検査

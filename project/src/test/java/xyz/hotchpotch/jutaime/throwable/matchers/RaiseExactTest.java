@@ -9,6 +9,10 @@ import xyz.hotchpotch.jutaime.throwable.Testee;
 
 public class RaiseExactTest {
     
+    // [static members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    
+    // [instance members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    
     @Test
     public void testRaiseExact1() {
         // インスタンス化の検査

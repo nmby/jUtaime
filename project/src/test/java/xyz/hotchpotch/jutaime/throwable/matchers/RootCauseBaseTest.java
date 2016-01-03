@@ -17,6 +17,8 @@ import xyz.hotchpotch.jutaime.throwable.Testee;
 
 public class RootCauseBaseTest {
     
+    // [static members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    
     private static class TestMatcher extends TypeSafeMatcher<Throwable> {
         private final List<Throwable> given = new ArrayList<>();
         
@@ -31,6 +33,8 @@ public class RootCauseBaseTest {
             description.appendText("I'm TestMatcher.");
         }
     }
+    
+    // [instance members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
     @Test
     public void testMatchesSafely1() {

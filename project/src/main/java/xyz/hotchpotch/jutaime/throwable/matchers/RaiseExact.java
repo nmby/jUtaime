@@ -16,11 +16,12 @@ import xyz.hotchpotch.jutaime.throwable.Testee;
  * このクラスはスレッドセーフではありません。<br>
  * ひとつの {@code Matcher} オブジェクトが複数のスレッドから操作されることは想定されていません。<br>
  * 
+ * @since 1.0.0
  * @author nmby
  */
 public class RaiseExact extends RaiseBase {
     
-    // ++++++++++++++++ static members ++++++++++++++++
+    // [static members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
     /**
      * スローされた例外の型を検査する {@code Matcher} オブジェクトを返します。<br>
@@ -49,7 +50,7 @@ public class RaiseExact extends RaiseBase {
         return new RaiseExact(expectedType, expectedMessage);
     }
     
-    // ++++++++++++++++ instance members ++++++++++++++++
+    // [instance members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
     private RaiseExact(Class<? extends Throwable> expectedType) {
         super(true, expectedType);

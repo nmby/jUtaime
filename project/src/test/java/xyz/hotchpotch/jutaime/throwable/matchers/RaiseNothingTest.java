@@ -9,6 +9,10 @@ import xyz.hotchpotch.jutaime.throwable.Testee;
 
 public class RaiseNothingTest {
     
+    // [static members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    
+    // [instance members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    
     @Test
     public void testRaiseNothing() {
         // インスタンス化の検査
