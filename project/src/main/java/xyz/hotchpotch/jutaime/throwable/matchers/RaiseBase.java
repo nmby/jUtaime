@@ -8,7 +8,6 @@ import org.hamcrest.Matcher;
  * このクラスはスレッドセーフではありません。<br>
  * ひとつの {@code Matcher} オブジェクトが複数のスレッドから操作されることは想定されていません。<br>
  * 
- * @since 1.0.0
  * @author nmby
  */
 /*package*/ class RaiseBase extends ThrowableBaseMatcher {

@@ -14,7 +14,6 @@ import xyz.hotchpotch.jutaime.throwable.Testee;
  * このクラスはスレッドセーフではありません。<br>
  * ひとつの {@code Matcher} オブジェクトが複数のスレッドから操作されることは想定されていません。<br>
  * 
- * @since 1.0.0
  * @author nmby
  */
 /*package*/ abstract class ThrowableBaseMatcher extends TypeSafeMatcher<Testee<?>> {
