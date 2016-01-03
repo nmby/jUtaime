@@ -11,32 +11,15 @@ import java.util.function.Function;
 
 /**
  * JUnit4でのシリアライズ／デシリアライズに関するテストを効率化するための機能を提供するユーティリティクラスです。<br>
- * 本クラスが提供するユーティリティメソッドは、大きく次の3つに分類されます。<br>
- * <ol>
- *   <li>オブジェクトのシリアライズ／デシリアライズに関するユーティリティ</li>
- *   <li>プリミティブデータ型とオブジェクトのシリアライズ形式取得に関するユーティリティ</li>
- *   <li>バイト配列の加工、およびバイト配列と16進表示形式文字列の変換に関するユーティリティ</li>
- * </ol>
- * <br>
- * バイト配列の視認性と加工のしやすさを向上させる目的で、バイト配列と16進表示形式文字列を相互に変換するユーティリティが提供されます。<br>
- * ここでいう16進表示形式とは、{@code "00"}～{@code "ff"} の2文字がスペース区切りで連結された形式のことを指します。<br>
- * 次の文字列は16進表示形式です。
- * <ul>
- *   <li>{@code "00"}</li>
- *   <li>{@code "01 2a b3 ff"}</li>
- *   <li>{@code ""}</li>
- * </ul>
- * 次の文字列は16進表示形式ではありません。
- * <ul>
- *   <li>{@code "00 1 23"} ： 必ず2桁の数字でなければなりません。</li>
- *   <li>{@code "12 "}、{@code " 34"} ： 先頭や末尾に余分なスペースが含まれてはなりません。</li>
- *   <li>{@code "AB FF"} ： {@code 0}～{@code 9}、{@code a}～{@code f} のみが許容されます。大文字は許容されません。</li>
- *   <li>{@code null}</li>
- * </ul>
  * 
+ * @deprecated このクラスは {@link xyz.hotchpotch.jutaime.serializable.STUtil} として正式リリースされました。<br>
+ *             今後は {@link xyz.hotchpotch.jutaime.serializable.experimental} パッケージではなく
+ *             {@link xyz.hotchpotch.jutaime.serializable} パッケージの各種クラスを利用してください。<br>
+ *             このパッケージは将来のリリースで削除される予定です。<br>
  * @since 1.2.0
  * @author nmby
  */
+@Deprecated
 public class TestUtil {
     
     // ++++++++++++++++ static members ++++++++++++++++
