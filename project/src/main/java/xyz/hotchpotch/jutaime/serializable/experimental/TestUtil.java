@@ -12,10 +12,11 @@ import java.util.function.Function;
 /**
  * JUnit4でのシリアライズ／デシリアライズに関するテストを効率化するための機能を提供するユーティリティクラスです。<br>
  * 
- * @deprecated このクラスは {@link xyz.hotchpotch.jutaime.serializable.STUtil} として正式リリースされました。<br>
+ * @deprecated このクラスは {@link xyz.hotchpotch.jutaime.serializable.STUtil
+ *                            xyz.hotchpotch.jutaime.serializable.STUtil} として正式リリースされました。<br>
  *             今後は {@link xyz.hotchpotch.jutaime.serializable.experimental} パッケージではなく
  *             {@link xyz.hotchpotch.jutaime.serializable} パッケージの各種クラスを利用してください。<br>
- *             このパッケージは将来のリリースで削除される予定です。<br>
+ *             このクラスは将来のリリースでパッケージごと削除される予定です。<br>
  * @since 1.2.0
  * @author nmby
  */

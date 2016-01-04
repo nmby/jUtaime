@@ -7,7 +7,8 @@
  *   <li>プリミティブデータ型とオブジェクトのシリアライズ形式取得に関する機能</li>
  *   <li>バイト配列の加工、およびバイト配列と16進表示形式文字列の変換に関する機能</li>
  * </ol>
- * <h3>1. オブジェクトのシリアライズ／デシリアライズに関する機能</h3>
+ * <br>
+ * <h2>1. オブジェクトのシリアライズ／デシリアライズに関する機能</h2>
  * {@link xyz.hotchpotch.jutaime.serializable.STUtil#writeAndRead(Object)} メソッドなどを利用することにより、
  * オブジェクトのシリアライズ／デシリアライズに関する検証を行うことができます。
  * <pre>
@@ -16,10 +17,11 @@
  *     assertThat(STUtil.writeAndRead(MySingleton.getInstance()), theInstance(MySingleton.getInstance()));
  *     
  *     // オブジェクトがシリアライズ不可能であることの検証
- *     assertThat(Testee.of(() -> STUtil.write(myNotSerializableObj)),
+ *     assertThat(Testee.of((){@code ->} STUtil.write(myNotSerializableObj)),
  *             RaiseMatchers.raise(FailToSerializationException.class));
  * </pre>
- * <h3>2. プリミティブデータ型とオブジェクトのシリアライズ形式取得に関する機能</h3>
+ * <br>
+ * <h2>2. プリミティブデータ型とオブジェクトのシリアライズ形式取得に関する機能</h2>
  * {@link xyz.hotchpotch.jutaime.serializable.STUtil#bytes(int)} メソッドなどを利用することにより、
  * 各種データをシリアライズすることによって得られるバイト配列を取得できます。
  * <pre>
@@ -28,12 +30,14 @@
  *     byte[] serializedUTF   = STUtil.bytes(MyClass.class.getName());
  * </pre>
  * これらは次の「3. バイト配列の加工、およびバイト配列と16進表示形式文字列の変換に関する機能」と組み合わせて使用すると便利です。<br>
- * <h3>3. バイト配列の加工、およびバイト配列と16進表示形式文字列の変換に関する機能</h3>
+ * <br>
+ * <h2>3. バイト配列の加工、およびバイト配列と16進表示形式文字列の変換に関する機能</h2>
  * {@link xyz.hotchpotch.jutaime.serializable.STUtil#replace(byte[], byte[], byte[])} メソッドなどを利用すると、
  * バイト配列の部分置換を行うことができます。
  * <pre>
  *     byte[] original = STUtil.write(Integer.valueOf(123));
  *     byte[] modified = STUtil.replace(original, STUtil.bytes(123), STUtil.bytes(777));
+ *     
  *     assertThat(STUtil.read(modified), is(Integer.valueOf(777)));
  * </pre>
  * この機能を利用して、改竄されたバイト配列からのデシリアライズの検証を行うことができます。<br>
@@ -44,7 +48,7 @@
  *     byte[] original = STUtil.write(new MyClass());
  *     byte[] modified = STUtil.replace(original, proxyName, className);
  *     
- *     assertThat(Testee.of(() -> STUtil.read(modified)),
+ *     assertThat(Testee.of((){@code ->} STUtil.read(modified)),
  *             RaiseMatchers.raise(FailToDeserializeException.class)
  *             .rootCause(ObjectStreamException.class, "proxy required"));
  * </pre>
@@ -55,7 +59,7 @@
  *     System.out.println(STUtil.toHexString(b));
  *     // 「ac ed 00 05 74 00 0d 48 65 6c 6c 6f 2c 20 77 6f 72 6c 64 21」と出力される。
  * </pre>
- * 各機能の詳細とその他の機能については {@link xyz.hotchpotch.jutaime.serializable.STUtil} の説明を参照してください。<br>
+ * 各機能の詳細とその他の機能については {@link xyz.hotchpotch.jutaime.serializable.STUtil STUtilクラスの説明} を参照してください。<br>
  * 
  * @since 1.3.0
  * @author nmby
