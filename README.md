@@ -28,69 +28,48 @@ JUnitでのテストを効率化するためのライブラリです。
             ...
         }
 
-また、他の Matcher と組み合わせて使用することもできます。  
-次の例では、[hamcrest.org](http://hamcrest.org/JavaHamcrest/) が提供する `anyOf`、`allOf`、`not` と組み合わせて使用しています。  
-
-    // NullPointerException または IllegalArgumentException がスローされることを検証する。
-    assertThat(of(() -> obj.doSomething(null)),
-            anyOf(raise(NullPointerException.class), raise(IllegalArgumentException.class));
-    
-    // NullPointerException 以外の何らかの実行時例外を原因として上位例外がスローされることを検証する。
-    assertThat(of(() -> obj.doSomething(param)),
-            allOf(raise(WrappingException.class, "expected message"),
-                  rootCause(RuntimeException.class),
-                  not(rootCause(NullPointerException.class))));
-
-`allOf()` の代わりに、次の連結スタイルで記述することも可能です。  
-
-    assertThat(of(() -> obj.doSomething(param)),
-            raise(WrappingException.class, "expected message")
-                    .rootCause(RuntimeException.class)
-                    .not(rootCause(NullPointerException.class)));
-
 詳細は [javadoc](http://nmby.github.io/jUtaime/api-docs/index.html) の中の
 [こちらのページ](http://nmby.github.io/jUtaime/api-docs/xyz/hotchpotch/jutaime/throwable/package-summary.html)
 を参照してください。  
   
 #### シリアライズ／デシリアライズ検証の効率化
 
-※この機能は実験的機能の位置づけであり、API仕様を互換性のない形で予告なく変更・廃止することがあります。  
-  
-Serializable を実装したクラスに対するシリアライズ／デシリアライズ検証を効率化する機能を提供します。  
+Serializable 実装クラスに対するシリアライズ／デシリアライズ検証を効率化する機能を提供します。  
 大きく分けて、次の3分類の機能を提供します。  
 * オブジェクトのシリアライズ／デシリアライズに関するユーティリティ  
 * プリミティブデータ型とオブジェクトのシリアライズ形式取得に関するユーティリティ  
 * バイト配列の加工、およびバイト配列と16進表示形式文字列の変換に関するユーティリティ  
+
+利用例をいくつか挙げます。
   
-**利用例１**：オブジェクトをシリアライズ／デシリアライズし、挙動を確認しています。
+**利用例１**：オブジェクトをシリアライズ／デシリアライズし、挙動を検証しています。
 
-    assertThat(TestUtil.writeAndRead(mySerializableObj), is(mySerializableObj));
-    assertThat(TestUtil.writeAndRead(MySingleton.getInstance()), theInstance(MySingleton.getInstance()));
-    assertThat(of(() -> TestUtil.write(myNotSerializableObj)), raise(FailToSerializeException.class));
+    assertThat(STUtil.writeAndRead(mySerializableObj), is(mySerializableObj));
+    assertThat(STUtil.writeAndRead(MySingleton.getInstance()), theInstance(MySingleton.getInstance()));
+    assertThat(Testee.of(() -> STUtil.write(myNotSerializableObj)),
+            RaiseMatchers.raise(FailToSerializeException.class));
 
-**利用例２**：シリアライズされたバイト配列を改竄し、デシリアライズ時の挙動を確認しています。
+**利用例２**：シリアライズされたバイト配列を改竄し、デシリアライズ時の挙動を検証しています。
 
-    // test2-1
-    Function<byte[], byte[]> modifier1 = bytes -> {
-        byte[] modified = Arrays.copyOf(bytes, bytes.length);
-        modified[modified.length - 1] = 0x02;
-        return modified;
-    };
-    assertThat(TestUtil.writeModifyAndRead(Integer.valueOf(1), modifier1), is(Integer.valueOf(2)));
+    // test1
+    byte[] original = STUtil.write(Integer.valueOf(123));
+    byte[] modified = STUtil.replace(original, STUtil.bytes(123), STUtil.bytes(777));
     
-    // test2-2
-    Function<byte[], byte[]> modifier2 = bytes -> {
-        return TestUtil.replace(bytes, TestUtil.bytes(MyClass1.class.getName()), TestUtil.bytes(MyClass2.class.getName()));
-    };
-    assertThat(TestUtil.writeModifyAndRead(new MyClass1(), modifier2), instanceOf(MyClass2.class));
+    assertThat(STUtil.read(modified), is(Integer.valueOf(777)));
+
+    // test2 : シリアライゼーションプロキシを迂回したデシリアライズが抑止されることの検証
+    byte[] className = STUtil.bytes(MyClass.class.getName());
+    byte[] proxyName = STUtil.bytes(MyClass.class.getName() + "$SerializationProxy");
     
-    // test2-3
-    assertThat(of(() -> TestUtil.writeModifyAndRead(new MyOdd(7),
-            bytes -> TestUtil.replace(bytes, TestUtil.bytes(7), TestUtil.bytes(8)))),
-            raise(FailToDeserializeException.class).rootCause(InvalidObjectException.class));
+    byte[] original = STUtil.write(new MyClass());
+    byte[] modified = STUtil.replace(original, proxyName, className);
+    
+    assertThat(Testee.of(() -> STUtil.read(modified)),
+            RaiseMatchers.raise(FailToDeserializeException.class)
+                    .rootCause(ObjectStreamException.class, "proxy required"));
 
 詳細は [javadoc](http://nmby.github.io/jUtaime/api-docs/index.html) の中の
-[こちらのページ](http://nmby.github.io/jUtaime/api-docs/xyz/hotchpotch/jutaime/serializable/experimental/TestUtil.html)
+[こちらのページ](http://nmby.github.io/jUtaime/api-docs/xyz/hotchpotch/jutaime/serializable/package-summary.html)
 を参照してください。  
 
 ## 前提・依存
@@ -104,6 +83,10 @@ Serializable を実装したクラスに対するシリアライズ／デシリ�
 ビルド・パスを設定してください。  
 
 ## 更新履歴
+#### Version 1.3.0 (2016/01/04)
+* シリアライズ／デシリアライズ検証支援機能を正式リリース
+* 例外検証支援機能の Testee クラスに総称型を導入
+
 #### Version 1.2.2 (2015/09/07)
 * 次の2つのメソッドの戻り値の型を Object から &lt;T&gt; に変更
   - TestUtil#read(byte[])
@@ -113,7 +96,7 @@ Serializable を実装したクラスに対するシリアライズ／デシリ�
 * ドキュメント内の用語を統一
 
 #### Version 1.2.0 (2015/09/06)
-* シリアライズ／デシリアライズテスト支援機能を実験的に追加
+* シリアライズ／デシリアライズ検証支援機能を実験的に追加
 
 #### Version 1.1.0 (2015/09/06)
 * 例外の型は問わず例外メッセージの期待値のみを指定する機能を追加
