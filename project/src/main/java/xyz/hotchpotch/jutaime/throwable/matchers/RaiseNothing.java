@@ -13,10 +13,11 @@ import xyz.hotchpotch.jutaime.throwable.Testee;
  * このクラスはスレッドセーフではありません。<br>
  * ひとつの {@code Matcher} オブジェクトが複数のスレッドから操作されることは想定されていません。<br>
  * 
+ * @param <T> 検査対象のオペレーションの戻り値の型
  * @since 1.0.0
  * @author nmby
  */
-public class RaiseNothing extends TypeSafeMatcher<Testee<?>> {
+public class RaiseNothing<T> extends TypeSafeMatcher<Testee<T>> {
     
     // [static members] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
@@ -25,6 +26,7 @@ public class RaiseNothing extends TypeSafeMatcher<Testee<?>> {
      * 
      * @return 検査対象のオペレーションが正常終了することを検査する {@code Matcher}
      */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public static Matcher<Testee<?>> raiseNothing() {
         return new RaiseNothing();
     }
@@ -38,7 +40,7 @@ public class RaiseNothing extends TypeSafeMatcher<Testee<?>> {
      * {@inheritDoc}
      */
     @Override
-    protected boolean matchesSafely(Testee<?> testee) {
+    protected boolean matchesSafely(Testee<T> testee) {
         assert testee != null;
         try {
             testee.call();
