@@ -28,8 +28,8 @@ JUnitでのテストを効率化するためのライブラリです。
             ...
         }
 
-詳細は [javadoc](http://nmby.github.io/jUtaime/api-docs/index.html) の中の
-[こちらのページ](http://nmby.github.io/jUtaime/api-docs/xyz/hotchpotch/jutaime/throwable/package-summary.html)
+詳細は [javadoc](http://jutaime.hotchpotch.xyz/docs/api/index.html) の中の
+[こちらのページ](http://jutaime.hotchpotch.xyz/docs/api/index.html?xyz/hotchpotch/jutaime/throwable/package-summary.html)
 を参照してください。  
   
 #### シリアライズ／デシリアライズ検証の効率化
@@ -51,13 +51,13 @@ Serializable 実装クラスに対するシリアライズ／デシリアライ�
 
 **利用例２**：シリアライズされたバイト配列を改竄し、デシリアライズ時の挙動を検証しています。
 
-    // test1
+    // test1 : オブジェクトをシリアライズしたのちバイト列を改竄し、改竄された内容にデシリアライズできることを検証しています。
     byte[] original = STUtil.write(Integer.valueOf(123));
     byte[] modified = STUtil.replace(original, STUtil.bytes(123), STUtil.bytes(777));
     
     assertThat(STUtil.read(modified), is(Integer.valueOf(777)));
 
-    // test2 : シリアライゼーションプロキシを迂回したデシリアライズが抑止されることの検証
+    // test2 : シリアライゼーションプロキシを迂回したデシリアライズが抑止されることを検証しています。
     byte[] className = STUtil.bytes(MyClass.class.getName());
     byte[] proxyName = STUtil.bytes(MyClass.class.getName() + "$SerializationProxy");
     
@@ -68,8 +68,8 @@ Serializable 実装クラスに対するシリアライズ／デシリアライ�
             RaiseMatchers.raise(FailToDeserializeException.class)
                     .rootCause(ObjectStreamException.class, "proxy required"));
 
-詳細は [javadoc](http://nmby.github.io/jUtaime/api-docs/index.html) の中の
-[こちらのページ](http://nmby.github.io/jUtaime/api-docs/xyz/hotchpotch/jutaime/serializable/package-summary.html)
+詳細は [javadoc](http://jutaime.hotchpotch.xyz/docs/api/index.html) の中の
+[こちらのページ](http://jutaime.hotchpotch.xyz/docs/api/index.html?xyz/hotchpotch/jutaime/serializable/package-summary.html)
 を参照してください。  
 
 ## 前提・依存
