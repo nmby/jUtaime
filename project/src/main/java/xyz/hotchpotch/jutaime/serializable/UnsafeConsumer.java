@@ -13,6 +13,7 @@ import java.util.function.Consumer;
  * @see Consumer
  * @author nmby
  */
+@SuppressWarnings("javadoc")
 @FunctionalInterface
 /*package*/ interface UnsafeConsumer<T> {
     
