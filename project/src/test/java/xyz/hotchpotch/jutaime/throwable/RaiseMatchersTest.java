@@ -77,13 +77,33 @@ public class RaiseMatchersTest {
     }
     
     @Test
-    public void testRaiseNothing() {
+    public void testRaiseNothing1() {
         assertThat(RaiseMatchers.raiseNothing(), instanceOf(RaiseNothing.class));
         
         assertThat(Testee.of(() -> {}),
                 RaiseMatchers.raiseNothing());
         assertThat(Testee.of(() -> { throw new Exception(); }),
                 not(RaiseMatchers.raiseNothing()));
+    }
+    
+    @Test
+    public void testRaiseNothing2() {
+        assertThat(RaiseMatchers.raiseNothing(not(123)), instanceOf(RaiseNothing.class));
+        
+        assertThat(Testee.of(() -> null),
+                RaiseMatchers.raiseNothing(nullValue()));
+        assertThat(Testee.of(() -> { throw new Exception(); }),
+                not(RaiseMatchers.raiseNothing(nullValue())));
+    }
+    
+    @Test
+    public void testRaiseNothing3() {
+        assertThat(RaiseMatchers.raiseNothing(123), instanceOf(RaiseNothing.class));
+        
+        assertThat(Testee.of(() -> 123),
+                RaiseMatchers.raiseNothing(123));
+        assertThat(Testee.of(() -> { throw new Exception(); }),
+                not(RaiseMatchers.raiseNothing(123)));
     }
     
     @Test

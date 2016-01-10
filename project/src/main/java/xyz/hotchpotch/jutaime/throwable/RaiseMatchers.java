@@ -153,6 +153,53 @@ public class RaiseMatchers {
     }
     
     /**
+     * 検査対象のオペレーションが例外やエラーをスローせずに正常終了し、戻り値が期待通りであることを検査する {@code Matcher} オブジェクトを返します。<br>
+     * このメソッドにより返される {@code Matcher} オブジェクトは、検査対象オペレーションが例外やエラーをスローせずに終了し、かつ
+     * 戻り値が期待通りである場合に合格と判定します。<br>
+     * 
+     * @param <T> 検査対象のオペレーションの戻り値の型
+     * @param matcher オペレーションの戻り値を検査する {@code Matcher}
+     * @return 検査対象のオペレーションが正常終了し、戻り値が期待通りであることを検査する {@code Matcher}
+     * @throws NullPointerException {@code matcher} が {@code null} の場合
+     * @see RaiseNothing#raiseNothing(Matcher)
+     * @since 1.4.0
+     */
+    public static <T> Matcher<Testee<T>> raiseNothing(Matcher<? super T> matcher) {
+        Objects.requireNonNull(matcher);
+        return RaiseNothing.raiseNothing(matcher);
+    }
+    
+    /**
+     * 検査対象のオペレーションが例外やエラーをスローせずに正常終了し、戻り値が期待通りであることを検査する {@code Matcher} オブジェクトを返します。<br>
+     * このメソッドにより返される {@code Matcher} オブジェクトは、検査対象オペレーションが例外やエラーをスローせずに終了し、かつ
+     * 戻り値が期待通りである場合に合格と判定します。<br>
+     * <br>
+     * 次の2つの呼び出しは同値です。
+     * <pre>
+     *     raiseNothing(expectedValue);
+     *     raiseNothing(org.hamcrest.CoreMatchers.is(expectedValue));
+     * </pre>
+     * なお、{@code expectedValue} に {@code null} を指定することはできません。<br>
+     * 検査対象のオペレーションの戻り値として {@code null} が期待される場合は、次のコードで検証してください。<br>
+     * <pre>
+     *     raiseNothing(org.hamcrest.CoreMatchers.nullValue());
+     * </pre>
+     * 
+     * @param <T> 検査対象のオペレーションの戻り値の型
+     * @param expectedValue 期待される戻り値
+     * @return 検査対象のオペレーションが正常終了し、戻り値が期待通りであることを検査する {@code Matcher}
+     * @throws NullPointerException {@code expectedValue} が {@code null} の場合
+     * @see RaiseNothing#raiseNothing(Object)
+     * @see org.hamcrest.CoreMatchers#is(Object)
+     * @see org.hamcrest.CoreMatchers#nullValue()
+     * @since 1.4.0
+     */
+    public static <T> Matcher<Testee<T>> raiseNothing(T expectedValue) {
+        Objects.requireNonNull(expectedValue);
+        return RaiseNothing.raiseNothing(expectedValue);
+    }
+    
+    /**
      * 検査対象のオペレーションがスローした例外やエラーが原因（cause）を持たないことを検査する {@code Matcher} オブジェクトを返します。<br>
      * このメソッドにより返される {@code Matcher} オブジェクトは、スローされた例外 {@code actual} に対して
      * {@code actual.getCause() == null} の場合に合格と判定します。<br>
