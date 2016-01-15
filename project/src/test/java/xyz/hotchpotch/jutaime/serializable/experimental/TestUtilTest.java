@@ -14,6 +14,7 @@ import java.util.function.Function;
 
 import org.junit.Test;
 
+@SuppressWarnings("deprecation")
 public class TestUtilTest {
     
     private static enum TestEnum {

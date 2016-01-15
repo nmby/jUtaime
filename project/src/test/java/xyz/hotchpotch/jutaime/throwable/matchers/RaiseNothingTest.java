@@ -1,4 +1,4 @@
-package xyz.hotchpotch.jutaime.throwable.matchers;
+﻿package xyz.hotchpotch.jutaime.throwable.matchers;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
