@@ -65,7 +65,7 @@ public class RaiseNothingTest {
         assertThat(Testee.of(() -> { throw new Throwable(); }), not(RaiseNothing.raiseNothing(123)));
         assertThat(Testee.of(() -> { throw new Error(); }), not(RaiseNothing.raiseNothing("abc")));
         assertThat(Testee.of(() -> { throw new Exception(); }), not(RaiseNothing.raiseNothing(nullValue())));
-        assertThat(Testee.of(() -> { throw new RuntimeException(); }), not(RaiseNothing.raiseNothing(is(true))));
+        assertThat(Testee.of(() -> { throw new RuntimeException(); }), not(RaiseNothing.raiseNothing((Matcher<Boolean>) is(true))));
         
         assertThat(Testee.of(() -> RaiseNothing.raiseNothing(null)), Raise.raise(NullPointerException.class));
     }
