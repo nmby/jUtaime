@@ -258,13 +258,13 @@ public class STUtil {
     // **** バイト配列の加工、およびバイト配列と16進表示形式文字列の変換に関するユーティリティ ****
     
     /**
-     * バイト配列内の {@code target} と一致する部分配列を {@code replacement} で置換した新たな配列を返します。
+     * バイト配列 {@code original} 内の {@code target} と一致する部分配列を {@code replacement} で置換した新たな配列を返します。
      * 元の配列は変更しません。<br>
      * 置き換えは、バイト配列の先頭から末尾まで進みます。<br>
      * <br>
      * <table border="1">
      *   <caption>置換例１</caption>
-     *   <tr><th>{@code bytes}</th><td><code>{ 0x01, 0x01, 0x01, 0x01, 0x01, 0x01 }</code></td></tr>
+     *   <tr><th>{@code original}</th><td><code>{ 0x01, 0x01, 0x01, 0x01, 0x01, 0x01 }</code></td></tr>
      *   <tr><th>{@code target}</th><td><code>{ 0x01, 0x01 }</code></td></tr>
      *   <tr><th>{@code replacement}</th><td><code>{ 0x01 }</code></td></tr>
      *   <tr><th>結果</th><td><code>{ 0x01, 0x01, 0x01 }</code></td></tr>
@@ -272,19 +272,19 @@ public class STUtil {
      * <br>
      * <table border="1">
      *   <caption>置換例２</caption>
-     *   <tr><th>{@code bytes}</th><td><code>{ 0x01, 0x01, 0x01 }</code></td></tr>
+     *   <tr><th>{@code original}</th><td><code>{ 0x01, 0x01, 0x01 }</code></td></tr>
      *   <tr><th>{@code target}</th><td><code>{ 0x01, 0x01 }</code></td></tr>
      *   <tr><th>{@code replacement}</th><td><code>{ 0x02 }</code></td></tr>
      *   <tr><th>結果</th><td><code>{ 0x02, 0x01 }</code> （<code>{ 0x01, 0x02 }</code> ではない）</td></tr>
      * </table>
      * <br>
-     * {@code target} が長さ 0 の配列の場合、何も置換を行わず、{@code bytes} のコピーを返します。<br>
+     * {@code target} が長さ 0 の配列の場合、何も置換を行わず、{@code original} のコピーを返します。<br>
      * 
      * @param original 置換前のバイト配列
      * @param target 置換対象の部分配列
      * @param replacement 置換後の部分配列
      * @return 置換後のバイト配列
-     * @throws NullPointerException {@code bytes}、{@code target}、{@code replacement} のいずれかが {@code null} の場合
+     * @throws NullPointerException {@code original}、{@code target}、{@code replacement} のいずれかが {@code null} の場合
      */
     public static byte[] replace(byte[] original, byte[] target, byte[] replacement) {
         Objects.requireNonNull(original);
@@ -295,13 +295,13 @@ public class STUtil {
     }
     
     /**
-     * バイト配列内の {@code target} で表される部分配列を、{@code replacement} で表される部分配列で置換した新たな配列を返します。
+     * バイト配列 {@code original} 内の {@code target} で表される部分配列を、{@code replacement} で表される部分配列で置換した新たな配列を返します。
      * 元の配列は変更しません。<br>
      * 置き換えは、バイト配列の先頭から末尾まで進みます。<br>
      * <br>
      * <table border="1">
      *   <caption>置換例１</caption>
-     *   <tr><th>{@code bytes}</th><td><code>{ 0x01, 0x01, 0x01, 0x01, 0x01, 0x01 }</code></td></tr>
+     *   <tr><th>{@code original}</th><td><code>{ 0x01, 0x01, 0x01, 0x01, 0x01, 0x01 }</code></td></tr>
      *   <tr><th>{@code target}</th><td>{@code "01 01"}</td></tr>
      *   <tr><th>{@code replacement}</th><td>{@code "01"}</td></tr>
      *   <tr><th>結果</th><td><code>{ 0x01, 0x01, 0x01 }</code></td></tr>
@@ -309,19 +309,19 @@ public class STUtil {
      * <br>
      * <table border="1">
      *   <caption>置換例２</caption>
-     *   <tr><th>{@code bytes}</th><td><code>{ 0x01, 0x01, 0x01 }</code></td></tr>
+     *   <tr><th>{@code original}</th><td><code>{ 0x01, 0x01, 0x01 }</code></td></tr>
      *   <tr><th>{@code target}</th><td>{@code "01 01"}</td></tr>
      *   <tr><th>{@code replacement}</th><td>{@code "02"}</td></tr>
      *   <tr><th>結果</th><td><code>{ 0x02, 0x01 }</code> （<code>{ 0x01, 0x02 }</code> ではない）</td></tr>
      * </table>
      * <br>
-     * {@code target} が空文字列の場合、何も置換を行わず、{@code bytes} のコピーを返します。<br>
+     * {@code target} が空文字列の場合、何も置換を行わず、{@code original} のコピーを返します。<br>
      * 
      * @param original 置換前のバイト配列
      * @param target 置換対象の部分配列を表す16進表示形式の文字列
      * @param replacement 置換後の部分配列を表す16進表示形式の文字列
      * @return 置換後のバイト配列
-     * @throws NullPointerException {@code bytes} が {@code null} の場合
+     * @throws NullPointerException {@code original} が {@code null} の場合
      * @throws NumberFormatException {@code target}、{@code replacement} のいずれかが16進表示形式でない場合
      * @see String#replace(CharSequence, CharSequence)
      */
