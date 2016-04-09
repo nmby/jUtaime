@@ -23,7 +23,7 @@ JUnitでのテストを効率化するためのライブラリです。
         public void testException() {
             assertThat(of(() -> Integer.valueOf("abc")), raiseExact(NumberFormatException.class));
             assertThat(of(() -> Integer.valueOf("123")), raiseNothing());
-            assertThat(of(() -> { Object o = null; o.toString(); }), raise(NullPointerException.class));
+            assertThat(of(() -> { Object o = null; o.toString(); }), raise(RuntimeException.class));
             assertThat(of(obj::dbOperation), rootCause(IOException.class));
             ...
         }
@@ -31,6 +31,7 @@ JUnitでのテストを効率化するためのライブラリです。
 詳細は [javadoc](http://jutaime.hotchpotch.xyz/docs/api/index.html) の中の
 [こちらのページ](http://jutaime.hotchpotch.xyz/docs/api/index.html?xyz/hotchpotch/jutaime/throwable/package-summary.html)
 を参照してください。  
+  
   
 #### シリアライズ／デシリアライズ検証の効率化
 
@@ -71,17 +72,20 @@ Serializable 実装クラスに対するシリアライズ／デシリアライ�
 詳細は [javadoc](http://jutaime.hotchpotch.xyz/docs/api/index.html) の中の
 [こちらのページ](http://jutaime.hotchpotch.xyz/docs/api/index.html?xyz/hotchpotch/jutaime/serializable/package-summary.html)
 を参照してください。  
-
+  
+  
 ## 前提・依存
-* ジュテームのサポート対象は java 8 です。java 7 以前では利用できません。
-* ジュテームは [hamcrest-core](http://search.maven.org/#search%7Cga%7C1%7Cg%3Aorg.hamcrest) に依存しています。  
-従ってジュテームを利用するためには [hamcrest-core](http://search.maven.org/#search%7Cga%7C1%7Cg%3Aorg.hamcrest) を
+* jUtaime のサポート対象は java 8 です。java 7 以前では利用できません。
+* jUtaime は [hamcrest-core](http://search.maven.org/#search%7Cga%7C1%7Cg%3Aorg.hamcrest) に依存しています。  
+従って jUtaime を利用するためには [hamcrest-core](http://search.maven.org/#search%7Cga%7C1%7Cg%3Aorg.hamcrest) を
 ビルド・パスに含める必要がありますが、JUnit4を利用しているのであれば、通常はすでに含まれているはずです。  
-
+  
+  
 ## 使い方
 [こちら](https://github.com/nmby/jUtaime/releases)から xyz.hotchpotch.jutaime-X.X.X-yyyymmdd.jar をダウンロードして任意の場所に配置し、
 ビルド・パスを設定してください。  
-
+  
+  
 ## 更新履歴
 #### Version 1.4.0 (2016/01/10)
 * 例外検証支援機能に raiseNothing(T) と raiseNothing(Matcher) を追加
@@ -110,7 +114,8 @@ Serializable 実装クラスに対するシリアライズ／デシリアライ�
 
 #### Version 1.0.0 (2015/07/26)
 * 初版
-
+  
+  
 ## ライセンス
 Licensed under the MIT License, see LICENSE.txt.  
 Copyright (c) 2015 nmby  
