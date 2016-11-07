@@ -16,6 +16,7 @@
 *.war
 *.ear
 
+api-docs/
 api-docs-modified/
 api-docs-modified.tar
 
