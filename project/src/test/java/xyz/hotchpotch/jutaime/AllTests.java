@@ -4,21 +4,18 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import xyz.hotchpotch.jutaime.throwable.RaiseMatcherTest;
-import xyz.hotchpotch.jutaime.throwable.RaiseMatchersTest;
-import xyz.hotchpotch.jutaime.throwable.TesteeTest;
-import xyz.hotchpotch.jutaime.throwable.matchers.InChainBaseTest;
-import xyz.hotchpotch.jutaime.throwable.matchers.InChainExactTest;
-import xyz.hotchpotch.jutaime.throwable.matchers.InChainTest;
-import xyz.hotchpotch.jutaime.throwable.matchers.NoCauseTest;
-import xyz.hotchpotch.jutaime.throwable.matchers.RaiseBaseTest;
-import xyz.hotchpotch.jutaime.throwable.matchers.RaiseExactTest;
-import xyz.hotchpotch.jutaime.throwable.matchers.RaiseNothingTest;
-import xyz.hotchpotch.jutaime.throwable.matchers.RaiseTest;
-import xyz.hotchpotch.jutaime.throwable.matchers.RootCauseBaseTest;
-import xyz.hotchpotch.jutaime.throwable.matchers.RootCauseExactTest;
-import xyz.hotchpotch.jutaime.throwable.matchers.RootCauseTest;
-import xyz.hotchpotch.jutaime.throwable.matchers.ThrowableBaseMatcherTest;
+import xyz.hotchpotch.jutaime.matchers.InChainBaseTest;
+import xyz.hotchpotch.jutaime.matchers.InChainExactTest;
+import xyz.hotchpotch.jutaime.matchers.InChainTest;
+import xyz.hotchpotch.jutaime.matchers.NoCauseTest;
+import xyz.hotchpotch.jutaime.matchers.RaiseBaseTest;
+import xyz.hotchpotch.jutaime.matchers.RaiseExactTest;
+import xyz.hotchpotch.jutaime.matchers.RaiseNothingTest;
+import xyz.hotchpotch.jutaime.matchers.RaiseTest;
+import xyz.hotchpotch.jutaime.matchers.RootCauseBaseTest;
+import xyz.hotchpotch.jutaime.matchers.RootCauseExactTest;
+import xyz.hotchpotch.jutaime.matchers.RootCauseTest;
+import xyz.hotchpotch.jutaime.matchers.ThrowableBaseMatcherTest;
 
 @RunWith(Suite.class)
 @SuiteClasses({
